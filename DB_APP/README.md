@@ -1,5 +1,9 @@
 # DB_APP
 
+https://drawsql.app/teams/ca-ate/diagrams/users
+
+![tables.png](tables.png)
+
 ## Overview
 
 This folder contains the code for a database application that interacts with a **MySQL** database containing 5 models.
