@@ -33,6 +33,7 @@ Run the application:
 ```Bash
 uvicorn DB_APP.main:app --reload
 ```
+Be able to do operation in url `127.0.0.1:8000/docs`
 
 ## Model Information
 

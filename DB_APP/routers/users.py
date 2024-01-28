@@ -15,7 +15,7 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 
-class User(BaseModel):
+class UserBaseSchema(BaseModel):
     """User model for API requests and responses."""
 
     # userID is taken cared automatically
@@ -23,13 +23,16 @@ class User(BaseModel):
     password: str = Field(default=..., min_length=MIN_LEN, max_length=MAX_LEN)
     isManager: bool = Field(default=False)
     isActive: bool = Field(default=True)
-    name: str = Field(default=..., min_length=MIN_LEN, max_length=MAX_LEN)
-    WorkPlaceID: int = Field(default=...)
+    name: str = Field(default="name", min_length=MIN_LEN, max_length=MAX_LEN)
+    # workPlaceID: int = Field(default=...)
     # createdAt: datetime
+
+    def verify_password(self):
+        pass
 
 
 @router.post("/")
-def create_user(user: User, db: Session = Depends(get_db)):
+def create_user(user: UserBaseSchema, db: Session = Depends(get_db)):
     """Creates a new user in the database."""
 
     # TODO: Implement password hashing (e.g., using Werkzeug's generate_password_hash)
@@ -40,6 +43,7 @@ def create_user(user: User, db: Session = Depends(get_db)):
     new_user.password = user.password  # Replace with hashed password
     new_user.isActive = user.isActive
     new_user.isManager = user.isManager
+    new_user.name = user.name
 
     # Save to database
     db.add(new_user)
@@ -67,7 +71,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{user_id}")
-def update_user(user_id: int, user: User, db: Session = Depends(get_db)):
+def update_user(user_id: int, user: UserBaseSchema, db: Session = Depends(get_db)):
     """Updates an existing user."""
 
     db_user = get_user(user_id, db)
