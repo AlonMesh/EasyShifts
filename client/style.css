@@ -1,0 +1,27 @@
+body {
+    font-size: 30px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 100px;
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+p {
+    margin: 5px;
+    font-size: 14px;
+}
+
+.signup-button {
+    font-size: 16px;
+    padding: 5px 10px;
+}
