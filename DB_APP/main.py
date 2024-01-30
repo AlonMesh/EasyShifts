@@ -1,16 +1,7 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from DB_APP.routers import workPlaces, users
+from initializtion import initialize_database_and_session
+from check_setup import check_setup
 
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.include_router(users.router)
-app.include_router(workPlaces.router)
+if __name__ == "__main__":
+    initialize_database_and_session()
+    # check_setup()  # Apply this for checking if the program works and the DBs are set
+    # Other stuf

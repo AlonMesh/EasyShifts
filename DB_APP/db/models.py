@@ -1,5 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, PrimaryKeyConstraint, DDL, event, \
-    CheckConstraint
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, PrimaryKeyConstraint
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -9,7 +8,7 @@ class User(Base):
     """Represents a user in the system."""
     __tablename__ = "users"
 
-    userID = Column(Integer, primary_key=True, index=True)  # TODO: Use uuid
+    userID = Column(Integer, primary_key=True, index=True)
     username = Column(String(20), unique=True, nullable=False)
     password = Column(String(20), nullable=False)  # TODO: Hashing passwords
     isManager = Column(Boolean, nullable=False)
@@ -19,10 +18,10 @@ class User(Base):
 
 class WorkPlace(Base):
     """Represents a workplace associated with a user."""
-    __tablename__ = "workPlace"
+    __tablename__ = "workPlaces"
 
-    userID = Column(Integer, primary_key=True, index=True, foreign_keys=[User.userID], nullable=False)
-    workPlaceID = Column(Integer, foreign_keys=[User.userID], nullable=False)
+    userID = Column(Integer, primary_key=True, index=True, nullable=False)
+    workPlaceID = Column(Integer, nullable=False)
 
     # __table_args__ = (
     #     CheckConstraint(
@@ -32,11 +31,11 @@ class WorkPlace(Base):
     # )
 
 
-class UserRequests(Base):
+class UserRequest(Base):
     """Represents user request for shifts."""
     __tablename__ = "userRequests"
 
-    userID = Column(Integer, primary_key=True, index=True, foreign_keys=[User.userID])
+    userID = Column(Integer, primary_key=True, index=True)
     modifyAt = Column(DateTime, nullable=False)
     requests = Column(String(30), nullable=False)
 
@@ -48,22 +47,22 @@ class ShiftPart(Enum):
     Evening = 'evening'
 
 
-class Shifts(Base):
+class Shift(Base):
     """Represents shifts in the system."""
     __tablename__ = "shifts"
 
     shiftID = Column(Integer, primary_key=True, index=True)
-    workPlaceID = Column(Integer, foreign_keys=[WorkPlace.workPlaceID], nullable=False)
+    workPlaceID = Column(Integer, nullable=False)
     shiftDate = Column(DateTime, nullable=False)
     shiftPart = Column(String(10), nullable=False)
 
 
-class ShiftWorkers(Base):
+class ShiftWorker(Base):
     """Represents all shifts of all workers."""
     __tablename__ = "shiftWorkers"
 
-    shiftID = Column(Integer, foreign_keys=[Shifts.shiftID], nullable=False)
-    userID = Column(Integer, forgeign_keys=[User.userID], nullable=False)
+    shiftID = Column(Integer, nullable=False)
+    userID = Column(Integer, nullable=False)
 
     __table_args__ = (
         PrimaryKeyConstraint('shiftID', 'userID'),
