@@ -8,7 +8,7 @@ def check_setup():
 
     # Check User creation
     user_data = {
-        "username": "LastOne5",
+        "username": "LastOne12",
         "password": "123456",
         "isManager": 0,
         "isActive": 1,
@@ -21,9 +21,12 @@ def check_setup():
     created_user = controller.create_entity(entity_data=user_data)
     print("User created:", created_user)
 
+    # Print references to all users
+    print("All users:", controller.get_all_entities())
+
     # Check WorkPlace creation
     workplace_data = {
-        "userID": 1,  # Replace with a valid user ID
+        "userID": 1,
         "workPlaceID": 1
     }
 
@@ -35,7 +38,7 @@ def check_setup():
 
     # Check UserRequest creation
     user_request_data = {
-        "userID": 1,  # Replace with a valid user ID
+        "userID": 1,
         "modifyAt": "2024-01-30T12:00:00",
         "requests": "Vacation"
     }
@@ -47,7 +50,7 @@ def check_setup():
 
     # Check Shift creation
     shift_data = {
-        "workPlaceID": 1,  # Replace with a valid workPlace ID
+        "workPlaceID": 1,
         "shiftDate": "2024-01-30T08:00:00",
         "shiftPart": "Morning"
     }

@@ -11,6 +11,8 @@ This folder contains the code for a database application that interacts with a *
 ## Setup check
 It is recommended to run the main when `check_setup()` is active. It'll set all DBs and will check that the system works.
 
+---
+
 ## Model Information
 
 1. **User:** Stores user information (username, password, name, manager status, active status).
@@ -19,21 +21,28 @@ It is recommended to run the main when `check_setup()` is active. It'll set all 
 4. **Shifts:** Represents shifts, including workplace, date, and part.
 5. **ShiftWorkers:** Records shifts assigned to workers.
 
-## Controllers, Repositories and Services
+---
 
-### Controllers
+## Generic Structure for Each Model
+**1. Repository:**
+   * Located in `db/repositories`.
+   * Handles database operations (CRUD) specific to the model.
+   * Implements methods for creating, reading, updating, and deleting model instances.
 
-Controllers handle the interaction between the user interface and the application logic. They receive user input, process it, and update the model accordingly. Specific controllers (e.g., `UserController`, `WorkPlaceController`) inherit from a base controller (`BaseController`), providing common operations and ensuring a consistent interface.
+**2. Service:**
+   * Located in `db/services`.
+   * Contains more complex operations involving the model.
+   * Interacts with the corresponding repository to perform data operations.
 
-### Repositories
+**3. Controller:**
+   * Located in `controllers`.
+   * A clean class responsible for handling user input and making calls to methods in both the service and repository.
+   * Ensures a consistent interface for interaction with the model
 
-Repositories handle database operations for each model. They encapsulate CRUD (Create, Read, Update, Delete) operations and ensure clean separation between the database and the rest of the application. Specific repositories (e.g., `UserRepository`, `WorkPlaceRepository`) inherit from a base repository (`BaseRepository`), which provides generic methods for database interactions.
+---
 
-### Services
-
-Services contain business logic that may involve multiple models or complex operations. They interact with repositories to perform data operations and provide a higher-level abstraction for application functionality. Specific services (e.g., `UserService`, `WorkPlaceService`) inherit from a base service (`BaseService`), which provides a common structure for service classes.
-
-## Example: Adding a User
+## Examples
+### Adding a User
 
 To add a new user to the system, you can use the provided `UserController` and `UserRepository` classes. Here's a step-by-step example:
 
@@ -61,3 +70,36 @@ created_user = user_controller.create_entity(new_user_data)
 print("User added successfully:", created_user)
 ```
 
+### Get a User(s)
+```python
+# Use UserController to get a list of users
+all_user_list = user_controller.get_all_entities()
+print("All Users:", all_user_list)
+
+# Get a specific user by its ID
+user_id = ...
+specific_user = user_controller.get_entity(user_id)
+print("User found successfully:", specific_user)
+```
+
+### Update user details and delete a user
+```python
+# Define new details
+new_user_data = {
+    "username": "john_doe",
+    "password": "new_password",  # Updated
+    "isManager": False,
+    "isActive": True,
+    "name": "John Doe"
+}
+
+user_id = ...
+
+# Updated the wished user details
+updated_user = user_controller.update_entity(user_id, new_user_data)
+
+user_id = ...
+
+# Delete a user by its ID
+deleted_user = user_controller.delete_entity(user_id)
+```

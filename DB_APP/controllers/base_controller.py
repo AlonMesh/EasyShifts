@@ -8,8 +8,6 @@ EntityType = TypeVar("EntityType", bound=BaseRepository)
 
 class BaseController:
     """
-    BaseController Class
-
     A generic controller class providing common operations for controllers.
 
     Attributes:

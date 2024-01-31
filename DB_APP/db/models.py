@@ -23,13 +23,6 @@ class WorkPlace(Base):
     userID = Column(Integer, primary_key=True, index=True, nullable=False)
     workPlaceID = Column(Integer, nullable=False)
 
-    # __table_args__ = (
-    #     CheckConstraint(
-    #         "EXISTS (SELECT 1 FROM users WHERE userID = workPlace.userID)",
-    #         name="check_user_id",
-    #     ),
-    # )
-
 
 class UserRequest(Base):
     """Represents user request for shifts."""
