@@ -1,11 +1,22 @@
-import socket
+import websockets
 
 def handle_login(data):
+    pass
+
 def handle_employee_signin(data):
+    pass
+
 def handle_manager_signin(data):
+    pass
+
 def handle_employee_shifts_request(data):
+    pass
+
 def handle_manager_shifts(data):
+    pass
+
 def handle_employee_list(data):
+    pass
 
 def get_request(data):
     # Assuming the request ID is the first two bytes of the received data
@@ -14,7 +25,7 @@ def get_request(data):
     request_data = data[2:].decode()
     return request_id, request_data
 
-def handle_request (request_id, data):
+def handle_request(request_id, data):
     if request_id == 10:
         # Login request handling
         print("Received Login request")
@@ -47,60 +58,31 @@ def handle_request (request_id, data):
 
     else:
         print("Unknown request ID:", request_id)
-def start_server():
-    # Create a TCP/IP socket
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # Bind the socket to the address and port
-    server_address = ('127.0.0.1', 8080)
-    server_socket.bind(server_address)
-
-    # Listen for incoming connections
-    server_socket.listen(5)  # Maximum 5 connections in the queue
-
-    print("Server is listening on {}:{}".format(*server_address))
-
-    while True:
-        # Wait for a connection
-        print("Waiting for a connection...")
-        connection, client_address = server_socket.accept()
-
-        try:
-            print("Connection established with", client_address)
-            handle_client(connection, client_address)
-
-        finally:
-            # Clean up the connection
-            connection.close()
-
-
-def handle_client(connection, address):
+def handle_client(websocket):
     try:
-        print("Connection established with", address)
+        data = websocket.recv()
+        print("Received:", data)
 
-        while True:
-            # Receive data from the client
-            data = connection.recv(1024)
-            if not data:
-                # If no data is received, break the loop
-                break
+        # Get the request ID and data from the received packet
+        request_id, request_data = get_request(data.encode())
 
-            print("Received:", data.decode())
+        # Handle the request based on the request ID
+        handle_request(request_id, request_data)
 
-            # Get the request ID and data from the received packet
-            request_id, request_data = get_request(data)
-
-            # Handle the request based on the request ID
-            handle_request(request_id, request_data)
-
-            # Example: Respond to the client
-            response = "Request handled successfully!"
-            connection.sendall(response.encode())
+        # Example: Respond to the client
+        response = "Request handled successfully!"
+        websocket.send(response)
 
     finally:
         # Clean up the connection
-        connection.close()
+        print("Connection closed")
 
+def start_server():
+    # Start the WebSocket server
+    with websockets.serve(handle_client, "localhost", 8080):
+        print("Server started")
+        input("Press Enter to exit...")  # Keep the server running until Enter is pressed
 
 if __name__ == "__main__":
     start_server()

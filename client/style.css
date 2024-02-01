@@ -10,18 +10,13 @@ h1 {
 }
 
 button {
-    padding: 10px 20px;
+    padding: 5px 10px;
     font-size: 16px;
     margin: 10px;
     cursor: pointer;
 }
 
-p {
-    margin: 5px;
-    font-size: 14px;
+.dontHave {
+    font-size: small;
 }
 
-.signup-button {
-    font-size: 16px;
-    padding: 5px 10px;
-}

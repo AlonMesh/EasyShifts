@@ -9,10 +9,23 @@
     <body>
         <h1>Easy Shifts</h1>
         
-        <button onclick="loginAsEmployee()">Login as Employee</button>
-        <button onclick="loginAsManager()">Login as Manager</button>
+        <label for="userName">Username:</label>
+        <input type="text" id="userName" name="userName" required>
 
-        <p>Don't have an account yet? <button class="signup-button" onclick="signUp()">Sign Up</button></p>
+        <br> <!-- Line break added here -->
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <br> <!-- Line break added here -->
+
+        <button type="submit" onclick="login()">Login</button>
+
+        <br> <!-- Line break added here -->
+
+        <span class ="dontHave"> 
+            Don't have an account yet? <button class="signup-button" onclick="signUp()">Sign Up</button>
+        </span>
 
         <script src="client.js"></script>
     </body>
