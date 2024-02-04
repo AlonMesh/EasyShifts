@@ -1,5 +1,5 @@
-from Backend.db.repositories.shifts_repository import ShiftsRepository
-from Backend.db.services.base_service import BaseService
+from App.db.repositories.shifts_repository import ShiftsRepository
+from App.db.services.base_service import BaseService
 
 
 class ShiftsService(BaseService):

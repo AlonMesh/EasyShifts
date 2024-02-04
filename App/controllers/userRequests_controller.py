@@ -1,8 +1,8 @@
 from __future__ import annotations
 from sqlalchemy.orm import Session
-from Backend.controllers.base_controller import BaseController
-from Backend.db.repositories.userRequests_repository import UserRequestsRepository
-from Backend.db.services.userRequests_service import UserRequestsService
+from App.controllers.base_controller import BaseController
+from App.db.repositories.userRequests_repository import UserRequestsRepository
+from App.db.services.userRequests_service import UserRequestsService
 
 
 class UserRequestsController(BaseController):

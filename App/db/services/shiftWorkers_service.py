@@ -1,5 +1,5 @@
-from Backend.db.repositories.shiftWorkers_repository import ShiftWorkersRepository
-from Backend.db.services.base_service import BaseService
+from App.db.repositories.shiftWorkers_repository import ShiftWorkersRepository
+from App.db.services.base_service import BaseService
 
 
 class ShiftWorkersService(BaseService):
