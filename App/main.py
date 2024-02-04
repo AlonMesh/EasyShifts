@@ -1,7 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from DB_APP.db.models import Base
-from DB_APP.private_password import PASSWORD  # Create this file locally, set PASSWORD = ... and DON'T upload to GitHub!
+from App.db.models import Base
+from App.private_password import PASSWORD  # Create this file locally, set PASSWORD = ... and DON'T upload to GitHub!
+
+
+# from check_setup import check_setup
 
 
 def initialize_database_and_session():
@@ -18,10 +21,20 @@ def initialize_database_and_session():
         f'mysql+pymysql://root:{PASSWORD}@localhost:3306/easyshiftsdb')  # Connect to a MySQL database
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-    # Create all tables if they don't exist
-    Base.metadata.create_all(bind=engine)
+    create_tables(engine)
 
     # Creating a session object
     db = SessionLocal()
 
     return db, SessionLocal
+
+
+def create_tables(engine):
+    # Create all tables if they don't exist
+    Base.metadata.create_all(bind=engine)
+
+
+if __name__ == "__main__":
+    initialize_database_and_session()
+    # check_setup()  # Apply this for checking if the program works and the DBs are set
+    # Other stuf

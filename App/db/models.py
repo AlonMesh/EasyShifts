@@ -1,26 +1,29 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, PrimaryKeyConstraint
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, PrimaryKeyConstraint, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+
+NAMES_LEN = 20
+PASS_LEN = 50
 
 
 class User(Base):
     """Represents a user in the system."""
     __tablename__ = "users"
 
-    userID = Column(Integer, primary_key=True, index=True)
-    username = Column(String(20), unique=True, nullable=False)
-    password = Column(String(20), nullable=False)  # TODO: Hashing passwords
+    userID = Column(Integer, primary_key=True, index=True, nullable=False)
+    username = Column(String(NAMES_LEN), unique=True, nullable=False)
+    password = Column(String(PASS_LEN), nullable=False)  # TODO: Hashing passwords
     isManager = Column(Boolean, nullable=False)
     isActive = Column(Boolean, nullable=False)
-    name = Column(String(20), nullable=False)
+    name = Column(String(NAMES_LEN), nullable=False)
 
 
 class WorkPlace(Base):
     """Represents a workplace associated with a user."""
     __tablename__ = "workPlaces"
 
-    userID = Column(Integer, primary_key=True, index=True, nullable=False)
+    userID = Column(Integer, ForeignKey('users.userID'), primary_key=True, index=True, nullable=False)
     workPlaceID = Column(Integer, nullable=False)
 
 
@@ -28,9 +31,9 @@ class UserRequest(Base):
     """Represents user request for shifts."""
     __tablename__ = "userRequests"
 
-    userID = Column(Integer, primary_key=True, index=True)
-    modifyAt = Column(DateTime, nullable=False)
-    requests = Column(String(30), nullable=False)
+    userID = Column(Integer, ForeignKey('users.userID'), primary_key=True, index=True)
+    modifyAt = Column(DateTime)
+    requests = Column(String(255))
 
 
 class ShiftPart(Enum):
@@ -54,8 +57,8 @@ class ShiftWorker(Base):
     """Represents all shifts of all workers."""
     __tablename__ = "shiftWorkers"
 
-    shiftID = Column(Integer, nullable=False)
-    userID = Column(Integer, nullable=False)
+    shiftID = Column(Integer, ForeignKey('shifts.shiftID'), nullable=False)
+    userID = Column(Integer, ForeignKey('users.userID'), nullable=False)
 
     __table_args__ = (
         PrimaryKeyConstraint('shiftID', 'userID'),

@@ -2,7 +2,7 @@
 
 https://drawsql.app/teams/ca-ate/diagrams/users
 
-![tables.png](tables.png)
+![tables.png](static/tables.png)
 
 ## Overview
 
@@ -48,7 +48,7 @@ To add a new user to the system, you can use the provided `UserController` and `
 
 ```python
 # Import necessary modules
-from DB_APP.controllers.users_controller import UsersController
+from Backend.controllers.users_controller import UsersController
 
 # Assuming db exsits
 db = ...

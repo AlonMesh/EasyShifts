@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from DB_APP.db.models import WorkPlace
-from DB_APP.db.repositories.base_repository import BaseRepository
+from Backend.db.models import WorkPlace
+from Backend.db.repositories.base_repository import BaseRepository
 
 
 class WorkPlacesRepository(BaseRepository):

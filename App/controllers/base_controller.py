@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from DB_APP.db.repositories.base_repository import BaseRepository
-from DB_APP.db.services.base_service import BaseService
+from Backend.db.repositories.base_repository import BaseRepository
+from Backend.db.services.base_service import BaseService
 from typing import Type, TypeVar
 
 EntityType = TypeVar("EntityType", bound=BaseRepository)

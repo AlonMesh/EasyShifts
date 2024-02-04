@@ -1,4 +1,4 @@
-from initializtion import initialize_database_and_session
+from main import initialize_database_and_session
 from controllers import (shifts_controller, shiftWorkers_controller, userRequests_controller,
                          users_controller, workPlaces_controller)
 

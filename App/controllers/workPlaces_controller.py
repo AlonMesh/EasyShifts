@@ -1,8 +1,8 @@
 from __future__ import annotations
 from sqlalchemy.orm import Session
-from DB_APP.controllers.base_controller import BaseController
-from DB_APP.db.repositories.workPlaces_repository import WorkPlacesRepository
-from DB_APP.db.services.workPlaces_service import WorkPlacesService
+from Backend.controllers.base_controller import BaseController
+from Backend.db.repositories.workPlaces_repository import WorkPlacesRepository
+from Backend.db.services.workPlaces_service import WorkPlacesService
 
 
 class WorkPlacesController(BaseController):

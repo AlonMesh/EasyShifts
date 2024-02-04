@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from DB_APP.db.models import Shift
-from DB_APP.db.repositories.base_repository import BaseRepository
+from Backend.db.models import Shift
+from Backend.db.repositories.base_repository import BaseRepository
 
 
 class ShiftsRepository(BaseRepository):

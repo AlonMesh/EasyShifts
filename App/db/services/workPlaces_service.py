@@ -1,18 +1,18 @@
-from DB_APP.db.repositories.userRequests_repository import UserRequestsRepository
-from DB_APP.db.services.base_service import BaseService
+from Backend.db.repositories.workPlaces_repository import WorkPlacesRepository
+from Backend.db.services.base_service import BaseService
 
 
-class UserRequestsService(BaseService):
+class WorkPlacesService(BaseService):
     """
     Service class for handling complexes operations.
     """
 
-    def __init__(self, repository: UserRequestsRepository):
+    def __init__(self, repository: WorkPlacesRepository):
         """
         Initializes the UsersService with a user repository.
 
         Parameters:
-            repository: An instance of UserRequestsRepository.
+            repository: An instance of WorkPlacesRepository.
         """
         super().__init__(repository)
 

@@ -1,18 +1,18 @@
-from DB_APP.db.repositories.shiftWorkers_repository import ShiftWorkersRepository
-from DB_APP.db.services.base_service import BaseService
+from Backend.db.repositories.userRequests_repository import UserRequestsRepository
+from Backend.db.services.base_service import BaseService
 
 
-class ShiftWorkersService(BaseService):
+class UserRequestsService(BaseService):
     """
     Service class for handling complexes operations.
     """
 
-    def __init__(self, repository: ShiftWorkersRepository):
+    def __init__(self, repository: UserRequestsRepository):
         """
         Initializes the UsersService with a user repository.
 
         Parameters:
-            repository: An instance of ShiftWorkersRepository.
+            repository: An instance of UserRequestsRepository.
         """
         super().__init__(repository)
 

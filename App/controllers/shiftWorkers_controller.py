@@ -1,8 +1,8 @@
 from __future__ import annotations
 from sqlalchemy.orm import Session
-from DB_APP.controllers.base_controller import BaseController
-from DB_APP.db.repositories.shiftWorkers_repository import ShiftWorkersRepository
-from DB_APP.db.services.shiftWorkers_service import ShiftWorkersService
+from Backend.controllers.base_controller import BaseController
+from Backend.db.repositories.shiftWorkers_repository import ShiftWorkersRepository
+from Backend.db.services.shiftWorkers_service import ShiftWorkersService
 
 
 class ShiftWorkersController(BaseController):
