@@ -48,7 +48,7 @@ To add a new user to the system, you can use the provided `UserController` and `
 
 ```python
 # Import necessary modules
-from Backend.controllers.users_controller import UsersController
+from App.controllers.users_controller import UsersController
 
 # Assuming db exsits
 db = ...

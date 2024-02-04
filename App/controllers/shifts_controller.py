@@ -1,8 +1,8 @@
 from __future__ import annotations
 from sqlalchemy.orm import Session
-from Backend.controllers.base_controller import BaseController
-from Backend.db.repositories.shifts_repository import ShiftsRepository
-from Backend.db.services.shifts_service import ShiftsService
+from App.controllers.base_controller import BaseController
+from App.db.repositories.shifts_repository import ShiftsRepository
+from App.db.services.shifts_service import ShiftsService
 
 
 class ShiftsController(BaseController):

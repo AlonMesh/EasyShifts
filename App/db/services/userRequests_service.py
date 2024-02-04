@@ -1,5 +1,5 @@
-from Backend.db.repositories.userRequests_repository import UserRequestsRepository
-from Backend.db.services.base_service import BaseService
+from App.db.repositories.userRequests_repository import UserRequestsRepository
+from App.db.services.base_service import BaseService
 
 
 class UserRequestsService(BaseService):

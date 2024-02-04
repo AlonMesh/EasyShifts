@@ -1,5 +1,5 @@
-from Backend.db.repositories.workPlaces_repository import WorkPlacesRepository
-from Backend.db.services.base_service import BaseService
+from App.db.repositories.workPlaces_repository import WorkPlacesRepository
+from App.db.services.base_service import BaseService
 
 
 class WorkPlacesService(BaseService):

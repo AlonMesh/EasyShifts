@@ -1,5 +1,5 @@
-from Backend.db.repositories.users_repository import UsersRepository
-from Backend.db.services.base_service import BaseService
+from App.db.repositories.users_repository import UsersRepository
+from App.db.services.base_service import BaseService
 
 
 class UsersService(BaseService):

@@ -1,4 +1,6 @@
 import websockets
+import asyncio
+from App.check_setup import initialize_database_and_session
 
 def handle_login(data):
     pass
@@ -78,11 +80,10 @@ def handle_client(websocket):
         # Clean up the connection
         print("Connection closed")
 
-def start_server():
-    # Start the WebSocket server
-    with websockets.serve(handle_client, "localhost", 8080):
+async def start_server():
+    db, _ = initialize_database_and_session()
+    async with websockets.serve(handle_client, "localhost", 8080):
         print("Server started")
-        input("Press Enter to exit...")  # Keep the server running until Enter is pressed
+        await asyncio.Future()  # Keep the server running until Enter is pressed
 
-if __name__ == "__main__":
-    start_server()
+asyncio.run(start_server())
