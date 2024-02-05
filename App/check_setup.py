@@ -8,11 +8,11 @@ def check_setup():
 
     # Check User creation
     user_data = {
-        "username": "LastOne12",
-        "password": "123456",
+        "username": "test_user",
+        "password": "test_pass",
         "isManager": 0,
         "isActive": 1,
-        "name": "jon jon"
+        "name": "test user"
     }
 
     # Initialize Controller
@@ -26,7 +26,7 @@ def check_setup():
 
     # Check WorkPlace creation
     workplace_data = {
-        "userID": 1,
+        "id": 1,
         "workPlaceID": 1
     }
 
@@ -38,9 +38,9 @@ def check_setup():
 
     # Check UserRequest creation
     user_request_data = {
-        "userID": 1,
+        "id": 1,
         "modifyAt": "2024-01-30T12:00:00",
-        "requests": "Vacation"
+        "requests": "Any request..."
     }
     # Initialize Controller
     controller = userRequests_controller.UserRequestsController(db)
