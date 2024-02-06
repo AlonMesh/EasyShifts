@@ -23,7 +23,7 @@ function connectToServer() {
     });
 }
 
-function sendLoginRequest() {
+function redirectToLogin() {
     if (socket && socket.readyState === WebSocket.OPEN) {
         const loginRequest = {
             request_id: 10,
@@ -36,7 +36,7 @@ function sendLoginRequest() {
     }
 }
 
-function sendSigninRequest() {
+function redirectToSignin() {
     if (socket && socket.readyState === WebSocket.OPEN) {
         const loginRequest = {
             request_id: 20,
