@@ -21,6 +21,9 @@ def handle_manager_shifts(data):
 def handle_employee_list(data):
     pass
 
+def handle_send_profile():
+    pass
+
 def get_request(msg):
     # Assuming the request ID is the first two bytes of the received data
     data = json.loads(msg)
@@ -35,16 +38,19 @@ def handle_request(request_id, data):
     if request_id == 10:
         # Login request handling
         print("Received Login request")
+        print(data)
         handle_login(data)
 
     elif request_id == 20:
         # Employee Sign in request handling
         print("Received Employee Sign in request")
+        print(data)
         handle_employee_signin(data)
 
     elif request_id == 30:
         # Manager Sign in request handling
         print("Received Manager Sign in request")
+        print(data)
         handle_manager_signin(data)
 
     elif request_id == 40:
@@ -60,7 +66,12 @@ def handle_request(request_id, data):
     elif request_id == 60:
         # Employees list request handling
         print("Received Employees list request")
-        handle_employee_list(data)
+        handle_employee_list()
+
+    elif request_id == 70:
+        # Employees list request handling
+        print("Send user profile")
+        handle_send_profile()
 
     else:
         print("Unknown request ID:", request_id)
