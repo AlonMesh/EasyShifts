@@ -1,6 +1,5 @@
 import websockets
 import asyncio
-from App.check_setup import initialize_database_and_session
 
 def handle_login(data):
     pass
@@ -81,7 +80,6 @@ def handle_client(websocket):
         print("Connection closed")
 
 async def start_server():
-    db, _ = initialize_database_and_session()
     async with websockets.serve(handle_client, "localhost", 8080):
         print("Server started")
         await asyncio.Future()  # Keep the server running until Enter is pressed
