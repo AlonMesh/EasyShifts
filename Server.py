@@ -4,7 +4,6 @@ import json
 from App.main import initialize_database_and_session
 
 def handle_login(data):
-    print("new")
     pass
 
 def handle_employee_signin(data):
