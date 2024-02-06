@@ -4,9 +4,6 @@ from App.db.models import Base
 from App.private_password import PASSWORD  # Create this file locally, set PASSWORD = ... and DON'T upload to GitHub!
 
 
-# from check_setup import check_setup
-
-
 def initialize_database_and_session():
     """
     Explanation:
@@ -36,5 +33,3 @@ def create_tables(engine):
 
 if __name__ == "__main__":
     initialize_database_and_session()
-    # check_setup()  # Apply this for checking if the program works and the DBs are set
-    # Other stuf
