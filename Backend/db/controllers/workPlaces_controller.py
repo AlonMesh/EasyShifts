@@ -19,4 +19,6 @@ class WorkPlacesController(BaseController):
         Parameters:
             db (Session): SQLAlchemy Session for database interactions.
         """
-        super().__init__(db, WorkPlacesRepository, WorkPlacesService)
+        self.repository = WorkPlacesRepository(db)
+        self.service = WorkPlacesService(self.repository)
+        super().__init__(self.repository, self.service)

@@ -19,4 +19,6 @@ class ShiftsController(BaseController):
         Parameters:
             db (Session): SQLAlchemy Session for database interactions.
         """
-        super().__init__(db, ShiftsRepository, ShiftsService)
+        self.repository = ShiftsRepository(db)
+        self.service = ShiftsService(self.repository)
+        super().__init__(self.repository, self.service)
