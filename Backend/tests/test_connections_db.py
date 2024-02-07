@@ -26,6 +26,9 @@ class TestConnectionsDB(TestCase):
         # Check if the entity_type of the service repository is User
         self.assertEqual(self.service.repository.entity_type, User)
 
+        # Check that service has access to repo's method
+        self.assertEqual(self.service.repository.custom_operation_for_test_only(), 30)
+
     def test_service_does_CURD(self):
         user_data = {
             "username": "ser_test_user",
