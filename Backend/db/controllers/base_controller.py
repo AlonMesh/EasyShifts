@@ -13,10 +13,11 @@ class BaseController:
 
     def __init__(self, repository, service):
         """
-        Initializes the BaseController with a database session, repository type, and service type.
+        Initializes the BaseController with a repository and service.
 
         Parameters:
-            # TODO: fix doc
+            repository: An instance of the repository type for database interactions.
+            service: An instance of the service type for handling complex operations.
         """
         self.repository = repository
         self.service = service
