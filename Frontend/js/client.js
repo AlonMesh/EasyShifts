@@ -41,7 +41,7 @@ function redirectToSignInShifts() {
     window.location.replace("../pages/sign_in_shifts.html");
 }
 
-function sendLoginRequest() { // ORI Ekshtein
+function sendLoginRequest() { // ORI
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -50,15 +50,26 @@ function sendLoginRequest() { // ORI Ekshtein
             data: {username, password},
         };
         socket.send(JSON.stringify(request));
+       socket.addEventListener('message', function(event) {
+            const response = JSON.parse(event.data);
+            const userExists = response.data[0];
+            const isManager = response.data[1];
+
+            if (!userExists) {
+                logMessage('Invalid Username or Password');
+            } else {
+                if (isManager) {
+                    window.location.replace("../pages/manager_page.html");
+                } else {
+                    window.location.replace("../pages/employee_page.html");
+                }
+            }
+        });
+
     } else {
         logMessage('Not connected to the server');
     }
 
-    // ori, you need to get from server here a response that tells if this user is manager or employee
-    // if manager, use  -  window.location.replace("../pages/manager_page.html");
-    // if employee, use - window.location.replace("../pages/employee_page.html");
-
-    // and if user doesn't exist, use - logMessage('invalid Username or Password'); you can copy it..
 }
 
 function sendManagerSignUpRequest() { // ALON

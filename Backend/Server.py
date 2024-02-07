@@ -1,28 +1,49 @@
 import websockets
 import asyncio
 import json
+
+from Backend.db.controllers import users_controller
 from Backend.main import initialize_database_and_session
 
+
 def handle_login(data):
-    pass
+    # Parse the JSON data received
+    login_data = json.loads(data)
+
+    # Access the username and password
+    username = login_data['data']['username']
+    password = login_data['data']['password']
+
+    # Check if the user exists and is a manager
+    user_exists, is_manager = users_controller.check_user_existence_and_manager_status(username, password)
+
+    # Return the pair of boolean values
+    return user_exists, is_manager
+
 
 def handle_employee_signin(data):
     pass
 
+
 def handle_manager_signin(data):
     pass
+
 
 def handle_employee_shifts_request(data):
     pass
 
+
 def handle_manager_shifts(data):
     pass
+
 
 def handle_employee_list(data):
     pass
 
+
 def handle_send_profile():
     pass
+
 
 def get_request(msg):
     # Assuming the request ID is the first two bytes of the received data
@@ -33,6 +54,7 @@ def get_request(msg):
     # Extract the rest of the data
     request_data = data.get('data', None)
     return request_id, request_data
+
 
 def handle_request(request_id, data):
     if request_id == 10:
@@ -76,6 +98,7 @@ def handle_request(request_id, data):
     else:
         print("Unknown request ID:", request_id)
 
+
 async def handle_client(websocket, path):
     try:
         async for message in websocket:
@@ -91,10 +114,12 @@ async def handle_client(websocket, path):
     except websockets.exceptions.ConnectionClosed:
         print(f"Connection closed for {websocket.remote_address}")
 
+
 async def start_server():
-    db, _  = initialize_database_and_session();
+    db, _ = initialize_database_and_session();
     async with websockets.serve(handle_client, "localhost", 8080):
         print("Server started")
         await asyncio.Future()  # Keep the server running until Enter is pressed
+
 
 asyncio.run(start_server())
