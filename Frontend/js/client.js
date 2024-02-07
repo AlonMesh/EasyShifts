@@ -41,7 +41,7 @@ function redirectToSignInShifts() {
     window.location.replace("../pages/sign_in_shifts.html");
 }
 
-function sendLoginRequest() { // ORI
+function sendLoginRequest() { // ORI Ekshtein
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     if (socket && socket.readyState === WebSocket.OPEN) {
