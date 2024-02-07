@@ -19,4 +19,6 @@ class UserRequestsController(BaseController):
         Parameters:
             db (Session): SQLAlchemy Session for database interactions.
         """
-        super().__init__(db, UserRequestsRepository, UserRequestsService)
+        self.repository = UserRequestsRepository(db)
+        self.service = UserRequestsService(self.repository)
+        super().__init__(self.repository, self.service)

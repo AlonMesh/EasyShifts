@@ -19,4 +19,6 @@ class ShiftWorkersController(BaseController):
         Parameters:
             db (Session): SQLAlchemy Session for database interactions.
         """
-        super().__init__(db, ShiftWorkersRepository, ShiftWorkersService)
+        self.repository = ShiftWorkersRepository(db)
+        self.service = ShiftWorkersService(self.repository)
+        super().__init__(self.repository, self.service)

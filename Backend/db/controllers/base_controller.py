@@ -9,25 +9,17 @@ EntityType = TypeVar("EntityType", bound=BaseRepository)
 class BaseController:
     """
     A generic controller class providing common operations for controllers.
-
-    Attributes:
-        db (Session): SQLAlchemy Session for database interactions.
-        repository_type (Type[BaseRepository]): Type of the repository associated with the controller.
-        service_type (Type[BaseService]): Type of the service associated with the controller.
     """
 
-    def __init__(self, db: Session, repository_type: Type[BaseRepository], service_type: Type[BaseService]):
+    def __init__(self, repository, service):
         """
         Initializes the BaseController with a database session, repository type, and service type.
 
         Parameters:
-            db (Session): SQLAlchemy Session for database interactions.
-            repository_type (Type[BaseRepository]): Type of the repository associated with the controller.
-            service_type (Type[BaseService]): Type of the service associated with the controller.
+            # TODO: fix doc
         """
-        self.db = db
-        self.repository_type = repository_type
-        self.service_type = service_type
+        self.repository = repository
+        self.service = service
 
     def create_entity(self, entity_data: dict) -> EntityType:
         """
@@ -39,8 +31,7 @@ class BaseController:
         Returns:
             EntityType: The created entity.
         """
-        repository = self.repository_type(self.db)
-        return repository.create_entity(entity_data)
+        return self.repository.create_entity(entity_data)
 
     def get_entity(self, entity_id: int) -> EntityType:
         """
@@ -52,8 +43,7 @@ class BaseController:
         Returns:
             EntityType: The retrieved entity if found, else None.
         """
-        repository = self.repository_type(self.db)
-        return repository.get_entity(entity_id)
+        return self.repository.get_entity(entity_id)
 
     def get_all_entities(self) -> list[EntityType]:
         """
@@ -62,8 +52,7 @@ class BaseController:
         Returns:
             List[EntityType]: A list of all entities.
         """
-        repository = self.repository_type(self.db)
-        return repository.get_all_entities()
+        return self.repository.get_all_entities()
 
     def update_entity(self, entity_id: int, updated_data: dict) -> EntityType:
         """
@@ -76,8 +65,7 @@ class BaseController:
         Returns:
             EntityType: The updated entity if found, else None.
         """
-        repository = self.repository_type(self.db)
-        return repository.update_entity(entity_id, updated_data)
+        return self.repository.update_entity(entity_id, updated_data)
 
     def delete_entity(self, entity_id: int) -> EntityType:
         """
@@ -89,8 +77,7 @@ class BaseController:
         Returns:
             EntityType: The deleted entity if found, else None.
         """
-        repository = self.repository_type(self.db)
-        return repository.delete_entity(entity_id)
+        return self.repository.delete_entity(entity_id)
 
     def perform_custom_operation(self) -> any:
         """
