@@ -17,18 +17,17 @@ user_session = None
 def handle_login(data):
     global user_session  # Declare user_session as a global variable
 
-    login_data = json.loads(data)
-
     # Access the username and password
-    username = login_data['data']['username']
-    password = login_data['data']['password']
+    username = data['username']
+    password = data['password']
 
     # Initialize the users controller, passing the database session
     users_controller = UsersController(db)
 
     # Check if the user exists and is a manager
     user_exists, is_manager = users_controller.check_user_existence_and_manager_status(username, password)
-
+    print(user_exists)
+    print(is_manager)
     if user_exists:
         # Retrieve the actual user ID from the database
         user_id = users_controller.get_user_id_by_username_and_password(username, password)
@@ -37,7 +36,8 @@ def handle_login(data):
         user_session = UserSession(user_id=user_id, is_manager=is_manager)
 
     # Return the pair of boolean values
-    return user_exists, is_manager
+    response = [user_exists, is_manager]
+    return response
 
 
 def handle_employee_signin(data):
@@ -89,7 +89,6 @@ def handle_employee_list():
         return None
 
 
-
 def handle_send_profile():
     pass
 
@@ -110,7 +109,9 @@ def handle_request(request_id, data):
         # Login request handling
         print("Received Login request")
         print(data)
-        handle_login(data)
+
+        response = handle_login(data)
+        return response
 
     elif request_id == 20:
         # Employee Sign in request handling
@@ -158,7 +159,10 @@ async def handle_client(websocket, path):
             request_id = data.get('request_id', None)
             request_data = data.get('data', None)
 
-            handle_request(request_id, request_data)
+            response = handle_request(request_id, request_data)
+            json_data = json.dumps(response)
+            await websocket.send(json_data)
+            print(response)
 
     except websockets.exceptions.ConnectionClosed:
         print(f"Connection closed for {websocket.remote_address}")

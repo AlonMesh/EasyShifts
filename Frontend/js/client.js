@@ -8,10 +8,6 @@ function connectToServer() {
     const serverUrl = 'ws://localhost:8080';
     socket = new WebSocket(serverUrl);
 
-    socket.addEventListener('message', (event) => {
-        logMessage(`Received: ${event.data}`);
-    });
-
     socket.addEventListener('close', (event) => {
         logMessage('Connection closed');
     });
@@ -49,23 +45,22 @@ function sendLoginRequest() { // ORI
             request_id: 10,
             data: {username, password},
         };
+
         socket.send(JSON.stringify(request));
-       socket.addEventListener('message', function(event) {
-            const response = JSON.parse(event.data);
-            const userExists = response.data[0];
-            const isManager = response.data[1];
+        socket.addEventListener ('message', (event) => {
+        const userExists = event.data[1];
 
-            if (!userExists) {
-                logMessage('Invalid Username or Password');
+        if (userExists == 'f') {
+            logMessage('Invalid Username or Password');
+        } else {
+            const isManager = event.data[7];
+            if (isManager == 't') {
+                window.location.replace("../pages/manager_page.html");
             } else {
-                if (isManager) {
-                    window.location.replace("../pages/manager_page.html");
-                } else {
-                    window.location.replace("../pages/employee_page.html");
-                }
+                window.location.replace("../pages/employee_page.html");
             }
+        }
         });
-
     } else {
         logMessage('Not connected to the server');
     }
@@ -118,7 +113,7 @@ function getProfileRequest() { // WHO ENDS HERE/HIS PART FIRST
 }
 
 function getEmployeesList() { // ORI
-    if (socket && socket.readyState === WebSocket.OPEN) {
+     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 60,
         };
@@ -127,13 +122,26 @@ function getEmployeesList() { // ORI
         logMessage('Not connected to the server');
         return;
     }
+
     socket.addEventListener('message', function(event) {
         const data = JSON.parse(event.data);
+        // Assuming data is an array of tuples containing employee ID and name
+        const employees = data;
 
+        // Generate HTML content dynamically
+        let htmlContent = '<h1>Employees List</h1>';
+        htmlContent += '<ul>';
+        employees.forEach(employee => {
+            htmlContent += `<li>${employee[0]}: ${employee[1]}</li>`;
+        });
+        htmlContent += '</ul>';
 
+        // Open the HTML page in a new browser window
+        const newWindow = window.open();
+        newWindow.document.open();
+        newWindow.document.write(htmlContent);
+        newWindow.document.close();
     });
-    // ori - you need to get from server an html file with employees list in it.
-    // then, use - window.location.replace("..."); to show it to user
 }
 
 function sendShiftRequest() { // NETA

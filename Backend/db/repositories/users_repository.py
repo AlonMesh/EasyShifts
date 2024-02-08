@@ -19,7 +19,6 @@ class UsersRepository(BaseRepository):
         """
         # Query the database to find a user with the given username and password
         user = self.db.query(User).filter(User.username == username, User.password == password).first()
-
         # If user is not None, it means a user with the provided credentials exists
         return user is not None
 
