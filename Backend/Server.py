@@ -4,9 +4,18 @@ import json
 
 from Backend.db.controllers import users_controller
 from Backend.main import initialize_database_and_session
+from Backend.db.controllers.users_controller import UsersController
+from Backend.user_session import UserSession
+
+db, _ = initialize_database_and_session()
+user_session = None
 
 
 def handle_login(data):
+    global user_session  # Declare user_session as a global variable
+
+    # Crate a UserSession object and assign it to the global variable
+    # user_session = UserSession(user_id=..., is_manager=...)
     # Parse the JSON data received
     login_data = json.loads(data)
 
@@ -26,7 +35,15 @@ def handle_employee_signin(data):
 
 
 def handle_manager_signin(data):
-    pass
+    """
+    Handles the manager signin process by creating a new user using the UsersController.
+
+    Parameters:
+        data (dict): A dictionary containing user data for signin.
+            Example: {'username': 'manager1', 'password': 'password123', 'isManager': True, 'isActive': True, 'name': 'Place Name'}
+    """
+    user_controller = UsersController(db)
+    user_controller.create_entity(data)
 
 
 def handle_employee_shifts_request(data):
@@ -116,10 +133,13 @@ async def handle_client(websocket, path):
 
 
 async def start_server():
-    db, _ = initialize_database_and_session();
+    db, _ = initialize_database_and_session()
     async with websockets.serve(handle_client, "localhost", 8080):
         print("Server started")
         await asyncio.Future()  # Keep the server running until Enter is pressed
 
 
 asyncio.run(start_server())
+
+if __name__ == "__main__":
+    asyncio.run(start_server())
