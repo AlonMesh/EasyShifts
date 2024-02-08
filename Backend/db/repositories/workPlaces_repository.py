@@ -44,3 +44,22 @@ class WorkPlacesRepository(BaseRepository):
             .all()
         )
 
+    def get_workplace_id_by_userid(self, user_id: int):
+        """
+        Retrieves the workplace ID for the specified user.
+
+        Parameters:
+            user_id (int): ID of the user.
+
+        Returns:
+            int | None: The workplace ID if the user works in a workplace, else None.
+        """
+        # Query the WorkPlace table to find the workplace associated with the user
+        workplace = (
+            self.db.query(WorkPlace)
+            .filter(WorkPlace.id == user_id)  # Assuming id represents user ID in WorkPlace
+            .first()
+        )
+
+        # Return the workplace ID if found, else None
+        return workplace.workPlaceID if workplace else None

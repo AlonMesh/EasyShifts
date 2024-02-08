@@ -2,29 +2,39 @@ import websockets
 import asyncio
 import json
 
-from Backend.db.controllers import users_controller
-from Backend.main import initialize_database_and_session
 from Backend.db.controllers.users_controller import UsersController
+from Backend.db.controllers.workPlaces_controller import WorkPlacesController
+from Backend.main import initialize_database_and_session
 from Backend.user_session import UserSession
 
+# Initialize the database and session
 db, _ = initialize_database_and_session()
+
+# Global variable declaration
 user_session = None
 
 
 def handle_login(data):
     global user_session  # Declare user_session as a global variable
 
-    # Crate a UserSession object and assign it to the global variable
-    # user_session = UserSession(user_id=..., is_manager=...)
-    # Parse the JSON data received
     login_data = json.loads(data)
 
     # Access the username and password
     username = login_data['data']['username']
     password = login_data['data']['password']
 
+    # Initialize the users controller, passing the database session
+    users_controller = UsersController(db)
+
     # Check if the user exists and is a manager
     user_exists, is_manager = users_controller.check_user_existence_and_manager_status(username, password)
+
+    if user_exists:
+        # Retrieve the actual user ID from the database
+        user_id = users_controller.get_user_id_by_username_and_password(username, password)
+
+        # Create a UserSession object if the user exists
+        user_session = UserSession(user_id=user_id, is_manager=is_manager)
 
     # Return the pair of boolean values
     return user_exists, is_manager
@@ -54,8 +64,30 @@ def handle_manager_shifts(data):
     pass
 
 
-def handle_employee_list(data):
-    pass
+def handle_employee_list():
+    if user_session is None:
+        print("User session not found.")
+        return
+    # Check if the user can access manager-specific pages
+    if user_session.can_access_manager_page():
+        # Initialize the workplaces controller, passing the database session
+        work_places_controller = WorkPlacesController(db)
+
+        # Retrieve the user ID from the user session
+        user_id = user_session.get_user_id()
+
+        # Retrieve the workplace ID for the specified user
+        workplace_id = work_places_controller.get_workplace_id_by_userid(user_id)
+
+        if workplace_id is not None:
+            return work_places_controller.get_active_workers_for_user(user_id)
+        else:
+            print("User does not work in any workplace.")
+            return None
+    else:
+        print("User does not have access to manager-specific pages.")
+        return None
+
 
 
 def handle_send_profile():

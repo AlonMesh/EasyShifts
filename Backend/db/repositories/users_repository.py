@@ -39,3 +39,17 @@ class UsersRepository(BaseRepository):
 
         # Check if the user exists and is a manager
         return user is not None and user.isManager
+
+    def get_user_by_username_and_password(self, username: str, password: str):
+        """
+        Retrieves a user by username and password.
+
+        Parameters:
+            username (str): The username of the user to retrieve.
+            password (str): The password of the user to retrieve.
+
+        Returns:
+            User: The user object if found, None otherwise.
+        """
+        # Query the database to find a user with the given username and password
+        return self.db.query(User).filter(User.username == username, User.password == password).first()

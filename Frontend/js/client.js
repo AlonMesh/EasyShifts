@@ -125,8 +125,13 @@ function getEmployeesList() { // ORI
         socket.send(JSON.stringify(request));
     } else {
         logMessage('Not connected to the server');
+        return;
     }
+    socket.addEventListener('message', function(event) {
+        const data = JSON.parse(event.data);
 
+
+    });
     // ori - you need to get from server an html file with employees list in it.
     // then, use - window.location.replace("..."); to show it to user
 }

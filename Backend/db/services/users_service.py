@@ -43,3 +43,19 @@ class UsersService(BaseService):
         is_manager = self.repository.is_manager_by_username_and_password(username, password)
 
         return user_exists, is_manager
+
+    def get_user_id_by_username_and_password(self, username: str, password: str):
+        """
+        Retrieves the user ID by username and password.
+
+        Parameters:
+            username (str): The username of the user to retrieve.
+            password (str): The password of the user to retrieve.
+
+        Returns:
+            Optional[int]: The user ID if the user exists, None otherwise.
+        """
+        user = self.repository.get_user_by_username_and_password(username, password)
+        if user:
+            return user.id
+        return None

@@ -38,3 +38,16 @@ class UsersController(BaseController):
         """
         # Delegate the functionality to the service layer
         return self.service.check_user_existence_and_manager_status(username, password)
+
+    def get_user_id_by_username_and_password(self, username: str, password: str):
+        """
+        Retrieves the user ID by username and password.
+
+        Parameters:
+            username (str): The username of the user to retrieve.
+            password (str): The password of the user to retrieve.
+
+        Returns:
+            Optional[int]: The user ID if the user exists, None otherwise.
+        """
+        return self.service.get_user_id_by_username_and_password(username, password)
