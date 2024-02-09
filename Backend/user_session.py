@@ -36,7 +36,7 @@ class UserSession:
         """
         return not self._is_manager
 
-    def get_user_id(self):
+    def get_id(self):
         """
         Retrieves the user's ID.
 

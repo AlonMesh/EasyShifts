@@ -6,6 +6,7 @@ from Backend.db.repositories.base_repository import BaseRepository
 class UsersRepository(BaseRepository):
     def __init__(self, db: Session):
         super().__init__(db, User)
+        
     def check_user_credentials(self, username: str, password: str) -> bool:
         """
         Check if a user with the given username and password exists.
@@ -52,3 +53,6 @@ class UsersRepository(BaseRepository):
         """
         # Query the database to find a user with the given username and password
         return self.db.query(User).filter(User.username == username, User.password == password).first()
+
+    def custom_operation_for_test_only(self):
+        return 30
