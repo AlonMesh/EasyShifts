@@ -35,3 +35,12 @@ class UserSession:
             bool: True if the user is a worker, False otherwise.
         """
         return not self._is_manager
+
+    def get_id(self):
+        """
+        Retrieves the user's ID.
+
+        Returns:
+            int: The user's ID.
+        """
+        return self._user_id
