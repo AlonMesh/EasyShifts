@@ -1,29 +1,44 @@
 from datetime import datetime
-from sqlalchemy.exc import NoResultFound
+from typing import List
 from sqlalchemy.orm import Session
 from Backend.db.models import Shift
 from Backend.db.repositories.base_repository import BaseRepository
+from Backend.db.repositories.shiftWorkers_repository import ShiftWorkersRepository
 
 
 class ShiftsRepository(BaseRepository):
     def __init__(self, db: Session):
         super().__init__(db, Shift)
 
-    def get_shift_date_by_shift_id(self, shift_id: int) -> datetime:
+    def get_all_shifts_since_date(self, date: datetime):
         """
-        Retrieves the shift date by shift ID.
+        Retrieves all shifts of a worker since a given date.
 
         Parameters:
-            shift_id (int): ID of the shift to retrieve the date for.
+            date (datetime): Date to retrieve the shifts since.
 
         Returns:
-             The date of the shift.
-
-        Raises:
-            NoResultFound: If the shift with the specified ID is not found.
+            List of shifts of the worker since the given date.
         """
-        try:
-            shift = self.db.query(Shift).filter(self.entity_type.id == shift_id).one()
-            return shift.shiftDate
-        except NoResultFound:
-            raise NoResultFound(f"No shift found with ID {shift_id}")
+        return self.db.query(Shift).filter(
+            Shift.shiftDate >= date
+        ).all()
+
+    def get_all_shifts_since_date_for_given_worker(self, date: datetime, worker_id: int) -> List[Shift]:
+        """
+        Retrieves all shifts of a worker since a given date.
+        Args:
+            date (datetime): Date to retrieve the shifts since.
+            worker_id (int): ID of the worker to retrieve shifts for.
+
+        Returns: List of shifts of the worker since the given date.
+        """
+        # Reuse the get_all_shifts_since_date function
+        shifts = self.get_all_shifts_since_date(date)
+
+        # Get the shift workers repository
+        shift_workers_repository = ShiftWorkersRepository(self.db)
+
+        # Filter shifts based on the given worker ID
+        shifts_for_worker = [shift for shift in shifts if shift_workers_repository.is_shift_assigned_to_worker(shift.id, worker_id)]
+        return shifts_for_worker
