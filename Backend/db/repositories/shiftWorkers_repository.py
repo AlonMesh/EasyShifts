@@ -81,3 +81,16 @@ class ShiftWorkersRepository(BaseRepository):
             ShiftWorker.shiftID == shift_id,
             ShiftWorker.userID == worker_id
         ).first() is not None
+
+    def convert_shift_workers_by_shift_id_to_client(self, shift_id) -> list[str]:
+        """
+        Retrieves all workers for a shift by shift ID.
+        Args:
+            shift_id (int): ID of the shift to retrieve workers for.
+
+        Returns:
+            List[str]: A list of all workers for the shift.
+        """
+        users_repository = UsersRepository(self.db)
+        workers = self.get_shift_workers_by_shift_id(shift_id)
+        return [users_repository.get_entity(worker.userID).name for worker in workers]

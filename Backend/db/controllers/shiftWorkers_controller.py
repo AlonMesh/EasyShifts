@@ -80,3 +80,14 @@ class ShiftWorkersController(BaseController):
             bool: True if the shift is assigned to the worker, False otherwise.
         """
         return self.repository.is_shift_assigned_to_worker(shift_id, worker_id)
+
+    def convert_shift_workers_by_shift_id_to_client(self, shift_id) -> list[str]:
+        """
+        Retrieves all workers for a shift by shift ID.
+        Args:
+            shift_id (int): ID of the shift to retrieve workers for.
+
+        Returns:
+            List[str]: A list of all workers for the shift.
+        """
+        return self.repository.convert_shift_workers_by_shift_id_to_client(shift_id)

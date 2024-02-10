@@ -40,3 +40,15 @@ class WorkPlacesService(BaseService):
         worker_info = [(user.id, user.name) for user in active_users]
 
         return worker_info
+
+    def get_workplace_id_by_worker_id(self, user_id: int) -> int:
+        """
+        Retrieves the workplace ID for the specified user.
+
+        Parameters:
+            user_id (int): ID of the user.
+
+        Returns:
+            int | None: The workplace ID if the user works in a workplace, else None.
+        """
+        return self.repository.get_workplace_by_worker_id(user_id).id
