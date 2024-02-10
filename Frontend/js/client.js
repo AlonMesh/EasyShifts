@@ -89,12 +89,11 @@ function sendManagerSignUpRequest() { // ALON
 function sendEmployeeSignUpRequest() { // SHOVAL
     const username = document.getElementById('employeeUsername').value;
     const password = document.getElementById('employeePassword').value;
-    const email = document.getElementById('employeeEmail').value;
-    const name = document.getElementById('name').value;
+    const businessNumber = document.getElementById('businessNumber').value;
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 20,
-            data: {username, password, email, name},
+            data: {username, password, businessNumber},
         };
         socket.send(JSON.stringify(request));
     } else {
