@@ -124,7 +124,7 @@ function getEmployeesList() { // ORI
 
 function sendShiftRequest() { // NETA
     let shiftsString = '';
-    // Loop through checkboxes of each day and shift to create the string
+    // Go over checkboxes of each day and shift to create the shiftsString
     for (let day of ['1', '2', '3', '4', '5', '6', '7']) {
         for (let shift of ['m', 'n', 'e']) {
             const checkbox = document.getElementById(`${day}${shift}`);
@@ -134,20 +134,17 @@ function sendShiftRequest() { // NETA
     }
     // Remove the trailing underscore
     shiftsString = shiftsString.slice(0, -1);
-    // Capture time
-    let currentDateString = currentDate.toString();
-    // Send time and shifts string to server
+    var currentDate = new Date();
+    // Send time and shifts to server
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 40,
-            data: {currentDateString, shiftsString},
+            data: {currentDate, shiftsString},
         };
         socket.send(JSON.stringify(request));
-        document.getElementById('result').innerHTML = shiftsString; /////////////
+        document.getElementById('result').innerHTML = "Request for shifts has been submitted";
     } else {
-        //logMessage('Not connected to the server');
-        document.getElementById('result').innerHTML = shiftsString; /////////////
-        document.getElementById('result').innerHTML = currentDateString; ////////////
+        logMessage('Not connected to the server');
     }
 }
 
