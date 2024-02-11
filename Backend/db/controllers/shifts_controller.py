@@ -123,7 +123,8 @@ def convert_shift_for_client(shift: Shift, db) -> dict:
     return {
         "id": shift.id,
         "workPlaceID": shift.workPlaceID,
-        "shiftDate": shift.shiftDate,
+        # JSON can't handle datetime objects, so we convert them to strings
+        'shiftDate': shift.shiftDate.isoformat(timespec='minutes') if shift.shiftDate else None,
         "shiftPart": shift.shiftPart,
         "workers": workers
     }
