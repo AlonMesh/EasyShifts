@@ -123,14 +123,31 @@ function getEmployeesList() { // ORI
 }
 
 function sendShiftRequest() { // NETA
+    let shiftsString = '';
+    // Loop through checkboxes of each day and shift to create the string
+    for (let day of ['1', '2', '3', '4', '5', '6', '7']) {
+        for (let shift of ['m', 'n', 'e']) {
+            const checkbox = document.getElementById(`${day}${shift}`);
+            const isChecked = checkbox.checked ? 't' : 'f';
+            shiftsString += `${day}${shift}-${isChecked}_`;
+        }
+    }
+    // Remove the trailing underscore
+    shiftsString = shiftsString.slice(0, -1);
+    // Capture time
+    let currentDateString = currentDate.toString();
+    // Send time and shifts string to server
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 40,
-            // neta you need to add here the shifts in format that will be comfortable for you to read in the server.
+            data: {currentDateString, shiftsString},
         };
         socket.send(JSON.stringify(request));
+        document.getElementById('result').innerHTML = shiftsString; /////////////
     } else {
-        logMessage('Not connected to the server');
+        //logMessage('Not connected to the server');
+        document.getElementById('result').innerHTML = shiftsString; /////////////
+        document.getElementById('result').innerHTML = currentDateString; ////////////
     }
 }
 
