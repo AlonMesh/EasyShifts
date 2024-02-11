@@ -83,7 +83,7 @@ class WorkPlacesController(BaseController):
             int | None: The workplace ID if the user works in a workplace, else None.
         """
         # Utilize the repository method to get the workplace ID by user ID
-        return self.service.get_workplace_id_by_worker_id(user_id)
+        return self.repository.get_workplace_id_by_user_id(user_id)
 
     def get_workplace_name_by_worker_id(self, user_id: int) -> str:
         """

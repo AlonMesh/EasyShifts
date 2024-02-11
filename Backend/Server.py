@@ -77,7 +77,7 @@ def handle_manager_signin(data):
 
 
 def handle_employee_shifts_request(data):
-    user_id = user_session.get_user_id()
+    user_id = user_session.get_id
     current_date = data.get('currentDate')
     shifts_string = data.get('shiftsString')
     shifts_request_data = {user_id, current_date, shifts_string}
@@ -97,9 +97,9 @@ def handle_employee_list():
     if user_session.can_access_manager_page():
         work_places_controller = WorkPlacesController(db)
         user_id = user_session.get_id
-        print(user_id)
+        print(user_id)  # Works correctly to this point
         workplace_id = work_places_controller.get_workplace_id_by_user_id(user_id)
-        print(workplace_id)
+        print(workplace_id)  # Returns None
         if workplace_id is not None:
             # Assuming get_active_workers_for_user returns a list of active workers
             active_workers = work_places_controller.get_active_workers_for_user(user_id)
