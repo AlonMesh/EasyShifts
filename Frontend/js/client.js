@@ -90,10 +90,11 @@ function sendEmployeeSignUpRequest() { // SHOVAL
     const username = document.getElementById('employeeUsername').value;
     const password = document.getElementById('employeePassword').value;
     const businessNumber = document.getElementById('businessNumber').value;
+    const employeeName = document.getElementById('employeeName').value;
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 20,
-            data: {username, password, businessNumber},
+            data: {username, password, businessNumber , employeeName},
         };
         socket.send(JSON.stringify(request));
     } else {

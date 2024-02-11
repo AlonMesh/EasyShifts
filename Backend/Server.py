@@ -1,3 +1,4 @@
+from Backend.db.controllers.userRequests_controller import UserRequestsController
 from Backend.db.controllers.users_controller import UsersController
 from Backend.db.controllers.workPlaces_controller import WorkPlacesController
 from Backend.user_session import UserSession
@@ -46,6 +47,69 @@ def handle_login(data):
 
 
 def handle_employee_signin(data):
+
+    # Get the relevant data from the packet
+    username = data['employeeUsername']
+    password = data['employeePassword']
+    business_id = data['businessNumber']
+    name = data['employeeName']
+
+    # Access the relevant db controllers
+    user_controller = UsersController(db)
+    work_places_controller = WorkPlacesController(db)
+    user_requests_controller = UserRequestsController(db)
+
+    # Insert data into Users table
+    user_data = {
+        'username': username,
+        'password': password,
+        'name': name,
+        'isManager': False,
+        'isActive': True,
+
+    }
+    user = user_controller.create_entity(user_data)
+
+    # Insert data into workPlaces table
+    work_place_data = {
+        'workPlaceID': business_id,
+        'userID': user.user_id
+    }
+    work_place = work_places_controller.create_entity(work_place_data)
+
+    # Insert data into userRequests table
+    user_request_data = {
+        'ModifyAt': data.now,
+        'Requests': ...
+    }
+    user_request = user_requests_controller.create_entity(user_request_data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     pass
 
 
