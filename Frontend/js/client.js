@@ -120,12 +120,12 @@ function getEmployeesList() {
         };
         socket.send(JSON.stringify(request));
         socket.addEventListener('message', (event) => {
-            const response = JSON.parse(event.data);
-            if (response !== false) {
-                const employeesList = response.map(worker => worker[1]); // Extracting the names from the list of tuples
-                displayEmployees(employeesList); // Function to display employees on the manager_page
+            const response = event.data; // Assuming the response is a string
+            if (response !== null) {
+                localStorage.setItem('employeesList', response); // Store the response in localStorage
+                window.location.href = 'manager_workers_list.html'; // Redirect to manager_workers_list.html
             } else {
-                console.log('Response is false');
+                console.log('Response is null');
             }
         });
     } else {
@@ -134,15 +134,6 @@ function getEmployeesList() {
     }
 }
 
-function displayEmployees(employeesList) {
-    const employeesContainer = document.getElementById('employees-container');
-    employeesContainer.innerHTML = ''; // Clearing any previous content
-    employeesList.forEach(employee => {
-        const employeeElement = document.createElement('div');
-        employeeElement.textContent = employee;
-        employeesContainer.appendChild(employeeElement);
-    });
-}
 
 
 

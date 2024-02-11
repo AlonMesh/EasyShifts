@@ -79,7 +79,10 @@ def handle_employee_list():
             # Assuming get_active_workers_for_user returns a list of active workers
             active_workers = work_places_controller.get_active_workers_for_user(user_id)
 
-            return active_workers  # return active workers
+            # Convert list of tuples to a string
+            active_workers_str = ' ,'.join(f'{worker[0]}: {worker[1]}' for worker in active_workers)
+
+            return active_workers_str  # return active workers as a string
         else:
             print("User does not work in any workplace.")
             return False
