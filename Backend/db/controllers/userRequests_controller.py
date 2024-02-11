@@ -22,3 +22,16 @@ class UserRequestsController(BaseController):
         self.repository = UserRequestsRepository(db)
         self.service = UserRequestsService(self.repository)
         super().__init__(self.repository, self.service)
+
+    def get_request_by_userid(self, id: int):
+        """
+        Retrieves a user request by userid.
+
+        Parameters:
+            id (int): the user id in db
+
+        Returns:
+            UserRequest: The user-request object if found, None otherwise.
+        """
+
+        return self.service.get_request_by_userid(id)
