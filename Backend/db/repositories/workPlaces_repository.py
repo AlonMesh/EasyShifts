@@ -1,3 +1,4 @@
+from __future__ import annotations
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from Backend.db.models import WorkPlace, User
@@ -119,6 +120,3 @@ class WorkPlacesRepository(BaseRepository):
             user, workplace = result
             userController = UsersController(self.db)
             return userController.get_name_by_id(workplace.workPlaceID)
-
-        # Return the workplace ID if found, else None
-        return workplace.workPlaceID if workplace else None
