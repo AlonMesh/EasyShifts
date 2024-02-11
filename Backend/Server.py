@@ -5,10 +5,12 @@ from Backend.db.controllers.workPlaces_controller import WorkPlacesController
 from Backend.db.controllers.userRequests_controller import UserRequestsController
 from Backend.user_session import UserSession
 from Backend.main import initialize_database_and_session
+from Backend.db.models import ShiftPart
 import websockets
 import asyncio
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
+
 # Initialize the database and session
 db, _ = initialize_database_and_session()
 
@@ -34,7 +36,8 @@ def handle_login(data):
 
         # Create a UserSession object if the user exists
         user_session = UserSession(user_id=user_id, is_manager=is_manager)
-
+    else:
+        print("user doesnt exist!")
     # TODO: else: send a message to the client that the user does not exist
 
     # Return the pair of boolean values
@@ -43,7 +46,45 @@ def handle_login(data):
 
 
 def handle_employee_signin(data):
-    pass
+    # Get the relevant data from the packet
+    username = data['username']
+    password = data['password']
+    business_id = data['businessNumber']
+    name = data['employeeName']
+
+    # Access the relevant db controllers
+    user_controller = UsersController(db)
+    work_places_controller = WorkPlacesController(db)
+    user_requests_controller = UserRequestsController(db)
+
+    # Insert data into Users table
+    user_data = {
+        'username': username,
+        'password': password,
+        'name': name,
+        'isManager': False,
+        'isActive': True,
+    }
+    user_controller.create_entity(user_data)
+
+    # Insert data into workPlaces table
+    work_place_data = {
+        'workPlaceID': business_id,
+        'id': user_controller.get_user_id_by_username_and_password(username, password)
+    }
+    work_places_controller.create_entity(work_place_data)
+
+    # Insert data into userRequests table
+    user_request_data = {
+        'id': user_controller.get_user_id_by_username_and_password(username, password),
+        'modifyAt': datetime.now(),
+        'requests': '...'
+
+    }
+    user_requests_controller.create_entity(user_request_data)
+
+    login_data = {"username": data["username"], "password": data["password"]}
+    handle_login(login_data)
 
 
 def handle_manager_signin(data):
@@ -76,15 +117,18 @@ def handle_manager_signin(data):
 
 
 def handle_employee_shifts_request(data):
+    if user_session is None:
+        print("User session not found.")
+        return False
     user_id = user_session.get_id
     shifts_string = data.get('shiftsString')
 
     shifts_request_data = {"id": user_id, "modifyAt": datetime.now(), "requests": shifts_string}
     user_request_controller = UserRequestsController(db)
-    user_request_controller.create_entity(shifts_request_data)
+    user_request_controller.update_entity(user_id, shifts_request_data)
 
 
-def handle_manager_shifts(data):
+def handle_get_employee_requests(data):
     if user_session is None:
         print("User session not found.")
         return False
@@ -110,6 +154,29 @@ def handle_manager_shifts(data):
         print("User does not have access to manager-specific pages.")
         return False
 
+def handle_manager_insert_shifts(data):
+    if user_session is None:
+        print("User session not found.")
+        return False
+
+    if user_session.can_access_manager_page():
+        work_places_controller = WorkPlacesController(db)
+        shifts_controller = ShiftsController(db)
+        workplace_id = work_places_controller.get_workplace_id_by_user_id(user_session.get_id)
+        current_date = datetime.now()
+        next_sunday = current_date + timedelta(days=(6 - current_date.weekday() + 1) % 7)
+        next_week_dates = [next_sunday + timedelta(days=i) for i in range(7)]
+        shift_parts = {ShiftPart.Morning, ShiftPart.Noon, ShiftPart.Evening}
+        for date in next_week_dates:
+            for i in range(1,3):
+                shift = {"workPlaceID": workplace_id, "shiftDate": date.strftime("%Y-%m-%d"), "shiftPart": shift_parts[i]}
+                shifts_controller.create_entity(shift)
+
+
+
+    else:
+        print("User does not have access to manager-specific pages.")
+        return False
 
 def handle_employee_list():
     if user_session is None:
@@ -119,9 +186,7 @@ def handle_employee_list():
     if user_session.can_access_manager_page():
         work_places_controller = WorkPlacesController(db)
         user_id = user_session.get_id
-        print(user_id)
         workplace_id = work_places_controller.get_workplace_id_by_user_id(user_id)
-        print(workplace_id)
         if workplace_id is not None:
             # Assuming get_active_workers_for_user returns a list of active workers
             active_workers = work_places_controller.get_active_workers_for_user(user_id)
@@ -222,9 +287,14 @@ def handle_request(request_id, data):
         handle_employee_shifts_request(data)
 
     elif request_id == 50:
+        # Manager Get Employees Requests Request
+        print("Received Manager Get Employees Requests Request")
+        return handle_get_employee_requests(data)
+
+    elif request_id == 55:
         # Manager Shifts inserting Request handling
         print("Received Manager Shifts inserting Request")
-        return handle_manager_shifts(data)
+        handle_manager_insert_shifts(data)
 
     elif request_id == 60:
         # Employees list request handling

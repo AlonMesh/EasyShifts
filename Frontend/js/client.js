@@ -116,12 +116,12 @@ function sendManagerSignUpRequest() { // ALON
 function sendEmployeeSignUpRequest() { // SHOVAL
     const username = document.getElementById('employeeUsername').value;
     const password = document.getElementById('employeePassword').value;
-    const email = document.getElementById('employeeEmail').value;
-    const name = document.getElementById('name').value;
+    const businessNumber = document.getElementById('businessNumber').value;
+    const employeeName = document.getElementById('employeeName').value;
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 20,
-            data: {username, password, email, name},
+            data: {username, password, businessNumber, employeeName},
         };
         socket.send(JSON.stringify(request));
     } else {
@@ -279,13 +279,10 @@ function getEmployeesShiftsRequest() { // HALEL
         socket.send(JSON.stringify(request));
         socket.addEventListener('message', (event) => {
             const response = event.data;
-            if (response !== null) {
-                localStorage.setItem('employeesList', response); // Store the response in localStorage
-                window.location.href = '../pages/manager_workers_list.html'; // Redirect to manager_workers_list.html
-            } else {
-                console.log('Response is null');
-            }
+            logMessage(event.data)
         });
+
+
     } else {
         logMessage('Not connected to the server');
     }

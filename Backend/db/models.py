@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, PrimaryKeyConstraint, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from enum import Enum
 
 Base = declarative_base()
 
 NAMES_LEN = 20
 PASS_LEN = 50
-
 
 class User(Base):
     """
