@@ -141,12 +141,26 @@ function getEmployeesList() {
 
 
 function sendShiftRequest() { // NETA
+    let shiftsString = '';
+    // Go over checkboxes of each day and shift to create the shiftsString
+    for (let day of ['1', '2', '3', '4', '5', '6', '7']) {
+        for (let shift of ['m', 'n', 'e']) {
+            const checkbox = document.getElementById(`${day}${shift}`);
+            const isChecked = checkbox.checked ? 't' : 'f';
+            shiftsString += `${day}${shift}-${isChecked}_`;
+        }
+    }
+    // Remove the trailing underscore
+    shiftsString = shiftsString.slice(0, -1);
+    var currentDate = new Date();
+    // Send time and shifts to server
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 40,
-            // neta you need to add here the shifts in format that will be comfortable for you to read in the server.
+            data: {currentDate, shiftsString},
         };
         socket.send(JSON.stringify(request));
+        document.getElementById('result').innerHTML = "Request for shifts has been submitted";
     } else {
         logMessage('Not connected to the server');
     }
