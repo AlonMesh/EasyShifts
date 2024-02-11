@@ -67,7 +67,7 @@ def handle_employee_shifts_request(data):
     current_date = data.get('currentDate')
     shifts_string = data.get('shiftsString')
 
-    shifts_request_data = {"id": user_id, "modifyAt": datetime.fromisoformat(current_date), "requests": shifts_string}
+    shifts_request_data = {"id": user_id, "modifyAt": datetime.strptime(current_date, "%a %b %d %Y %H:%M:%S %Z"), "requests": shifts_string}
     user_request_controller = UserRequestsController(db)
     user_request_controller.create_entity(shifts_request_data)
 
