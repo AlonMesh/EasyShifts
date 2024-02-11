@@ -76,7 +76,7 @@ def handle_employee_list():
 
     if user_session.can_access_manager_page():
         work_places_controller = WorkPlacesController(db)
-        user_id = user_session.get_user_id()
+        user_id = user_session.get_id
         print(user_id)
         workplace_id = work_places_controller.get_workplace_id_by_user_id(user_id)
         print(workplace_id)
@@ -94,7 +94,6 @@ def handle_employee_list():
     else:
         print("User does not have access to manager-specific pages.")
         return False
-
 
 
 def handle_send_profile():
