@@ -246,10 +246,6 @@ function getEmployeesList() {
     }
 }
 
-
-
-
-
 function sendShiftRequest() { // NETA
     let shiftsString = '';
     // Go over checkboxes of each day and shift to create the shiftsString
@@ -262,12 +258,11 @@ function sendShiftRequest() { // NETA
     }
     // Remove the trailing underscore
     shiftsString = shiftsString.slice(0, -1);
-    var currentDate = new Date();
     // Send time and shifts to server
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 40,
-            data: {currentDate, shiftsString},
+            data: {shiftsString},
         };
         socket.send(JSON.stringify(request));
         document.getElementById('result').innerHTML = "Request for shifts has been submitted";
@@ -282,6 +277,15 @@ function getEmployeesShiftsRequest() { // HALEL
             request_id: 50,
         };
         socket.send(JSON.stringify(request));
+        socket.addEventListener('message', (event) => {
+            const response = event.data;
+            if (response !== null) {
+                localStorage.setItem('employeesList', response); // Store the response in localStorage
+                window.location.href = '../pages/manager_workers_list.html'; // Redirect to manager_workers_list.html
+            } else {
+                console.log('Response is null');
+            }
+        });
     } else {
         logMessage('Not connected to the server');
     }
