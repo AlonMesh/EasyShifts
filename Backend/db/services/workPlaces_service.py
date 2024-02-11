@@ -1,6 +1,7 @@
 from Backend.db.repositories.workPlaces_repository import WorkPlacesRepository
 from Backend.db.services.base_service import BaseService
-
+from typing import List, Tuple
+from Backend.db.models import WorkPlace, User
 
 class WorkPlacesService(BaseService):
     """
@@ -23,21 +24,29 @@ class WorkPlacesService(BaseService):
         """
         pass
 
-    def get_active_workers_by_workplace_id(self, workplace_id: int):
+    def get_active_workers_by_workplace_id(self, user_id: int) -> List[Tuple[int, str]]:
         """
-        Retrieves the names and IDs of all active workers in the specified workplace.
+        Retrieves the IDs and names of all active workers in the workplace of the specified user.
 
         Parameters:
-            workplace_id (int): ID of the workplace.
+            user_id (int): ID of the user.
 
         Returns:
             List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
         """
-        # Get active users by workplace ID from the repository
-        active_users = self.repository.get_active_users_by_workplace_id(workplace_id)
+        # Get the workplace ID for the specified user
+        workplace_id = self.repository.get_workplace_id_by_user_id(user_id)
 
-        # Extract worker IDs and names from active users
-        worker_info = [(user.id, user.name) for user in active_users]
+        if workplace_id is not None:
+            # Get all active users in the workplace by workplace ID
+            active_users = self.repository.get_active_users_by_workplace_id(workplace_id)
+
+            # Construct a list of tuples containing worker IDs and names
+            active_workers = [(user.id, user.name) for user in active_users]
+            return active_workers
+        else:
+            # If the user does not work in any workplace, return an empty list
+            return []
 
         return worker_info
 

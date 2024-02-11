@@ -46,7 +46,7 @@ class WorkPlacesRepository(BaseRepository):
             .all()
         )
 
-    def get_workplace_id_by_userid(self, user_id: int):
+    def get_workplace_id_by_user_id(self, user_id: int) -> int | None:
         """
         Retrieves the workplace ID for the specified user.
 
@@ -120,3 +120,5 @@ class WorkPlacesRepository(BaseRepository):
             userController = UsersController(self.db)
             return userController.get_name_by_id(workplace.workPlaceID)
 
+        # Return the workplace ID if found, else None
+        return workplace.workPlaceID if workplace else None

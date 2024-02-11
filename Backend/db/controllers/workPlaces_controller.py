@@ -50,7 +50,7 @@ class WorkPlacesController(BaseController):
             List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
         """
         # Retrieve the workplace ID for the specified user
-        workplace_id = self.repository.get_workplace_id_by_userid(user_id)
+        workplace_id = self.repository.get_workplace_id_by_user_id(user_id)
 
         if workplace_id is not None:
             # Utilize the service method to get active workers by workplace ID
@@ -72,7 +72,7 @@ class WorkPlacesController(BaseController):
         # Utilize the service method to get the workplace name by user ID
         return self.repository.get_workplace_by_worker_id(user_id)
 
-    def get_workplace_id_by_worker_id(self, user_id: int) -> int:
+    def get_workplace_id_by_user_id(self, user_id: int) -> int | None:
         """
         Retrieves the workplace ID for the specified user.
 
