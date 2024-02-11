@@ -1,4 +1,5 @@
 from unittest import TestCase
+from Backend.db.controllers.users_controller import UsersController
 from Backend.db.models import User
 from Backend.db.repositories.users_repository import UsersRepository
 from Backend.main import initialize_database_and_session
@@ -21,6 +22,7 @@ def arrange_user_data(password='test_password', is_manager=0, is_active=1, name=
 
 class TestUsersRepository(TestCase):
     """Test case for UsersRepository class."""
+
     def setUp(self):
         """Set up the test environment."""
         # Initialize a test database
@@ -28,6 +30,7 @@ class TestUsersRepository(TestCase):
         self.db = db
         self.session = session
         self.users_repo = UsersRepository(self.db)
+        self.users_controller = UsersController(self.db)
 
     def delete_user(self, user):
         """Delete the user from the database."""
@@ -110,3 +113,31 @@ class TestUsersRepository(TestCase):
 
         # Assert
         self.assertIsNone(self.users_repo.get_entity(created_user.id))
+
+    def test_get_username_by_id(self):
+        """Test retrieving a username by user ID."""
+        # Arrange
+        user_data = arrange_user_data()
+        created_user = self.users_repo.create_entity(user_data)
+
+        # Act
+        retrieved_username = self.users_controller.get_username_by_id(created_user.id)
+
+        # Assert
+        self.assertEqual(retrieved_username, created_user.username)
+
+        self.delete_user(created_user)
+
+    def test_get_name_by_id(self):
+        """Test retrieving a name by user ID."""
+        # Arrange
+        user_data = arrange_user_data()
+        created_user = self.users_repo.create_entity(user_data)
+
+        # Act
+        retrieved_name = self.users_controller.get_name_by_id(created_user.id)
+
+        # Assert
+        self.assertEqual(retrieved_name, created_user.name)
+
+        self.delete_user(created_user)

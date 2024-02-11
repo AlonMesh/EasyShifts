@@ -2,8 +2,10 @@ from datetime import datetime
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from Backend.db.controllers.base_controller import BaseController
+from Backend.db.models import Shift
 from Backend.db.repositories.shifts_repository import ShiftsRepository
 from Backend.db.services.shifts_service import ShiftsService
+from Backend.db.controllers.shiftWorkers_controller import ShiftWorkersController
 
 
 class ShiftsController(BaseController):
@@ -67,3 +69,85 @@ class ShiftsController(BaseController):
         """
         return self.repository.get_all_shifts_since_date_for_given_worker(date, worker_id)
 
+    def get_future_shifts_for_user(self, user_id: int):
+        """
+        Retrieves all future shifts for the specified user.
+
+        Parameters:
+            user_id (int): ID of the user to retrieve shifts for.
+
+        Returns:
+            List of future shifts for the specified user.
+        """
+        # This method is just a wrapper around the get_all_shifts_since_date_for_given_worker method
+        return self.get_all_shifts_since_date_for_given_worker(datetime.now(), user_id)
+
+    def get_all_shifts_since_date_for_given_workplace(self, date: datetime, workplace_id: int):
+        """
+        Retrieves all shifts of a workplace since a given date.
+
+        Args:
+            date (datetime): Date to retrieve the shifts since.
+            workplace_id (int): ID of the workplace to retrieve shifts for.
+
+        Returns: List of shifts of the workplace since the given date.
+        """
+        return self.repository.get_all_shifts_since_date_for_given_workplace(date, workplace_id)
+
+    def get_future_shifts_for_workplace(self, workplace_id: int):
+        """
+        Retrieves all future shifts for the specified workplace.
+
+        Parameters:
+            workplace_id (int): ID of the workplace to retrieve shifts for.
+
+        Returns:
+            List of future shifts for the specified workplace.
+        """
+        # This method is just a wrapper around the get_all_shifts_since_date_for_given_workplace method
+        return self.get_all_shifts_since_date_for_given_workplace(datetime.now(), workplace_id)
+
+
+def convert_shift_for_client(shift: Shift, db, is_manager=True) -> dict:
+    """
+    Converts a shift to a dictionary format for client-side consumption.
+    If the user is a manager, the dictionary will also include the workers assigned to the shift.
+
+    Parameters:
+        shift (Shift): The shift to convert.
+        db (Session): SQLAlchemy Session for database interactions.
+        is_manager (bool): A boolean indicating whether the user is a manager.
+
+    Returns:
+        dict: A dictionary representation of the shift.
+    """
+    shift_workers_controller = ShiftWorkersController(db)
+    shifts_for_client = {
+        "id": shift.id,
+        "workPlaceID": shift.workPlaceID,
+        # JSON can't handle datetime objects, so we convert them to strings
+        'shiftDate': shift.shiftDate.isoformat(timespec='minutes') if shift.shiftDate else None,
+        "shiftPart": shift.shiftPart,
+    }
+
+    # If the user is a manager, we also include the workers assigned to the shift
+    if is_manager:
+        workers = shift_workers_controller.convert_shift_workers_by_shift_id_to_client(shift.id)
+        shifts_for_client["workers"] = workers
+
+    return shifts_for_client
+
+
+def convert_shifts_for_client(shifts: list[Shift], db, is_manager=True) -> list[dict]:
+    """
+    Converts a list of shifts to a dictionary format for client-side consumption.
+
+    Parameters:
+        shifts (List[Shift]): The shifts to convert.
+        db (Session): SQLAlchemy Session for database interactions.
+        is_manager (bool): A boolean indicating whether the user is a manager.
+
+    Returns:
+        List[dict]: A list of dictionary representations of the shifts.
+    """
+    return [convert_shift_for_client(shift, db, is_manager) for shift in shifts]

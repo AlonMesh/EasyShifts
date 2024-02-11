@@ -1,6 +1,8 @@
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from Backend.db.models import WorkPlace, User
 from Backend.db.repositories.base_repository import BaseRepository
+from Backend.db.controllers.users_controller import UsersController
 
 
 class WorkPlacesRepository(BaseRepository):
@@ -60,6 +62,63 @@ class WorkPlacesRepository(BaseRepository):
             .filter(WorkPlace.id == user_id)  # Assuming id represents user ID in WorkPlace
             .first()
         )
+
+        # Raise an exception if workplace is None
+        if workplace is None:
+            raise NoResultFound(f"Workplace for user with ID {user_id} not found")
+
+        # Return the workplace ID
+        return workplace.workPlaceID
+
+    def get_workplace_by_worker_id(self, user_id: int) -> WorkPlace:
+        """
+        Retrieves the workplace where the specified user works.
+
+        Parameters:
+            user_id (int): ID of the user.
+
+        Raises:
+            NoResultFound: If the workplace for the specified user is not found.
+
+        Returns:
+            WorkPlace: The workplace where the user works.
+        """
+        # Query the WorkPlace table to find the workplace associated with the user
+        workplace = (
+            self.db.query(WorkPlace)
+            .filter(WorkPlace.id == user_id)  # Assuming id represents user ID in WorkPlace
+            .first()
+        )
+
+        # Raise an exception if workplace is None
+        if workplace is None:
+            raise NoResultFound(f"Workplace for user with ID {user_id} not found")
+
+        # Return the workplace name
+        return workplace
+
+    def get_workplace_name_by_worker_id(self, workplace_id: int) -> str:
+        """
+        Retrieves the workplace name by ID.
+
+        Parameters:
+            workplace_id (int): ID of the workplace.
+
+        Returns:
+            str: The workplace name if the workplace exists, None otherwise.
+        """
+        # Query the WorkPlace table to find the workplace by ID
+        result = (
+            self.db.query(User, WorkPlace)
+            .join(WorkPlace, User.id == WorkPlace.id)
+            .filter(User.id == workplace_id)
+            .first()
+        )
+
+        if result:
+            user, workplace = result
+            userController = UsersController(self.db)
+            return userController.get_name_by_id(workplace.workPlaceID)
 
         # Return the workplace ID if found, else None
         return workplace.workPlaceID if workplace else None

@@ -1,7 +1,7 @@
 import datetime
 from unittest import TestCase
 from sqlalchemy.exc import NoResultFound
-from Backend.db.controllers.shifts_controller import ShiftsController
+from Backend.db.controllers.shifts_controller import ShiftsController, convert_shift_for_client
 from Backend.db.controllers.users_controller import UsersController
 from Backend.db.controllers.shiftWorkers_controller import ShiftWorkersController
 from Backend.main import initialize_database_and_session
@@ -128,3 +128,93 @@ class TestShiftsController(TestCase):
         self.shift_controller.delete_entity(created_shift_2.id)
         self.shift_controller.delete_entity(created_shift_3.id)
         user_controller.delete_entity(worker.id)
+
+    def test_get_all_shifts_since_date_for_given_workplace(self):
+        # Add an entity to the database
+        shift_data_1 = {"workPlaceID": 999, "shiftDate": "2022-12-12", "shiftPart": "Morning"}
+        shift_data_2 = {"workPlaceID": 999, "shiftDate": "2022-12-11", "shiftPart": "Afternoon"}
+        shift_data_3 = {"workPlaceID": 999, "shiftDate": "2022-12-10", "shiftPart": "Night"}
+
+        # Create the entities
+        created_shift_1 = self.shift_controller.create_entity(shift_data_1)
+        created_shift_2 = self.shift_controller.create_entity(shift_data_2)
+        created_shift_3 = self.shift_controller.create_entity(shift_data_3)
+
+        try:
+            # Get all shifts since a given date for a given workplace
+            shifts = self.shift_controller.get_all_shifts_since_date_for_given_workplace(
+                datetime.datetime(2022, 12, 11),
+                999)
+
+            # Assert that the retrieved shifts are correct
+            self.assertEqual(len(shifts), 2)
+            self.assertIn(created_shift_1, shifts)
+            self.assertIn(created_shift_2, shifts)
+            self.assertNotIn(created_shift_3, shifts)
+        except:
+            # Delete the entities from the database
+            self.shift_controller.delete_entity(created_shift_1.id)
+            self.shift_controller.delete_entity(created_shift_2.id)
+            self.shift_controller.delete_entity(created_shift_3.id)
+            self.fail()
+
+        # Delete the entities from the database
+        self.shift_controller.delete_entity(created_shift_1.id)
+        self.shift_controller.delete_entity(created_shift_2.id)
+        self.shift_controller.delete_entity(created_shift_3.id)
+
+    def test_get_future_shifts_for_workplace(self):
+        # Add an entity to the database
+        shift_data_1 = {"workPlaceID": 999, "shiftDate": "2025-12-12", "shiftPart": "Morning"}
+        shift_data_2 = {"workPlaceID": 999, "shiftDate": "2022-12-11", "shiftPart": "Afternoon"}
+        shift_data_3 = {"workPlaceID": 999, "shiftDate": "2022-12-10", "shiftPart": "Night"}
+
+        # Create the entities
+        created_shift_1 = self.shift_controller.create_entity(shift_data_1)
+        created_shift_2 = self.shift_controller.create_entity(shift_data_2)
+        created_shift_3 = self.shift_controller.create_entity(shift_data_3)
+
+        try:
+            # Get all future shifts for a given workplace
+            shifts = self.shift_controller.get_future_shifts_for_workplace(999)
+
+            # Assert that the retrieved shifts are correct
+            self.assertEqual(len(shifts), 1)
+            self.assertIn(created_shift_1, shifts)
+            self.assertNotIn(created_shift_2, shifts)
+            self.assertNotIn(created_shift_3, shifts)
+        except:
+            # Delete the entities from the database
+            self.shift_controller.delete_entity(created_shift_1.id)
+            self.shift_controller.delete_entity(created_shift_2.id)
+            self.shift_controller.delete_entity(created_shift_3.id)
+            self.fail()
+
+        # Delete the entities from the database
+        self.shift_controller.delete_entity(created_shift_1.id)
+        self.shift_controller.delete_entity(created_shift_2.id)
+        self.shift_controller.delete_entity(created_shift_3.id)
+
+    def test_convert_shift_for_client(self):
+        # Add an entity to the database
+        shift_data = {"workPlaceID": 999, "shiftDate": "2025-12-12", "shiftPart": "Morning"}
+
+        # Create the entity
+        created_shift = self.shift_controller.create_entity(shift_data)
+
+        # Convert the shift for client
+        shift_for_client = convert_shift_for_client(created_shift, self.db)
+
+        # Assert that the converted shift is correct
+        self.assertEqual(shift_for_client, {
+            "id": created_shift.id,
+            "workPlaceID": created_shift.workPlaceID,
+            "shiftDate": created_shift.shiftDate,
+            "shiftPart": created_shift.shiftPart,
+            "workers": []
+        })
+
+        print(shift_for_client)  # To see the output clearly
+
+        # Delete the entity from the database
+        self.shift_controller.delete_entity(created_shift.id)
