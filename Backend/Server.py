@@ -77,27 +77,28 @@ def handle_manager_shifts(data):
 def handle_employee_list():
     if user_session is None:
         print("User session not found.")
-        return
-    # Check if the user can access manager-specific pages
+        return False
+
     if user_session.can_access_manager_page():
-        # Initialize the workplaces controller, passing the database session
         work_places_controller = WorkPlacesController(db)
-
-        # Retrieve the user ID from the user session
-        user_id = user_session.get_user_id()
-
-        # Retrieve the workplace ID for the specified user
-        workplace_id = work_places_controller.get_workplace_id_by_userid(user_id)
-
+        user_id = user_session.get_id
+        print(user_id)
+        workplace_id = work_places_controller.get_workplace_id_by_user_id(user_id)
+        print(workplace_id)
         if workplace_id is not None:
-            return work_places_controller.get_active_workers_for_user(user_id)
+            # Assuming get_active_workers_for_user returns a list of active workers
+            active_workers = work_places_controller.get_active_workers_for_user(user_id)
+
+            # Convert list of tuples to a string
+            active_workers_str = ' ,'.join(f'{worker[0]}: {worker[1]}' for worker in active_workers)
+
+            return active_workers_str  # return active workers as a string
         else:
             print("User does not work in any workplace.")
-            return None
+            return False
     else:
         print("User does not have access to manager-specific pages.")
-        return None
-
+        return False
 
 
 def handle_send_profile():
@@ -149,7 +150,8 @@ def handle_request(request_id, data):
     elif request_id == 60:
         # Employees list request handling
         print("Received Employees list request")
-        handle_employee_list()
+        response = handle_employee_list()
+        return response
 
     elif request_id == 70:
         # Employees list request handling

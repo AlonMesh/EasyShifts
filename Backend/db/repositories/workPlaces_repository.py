@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from Backend.db.models import WorkPlace , User
+from Backend.db.models import WorkPlace, User
 from Backend.db.repositories.base_repository import BaseRepository
 
 
@@ -44,7 +44,7 @@ class WorkPlacesRepository(BaseRepository):
             .all()
         )
 
-    def get_workplace_id_by_userid(self, user_id: int):
+    def get_workplace_id_by_user_id(self, user_id: int) -> int | None:
         """
         Retrieves the workplace ID for the specified user.
 

@@ -46,6 +46,7 @@ class UserSession:
         """
         return not self._is_manager
 
+    @property
     def get_id(self):
         """
         Retrieves the user's ID.

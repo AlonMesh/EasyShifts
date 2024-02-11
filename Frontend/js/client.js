@@ -49,11 +49,12 @@ function sendLoginRequest() { // ORI
         socket.send(JSON.stringify(request));
         socket.addEventListener ('message', (event) => {
         const userExists = event.data[1];
-
         if (userExists == 'f') {
             logMessage('Invalid Username or Password');
         } else {
             const isManager = event.data[7];
+            logMessage(event.data[7]);
+
             if (isManager == 't') {
                 window.location.replace("../pages/manager_page.html");
             } else {
@@ -114,37 +115,30 @@ function getProfileRequest() { // WHO ENDS HERE/HIS PART FIRST
     }
 }
 
-function getEmployeesList() { // ORI
-     if (socket && socket.readyState === WebSocket.OPEN) {
+function getEmployeesList() {
+    if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 60,
         };
         socket.send(JSON.stringify(request));
+        socket.addEventListener('message', (event) => {
+            const response = event.data; // Assuming the response is a string
+            if (response !== null) {
+                localStorage.setItem('employeesList', response); // Store the response in localStorage
+                window.location.href = 'manager_workers_list.html'; // Redirect to manager_workers_list.html
+            } else {
+                console.log('Response is null');
+            }
+        });
     } else {
         logMessage('Not connected to the server');
         return;
     }
-
-    socket.addEventListener('message', function(event) {
-        const data = JSON.parse(event.data);
-        // Assuming data is an array of tuples containing employee ID and name
-        const employees = data;
-
-        // Generate HTML content dynamically
-        let htmlContent = '<h1>Employees List</h1>';
-        htmlContent += '<ul>';
-        employees.forEach(employee => {
-            htmlContent += `<li>${employee[0]}: ${employee[1]}</li>`;
-        });
-        htmlContent += '</ul>';
-
-        // Open the HTML page in a new browser window
-        const newWindow = window.open();
-        newWindow.document.open();
-        newWindow.document.write(htmlContent);
-        newWindow.document.close();
-    });
 }
+
+
+
+
 
 function sendShiftRequest() { // NETA
     let shiftsString = '';
