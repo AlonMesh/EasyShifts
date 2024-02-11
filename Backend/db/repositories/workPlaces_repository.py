@@ -60,7 +60,7 @@ class WorkPlacesRepository(BaseRepository):
         # Query the WorkPlace table to find the workplace associated with the user
         workplace = (
             self.db.query(WorkPlace)
-            .filter(WorkPlace.id == user_id)  # Assuming id represents user ID in WorkPlace
+            .filter(WorkPlace.workPlaceID == user_id)  # Assuming id represents user ID in WorkPlace
             .first()
         )
 
@@ -69,7 +69,7 @@ class WorkPlacesRepository(BaseRepository):
             raise NoResultFound(f"Workplace for user with ID {user_id} not found")
 
         # Return the workplace ID
-        return workplace.workPlaceID
+        return workplace.workPlaceID if workplace else None
 
     def get_workplace_by_worker_id(self, user_id: int) -> WorkPlace:
         """
