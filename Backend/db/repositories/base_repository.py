@@ -1,4 +1,5 @@
 from __future__ import annotations
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 from typing import Type, TypeVar
@@ -54,10 +55,18 @@ class BaseRepository:
         Parameters:
             entity_id (int): ID of the entity to retrieve.
 
+        Raises:
+            NoResultFound: If the entity with the specified ID is not found.
+
         Returns:
             EntityType: The retrieved entity if found, else None.
         """
-        return self.db.query(self.entity_type).filter(self.entity_type.id == entity_id).first()
+        entity = self.db.query(self.entity_type).filter(self.entity_type.id == entity_id).first()
+
+        if entity is None:
+            raise NoResultFound(f"Entity with ID {entity_id} not found")
+
+        return entity
 
     def get_all_entities(self) -> list[EntityType]:
         """
@@ -89,8 +98,6 @@ class BaseRepository:
             self.db.commit()
             self.db.refresh(db_entity)
 
-        # TODO: Raise error if it doesn't exist
-
         return db_entity
 
     def delete_entity(self, entity_id: int) -> EntityType | None:
@@ -110,7 +117,5 @@ class BaseRepository:
         if db_entity:
             self.db.delete(db_entity)
             self.db.commit()
-
-        # TODO: Raise error if it doesn't exist
 
         return db_entity

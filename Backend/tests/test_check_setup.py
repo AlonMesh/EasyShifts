@@ -18,8 +18,8 @@ class TestCheckSetup(TestCase):
     def test_user_creation(self):
         # Check User creation
         user_data = {
-            "username": "test_user",
-            "password": "test_pass",
+            "username": "ori",
+            "password": "12345",
             "isManager": 0,
             "isActive": 1,
             "name": "test user"

@@ -18,7 +18,17 @@ class UserSession:
         self._user_id = user_id
         self._is_manager = is_manager
 
-    def can_access_manager_page(self):
+    @property
+    def get_id(self) -> int:
+        """
+        Retrieves the user's ID.
+
+        Returns:
+            int: The user's ID.
+        """
+        return self._user_id
+
+    def can_access_manager_page(self) -> bool:
         """
         Checks if the user can access manager-specific pages.
 
@@ -27,7 +37,7 @@ class UserSession:
         """
         return self._is_manager
 
-    def can_access_worker_page(self):
+    def can_access_worker_page(self) -> bool:
         """
         Checks if the user can access worker-specific pages.
 
@@ -35,3 +45,12 @@ class UserSession:
             bool: True if the user is a worker, False otherwise.
         """
         return not self._is_manager
+
+    def get_id(self):
+        """
+        Retrieves the user's ID.
+
+        Returns:
+            int: The user's ID.
+        """
+        return self._user_id
