@@ -18,8 +18,8 @@ class TestCheckSetup(TestCase):
     def test_user_creation(self):
         # Check User creation
         user_data = {
-            "username": "ori",
-            "password": "12345",
+            "username": "zz",
+            "password": "8",
             "isManager": 0,
             "isActive": 1,
             "name": "test user"
@@ -34,7 +34,7 @@ class TestCheckSetup(TestCase):
     def test_workplace_creation(self):
         # Check WorkPlace creation
         workplace_data = {
-            "id": 1,
+            "id": 23,
             "workPlaceID": 1
         }
 
