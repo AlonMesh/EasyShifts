@@ -1,3 +1,4 @@
+
 from Backend.db.controllers.userRequests_controller import UserRequestsController
 from Backend.db.controllers.users_controller import UsersController
 from Backend.db.controllers.workPlaces_controller import WorkPlacesController
@@ -6,6 +7,8 @@ from Backend.main import initialize_database_and_session
 import websockets
 import asyncio
 import json
+import datetime
+
 
 # Initialize the database and session
 db, _ = initialize_database_and_session()
@@ -73,14 +76,16 @@ def handle_employee_signin(data):
     # Insert data into workPlaces table
     work_place_data = {
         'workPlaceID': business_id,
-        'userID': user.user_id
+        'id': user.user_id
     }
     work_place = work_places_controller.create_entity(work_place_data)
 
     # Insert data into userRequests table
     user_request_data = {
-        'ModifyAt': data.now,
-        'Requests': ...
+        'ModifyAt': datetime.datetime.now(),
+        'Requests': '...',
+        'id': user.user_id
+
     }
     user_request = user_requests_controller.create_entity(user_request_data)
 
