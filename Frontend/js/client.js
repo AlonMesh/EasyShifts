@@ -166,20 +166,6 @@ function handleProfileResponse(response) {
     }
 }
 
-// Function to update the UI with profile data
-// function updateProfileUI(profileData) {
-//     // Debugging: Log the element IDs
-//     console.log('Profile data:', profileData)
-//     console.log('userName element:', profileData.username);
-//     console.log('workplaceName element:', profileData.workplace_name);
-//     console.log('future_shifts element:', profileData.future_shifts);
-//     console.log('future_shifts   elements:', formatShifts(profileData.future_shifts));
-//
-//     // Update the UI with the profile data
-//     document.getElementById('userName').innerText = profileData.username;
-//     document.getElementById('workplaceName').innerText = profileData.workplace_name;
-//     document.getElementById('Shifts').innerText = formatShifts(profileData.future_shifts);
-// }
 
 // Example function to format shifts
 function formatShifts(shifts) {

@@ -152,7 +152,7 @@ def handle_send_profile() -> dict:
         returned_data["name"] = users_controller.get_name_by_id(user_id)
         returned_data["workplace_name"] = work_places_controller.get_workplace_name_by_worker_id(user_id)
         future_shifts = shifts_controller.get_future_shifts_for_user(user_id)
-        future_shifts_for_client = convert_shifts_for_client(future_shifts, db)
+        future_shifts_for_client = convert_shifts_for_client(future_shifts, db, is_manager=False)
         returned_data["future_shifts"] = future_shifts_for_client
 
     # Return the dictionary
