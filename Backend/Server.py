@@ -35,7 +35,12 @@ def handle_manager_signin(data):
 
 
 def handle_employee_shifts_request(data):
-    pass
+    user_id = user_session.get_user_id()
+    current_date = data.get('currentDate')
+    shifts_string = data.get('shiftsString')
+    shifts_request_data = {user_id, current_date, shifts_string}
+    user_controller = UsersController(db)
+    user_controller.create_entity(shifts_request_data)
 
 
 def handle_manager_shifts(data):
