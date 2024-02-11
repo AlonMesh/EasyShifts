@@ -71,11 +71,13 @@ function sendLoginRequest() { // ORI
 function sendManagerSignUpRequest() { // ALON
     const username = document.getElementById('managerUsername').value;
     const password = document.getElementById('managerPassword').value;
-    const email = document.getElementById('managerEmail').value;
+    const isManager = 1;
+    const isActive = 1;
+    const name = document.getElementById('name').value;
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 30,
-            data: {username, password, email},
+            data: {username, password, isManager, isActive, name},
         };
         socket.send(JSON.stringify(request));
     } else {
@@ -89,11 +91,11 @@ function sendEmployeeSignUpRequest() { // SHOVAL
     const username = document.getElementById('employeeUsername').value;
     const password = document.getElementById('employeePassword').value;
     const email = document.getElementById('employeeEmail').value;
-    const businessNumber = document.getElementById('businessNumber').value;
+    const name = document.getElementById('name').value;
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 20,
-            data: {username, password, email, businessNumber},
+            data: {username, password, email, name},
         };
         socket.send(JSON.stringify(request));
     } else {

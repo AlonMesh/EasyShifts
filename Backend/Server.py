@@ -1,16 +1,16 @@
+from Backend.db.controllers.users_controller import UsersController
+from Backend.db.controllers.workPlaces_controller import WorkPlacesController
+from Backend.user_session import UserSession
+from Backend.main import initialize_database_and_session
 import websockets
 import asyncio
 import json
-
-from Backend.db.controllers.users_controller import UsersController
-from Backend.db.controllers.workPlaces_controller import WorkPlacesController
-from Backend.main import initialize_database_and_session
-from Backend.user_session import UserSession
 
 # Initialize the database and session
 db, _ = initialize_database_and_session()
 
 # Global variable declaration
+
 user_session = None
 
 
@@ -38,6 +38,11 @@ def handle_login(data):
     # Return the pair of boolean values
     response = [user_exists, is_manager]
     return response
+
+    # Crate a UserSession object and assign it to the global variable
+    # user_session = UserSession(user_id=..., is_manager=...)
+
+    pass
 
 
 def handle_employee_signin(data):
@@ -89,6 +94,7 @@ def handle_employee_list():
     else:
         print("User does not have access to manager-specific pages.")
         return False
+
 
 
 def handle_send_profile():
