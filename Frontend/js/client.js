@@ -271,6 +271,17 @@ function sendShiftRequest() { // NETA
     }
 }
 
+function createNewShifts() {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        const request = {
+            request_id: 80,
+        };
+        socket.send(JSON.stringify(request));
+    } else {
+        logMessage('Not connected to the server');
+    }
+}
+
 function getEmployeesShiftsRequest() { // HALEL
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {

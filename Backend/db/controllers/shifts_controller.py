@@ -107,6 +107,8 @@ class ShiftsController(BaseController):
         # This method is just a wrapper around the get_all_shifts_since_date_for_given_workplace method
         return self.get_all_shifts_since_date_for_given_workplace(datetime.now(), workplace_id)
 
+    def get_shift_id_by_day_and_part_and_workplace(self, day: str, part: str, workplace: int):
+        return self.service.get_shift_id_by_day_and_part_and_workplace(day, part, workplace)
 
 def convert_shift_for_client(shift: Shift, db, is_manager=True) -> dict:
     """
@@ -151,3 +153,4 @@ def convert_shifts_for_client(shifts: list[Shift], db, is_manager=True) -> list[
         List[dict]: A list of dictionary representations of the shifts.
     """
     return [convert_shift_for_client(shift, db, is_manager) for shift in shifts]
+

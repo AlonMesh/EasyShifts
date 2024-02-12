@@ -65,6 +65,15 @@ class ShiftPart(Enum):
     Noon = 'noon'
     Evening = 'evening'
 
+class DayName(Enum):
+    Sunday = 0
+    Monday = 1
+    Tuesday = 2
+    Wednesday = 3
+    Thursday = 4
+    Friday = 5
+    Saturday = 6
+
 
 class Shift(Base):
     """
@@ -81,6 +90,7 @@ class Shift(Base):
     id = Column(Integer, primary_key=True, index=True)  # shiftID
     workPlaceID = Column(Integer, nullable=False)
     shiftDate = Column(DateTime, nullable=False)
+    shiftDay = Column(String(10), nullable=False)
     shiftPart = Column(String(10), nullable=False)
 
 
