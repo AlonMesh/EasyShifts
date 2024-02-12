@@ -278,11 +278,39 @@ function getEmployeesShiftsRequest() { // HALEL
         };
         socket.send(JSON.stringify(request));
         socket.addEventListener('message', (event) => {
-            const response = event.data;
-            logMessage(event.data)
+            const response = event.data.substring(1, event.data.length - 1);
+            const keyValuePairs = response.split(', ');
+            const resultObject = {};
+            keyValuePairs.forEach(pair => {
+                const [key, value] = pair.split(': ');
+                resultObject[key.substring(1, key.length - 1)] = value.substring(1, value.length - 1);
+            });
+
+            // Log the received data for debugging
+            console.log('Received data:', resultObject);
+
+            // Store the response data in localStorage for access on the new page
+            localStorage.setItem('shiftsData', JSON.stringify(resultObject));
+
+            // Log a message for debugging
+            console.log('Data stored in localStorage.');
+
+            // Redirect to the new page
+            window.location.href = "../pages/manager_view_shifts_requests.html";
         });
 
+    } else {
+        logMessage('Not connected to the server');
+    }
+}
 
+function managerSendShifts(username) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        const request = {
+            request_id: 55,
+            data: {username},
+        };
+        socket.send(JSON.stringify(request));
     } else {
         logMessage('Not connected to the server');
     }

@@ -163,15 +163,18 @@ def handle_manager_insert_shifts(data):
         work_places_controller = WorkPlacesController(db)
         shifts_controller = ShiftsController(db)
         workplace_id = work_places_controller.get_workplace_id_by_user_id(user_session.get_id)
+        user_request_controller = UserRequestsController(db)
+        users_controller = UsersController(db)
+        employee_id = users_controller.get_user_id_by_username(data["username"])
+        employee_request = user_request_controller.get_request_by_userid(employee_id)
         current_date = datetime.now()
         next_sunday = current_date + timedelta(days=(6 - current_date.weekday() + 1) % 7)
         next_week_dates = [next_sunday + timedelta(days=i) for i in range(7)]
-        shift_parts = {ShiftPart.Morning, ShiftPart.Noon, ShiftPart.Evening}
+        shift_parts = [ShiftPart.Morning, ShiftPart.Noon, ShiftPart.Evening]
         for date in next_week_dates:
             for i in range(1,3):
-                shift = {"workPlaceID": workplace_id, "shiftDate": date.strftime("%Y-%m-%d"), "shiftPart": shift_parts[i]}
+                shift = {"workPlaceID": user_session.get_id, "shiftDate": date.strftime("%Y-%m-%d"), "shiftPart": shift_parts[i]}
                 shifts_controller.create_entity(shift)
-
 
 
     else:
@@ -251,18 +254,6 @@ def handle_send_profile() -> dict:
     # Return the dictionary
     return returned_data
 
-
-def get_request(msg):
-    # Assuming the request ID is the first two bytes of the received data
-    data = json.loads(msg)
-
-    # Extract the request_id and data
-    request_id = data.get('request_id', None)
-    # Extract the rest of the data
-    request_data = data.get('data', None)
-    return request_id, request_data
-
-
 def handle_request(request_id, data):
     if request_id == 10:
         # Login request handling
@@ -331,10 +322,16 @@ async def handle_client(websocket, path):
 
 
 async def start_server():
-    db, _ = initialize_database_and_session()
-    async with websockets.serve(handle_client, "localhost", 8080):
-        print("Server started")
-        await asyncio.Future()  # Keep the server running until Enter is pressed
+    try:
+        db, _ = initialize_database_and_session()
+        async with websockets.serve(handle_client, "localhost", 8080):
+            print("Server started")
+            await asyncio.Future()  # Keep the server running until Enter is pressed
+    except asyncio.CancelledError:
+        print("Server stopped.")
+        exit(0)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
 
 asyncio.run(start_server())
