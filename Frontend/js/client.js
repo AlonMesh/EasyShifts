@@ -116,12 +116,12 @@ function sendManagerSignUpRequest() { // ALON
 function sendEmployeeSignUpRequest() { // SHOVAL
     const username = document.getElementById('employeeUsername').value;
     const password = document.getElementById('employeePassword').value;
-    const email = document.getElementById('employeeEmail').value;
-    const name = document.getElementById('name').value;
+    const businessNumber = document.getElementById('businessNumber').value;
+    const employeeName = document.getElementById('employeeName').value;
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 20,
-            data: {username, password, email, name},
+            data: {username, password, businessNumber, employeeName},
         };
         socket.send(JSON.stringify(request));
     } else {
@@ -246,10 +246,6 @@ function getEmployeesList() {
     }
 }
 
-
-
-
-
 function sendShiftRequest() { // NETA
     let shiftsString = '';
     // Go over checkboxes of each day and shift to create the shiftsString
@@ -262,15 +258,25 @@ function sendShiftRequest() { // NETA
     }
     // Remove the trailing underscore
     shiftsString = shiftsString.slice(0, -1);
-    var currentDate = new Date();
     // Send time and shifts to server
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 40,
-            data: {currentDate, shiftsString},
+            data: {shiftsString},
         };
         socket.send(JSON.stringify(request));
         document.getElementById('result').innerHTML = "Request for shifts has been submitted";
+    } else {
+        logMessage('Not connected to the server');
+    }
+}
+
+function createNewShifts() {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        const request = {
+            request_id: 80,
+        };
+        socket.send(JSON.stringify(request));
     } else {
         logMessage('Not connected to the server');
     }
@@ -280,6 +286,40 @@ function getEmployeesShiftsRequest() { // HALEL
     if (socket && socket.readyState === WebSocket.OPEN) {
         const request = {
             request_id: 50,
+        };
+        socket.send(JSON.stringify(request));
+        socket.addEventListener('message', (event) => {
+            const response = event.data.substring(1, event.data.length - 1);
+            const keyValuePairs = response.split(', ');
+            const resultObject = {};
+            keyValuePairs.forEach(pair => {
+                const [key, value] = pair.split(': ');
+                resultObject[key.substring(1, key.length - 1)] = value.substring(1, value.length - 1);
+            });
+
+            // Log the received data for debugging
+            console.log('Received data:', resultObject);
+
+            // Store the response data in localStorage for access on the new page
+            localStorage.setItem('shiftsData', JSON.stringify(resultObject));
+
+            // Log a message for debugging
+            console.log('Data stored in localStorage.');
+
+            // Redirect to the new page
+            window.location.href = "../pages/manager_view_shifts_requests.html";
+        });
+
+    } else {
+        logMessage('Not connected to the server');
+    }
+}
+
+function managerSendShifts(username) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        const request = {
+            request_id: 55,
+            data: {username},
         };
         socket.send(JSON.stringify(request));
     } else {

@@ -10,6 +10,9 @@ class ShiftsRepository(BaseRepository):
     def __init__(self, db: Session):
         super().__init__(db, Shift)
 
+    def get_shift_by_day_and_part_and_workplace(self, day: str, part: str, workplace: int):
+        return self.db.query(Shift).filter(Shift.shiftDay == day, Shift.shiftPart == part, Shift.workPlaceID == workplace).first()
+
     def get_all_shifts_since_date(self, date: datetime):
         """
         Retrieves all shifts of a worker since a given date.

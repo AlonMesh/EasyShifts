@@ -33,4 +33,9 @@ class ShiftsService(BaseService):
         shift = self.repository.get_entity(shift_id)
         return shift.shiftDate
 
-
+    def get_shift_id_by_day_and_part_and_workplace(self, day: str, part: str, workplace: int):
+        shift = self.repository.get_shift_by_day_and_part_and_workplace(day, part, workplace)
+        if shift:
+            print(shift)
+            return shift.id
+        return None
