@@ -64,19 +64,19 @@ class UsersController(BaseController):
         """
         return self.service.get_user_id_by_username(username)
 
-    def get_username_by_id(self, user_id):
+    def get_username_by_id(self, user_id: str):
         """
         Retrieves the username by user ID.
 
         Parameters:
-            user_id (int): The user ID of the user to retrieve.
+            user_id (str): The user ID of the user to retrieve.
 
         Returns:
             Optional[str]: The username if the user exists, None otherwise.
         """
         return self.service.get_username_by_id(user_id)
 
-    def get_name_by_id(self, user_id):
+    def get_name_by_id(self, user_id: str):
         """
         Retrieves the name by user ID.
 

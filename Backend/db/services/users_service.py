@@ -75,7 +75,7 @@ class UsersService(BaseService):
             return user.id
         return None
 
-    def get_username_by_id(self, user_id):
+    def get_username_by_id(self, user_id: str):
         """
         Retrieves the username by user ID.
 
@@ -91,7 +91,7 @@ class UsersService(BaseService):
         user = self.repository.get_entity(user_id)  # Raises an exception if the user does not exist
         return user.username
 
-    def get_name_by_id(self, user_id):
+    def get_name_by_id(self, user_id: str):
         """
         Retrieves the name by user ID.
 

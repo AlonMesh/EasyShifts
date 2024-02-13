@@ -1,4 +1,5 @@
 from __future__ import annotations
+from enum import Enum
 from Backend.db.controllers.users_controller import UsersController
 from Backend.db.controllers.shifts_controller import ShiftsController, convert_shifts_for_client
 from Backend.db.controllers.workPlaces_controller import WorkPlacesController
@@ -6,7 +7,7 @@ from Backend.db.controllers.userRequests_controller import UserRequestsControlle
 from Backend.db.controllers.shiftWorkers_controller import ShiftWorkersController
 from Backend.user_session import UserSession
 from Backend.main import initialize_database_and_session
-from Backend.db.models import ShiftPart, DayName
+from Backend.db.models import ShiftPart
 import websockets
 import asyncio
 import json
@@ -17,6 +18,17 @@ db, _ = initialize_database_and_session()
 
 # Global variable declaration
 user_session: UserSession | None = None
+
+
+class DayName(Enum):  # I moved this class over here cuz it's not supposed to be in the models file
+    Sunday = 'Sunday'
+    Monday = 'Monday'
+    Tuesday = 'Tuesday'
+    Wednesday = 'Wednesday'
+    Thursday = 'Thursday'
+    Friday = 'Friday'
+    Saturday = 'Saturday'
+
 
 def handle_login(data):
     global user_session  # Declare user_session as a global variable
@@ -155,6 +167,7 @@ def handle_get_employee_requests(data):
         print("User does not have access to manager-specific pages.")
         return False
 
+
 def handle_manager_insert_shifts(data):
     if user_session is None:
         print("User session not found.")
@@ -180,7 +193,8 @@ def handle_manager_insert_shifts(data):
                     part = shift_parts[1].value
                 elif shift_time[1] == 'e':
                     part = shift_parts[2].value
-                shift_id = shifts_controller.get_shift_id_by_day_and_part_and_workplace(days[int(shift_time[0])-1].name, part, user_session.get_id)
+                shift_id = shifts_controller.get_shift_id_by_day_and_part_and_workplace(
+                    days[int(shift_time[0]) - 1].name, part, user_session.get_id)
                 if shift_id is not None:
                     shift_worker = {'shiftID': shift_id, 'userID': employee_id}
                     shift_workers_controller.create_entity(shift_worker)
@@ -188,6 +202,7 @@ def handle_manager_insert_shifts(data):
     else:
         print("User does not have access to manager-specific pages.")
         return False
+
 
 def make_shifts():
     if user_session is None:
@@ -213,6 +228,7 @@ def make_shifts():
         print("User does not have access to manager-specific pages.")
         return False
 
+
 def handle_employee_list():
     if user_session is None:
         print("User session not found.")
@@ -236,6 +252,7 @@ def handle_employee_list():
     else:
         print("User does not have access to manager-specific pages.")
         return False
+
 
 def handle_send_profile() -> dict:
     """
@@ -285,6 +302,7 @@ def handle_send_profile() -> dict:
 
     # Return the dictionary
     return returned_data
+
 
 def handle_request(request_id, data):
     if request_id == 10:

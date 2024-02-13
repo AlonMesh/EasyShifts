@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import date, datetime
+from sqlalchemy import Date
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from Backend.db.controllers.base_controller import BaseController
@@ -26,12 +27,12 @@ class ShiftsController(BaseController):
         self.service = ShiftsService(self.repository)
         super().__init__(self.repository, self.service)
 
-    def get_shift_date_by_shift_id(self, shift_id: int):
+    def get_shift_date_by_shift_id(self, shift_id: str) -> Date:
         """
         Retrieves the shift's date by its ID.
 
         Parameters:
-            shift_id (int): ID of the shift to retrieve the date for.
+            shift_id (str): ID of the shift to retrieve the date for.
 
         Returns:
              The date of the shift.
@@ -41,12 +42,12 @@ class ShiftsController(BaseController):
         """
         return self.service.get_shift_date_by_shift_id(shift_id)
 
-    def get_all_shifts_of_worker_since_date(self, date: datetime):
+    def get_all_shifts_of_worker_since_date(self, date: date):
         """
         Retrieves all shifts of a worker since a given date.
 
         Parameters:
-            date (datetime): Date to retrieve the shifts since.
+            date (date): Date to retrieve the shifts since.
 
         Returns:
             List of shifts of the worker since the given date.
@@ -57,24 +58,24 @@ class ShiftsController(BaseController):
         except NoResultFound:
             return None  # It's okay to assume that the worker has no shifts since the given date.
 
-    def get_all_shifts_since_date_for_given_worker(self, date: datetime, worker_id: int):
+    def get_all_shifts_since_date_for_given_worker(self, date: date, worker_id: str):
         """
         Retrieves all shifts of a worker since a given date.
 
         Args:
-            date (datetime): Date to retrieve the shifts since.
-            worker_id (int): ID of the worker to retrieve shifts for.
+            date (date): Date to retrieve the shifts since.
+            worker_id (str): ID of the worker to retrieve shifts for.
 
         Returns: List of shifts of the worker since the given date.
         """
         return self.repository.get_all_shifts_since_date_for_given_worker(date, worker_id)
 
-    def get_future_shifts_for_user(self, user_id: int):
+    def get_future_shifts_for_user(self, user_id: str):
         """
         Retrieves all future shifts for the specified user.
 
         Parameters:
-            user_id (int): ID of the user to retrieve shifts for.
+            user_id (str): ID of the user to retrieve shifts for.
 
         Returns:
             List of future shifts for the specified user.
@@ -82,24 +83,24 @@ class ShiftsController(BaseController):
         # This method is just a wrapper around the get_all_shifts_since_date_for_given_worker method
         return self.get_all_shifts_since_date_for_given_worker(datetime.now(), user_id)
 
-    def get_all_shifts_since_date_for_given_workplace(self, date: datetime, workplace_id: int):
+    def get_all_shifts_since_date_for_given_workplace(self, given_date: date, workplace_id: str):
         """
         Retrieves all shifts of a workplace since a given date.
 
         Args:
-            date (datetime): Date to retrieve the shifts since.
-            workplace_id (int): ID of the workplace to retrieve shifts for.
+            given_date (date): Date to retrieve the shifts since.
+            workplace_id (str): ID of the workplace to retrieve shifts for.
 
         Returns: List of shifts of the workplace since the given date.
         """
-        return self.repository.get_all_shifts_since_date_for_given_workplace(date, workplace_id)
+        return self.repository.get_all_shifts_since_date_for_given_workplace(given_date, workplace_id)
 
-    def get_future_shifts_for_workplace(self, workplace_id: int):
+    def get_future_shifts_for_workplace(self, workplace_id: str):
         """
         Retrieves all future shifts for the specified workplace.
 
         Parameters:
-            workplace_id (int): ID of the workplace to retrieve shifts for.
+            workplace_id (str): ID of the workplace to retrieve shifts for.
 
         Returns:
             List of future shifts for the specified workplace.
@@ -109,6 +110,7 @@ class ShiftsController(BaseController):
 
     def get_shift_id_by_day_and_part_and_workplace(self, day: str, part: str, workplace: int):
         return self.service.get_shift_id_by_day_and_part_and_workplace(day, part, workplace)
+
 
 def convert_shift_for_client(shift: Shift, db, is_manager=True) -> dict:
     """
@@ -127,8 +129,8 @@ def convert_shift_for_client(shift: Shift, db, is_manager=True) -> dict:
     shifts_for_client = {
         "id": shift.id,
         "workPlaceID": shift.workPlaceID,
-        # JSON can't handle datetime objects, so we convert them to strings
-        'shiftDate': shift.shiftDate.isoformat(timespec='minutes') if shift.shiftDate else None,
+        # JSON can't handle date objects, so we convert them to strings
+        'shiftDate': shift.shiftDate.isoformat() if shift.shiftDate else None,
         "shiftPart": shift.shiftPart,
     }
 
@@ -153,4 +155,3 @@ def convert_shifts_for_client(shifts: list[Shift], db, is_manager=True) -> list[
         List[dict]: A list of dictionary representations of the shifts.
     """
     return [convert_shift_for_client(shift, db, is_manager) for shift in shifts]
-

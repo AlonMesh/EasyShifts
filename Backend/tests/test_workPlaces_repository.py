@@ -1,5 +1,4 @@
 from unittest import TestCase
-
 from Backend.db.controllers.users_controller import UsersController
 from Backend.db.controllers.workPlaces_controller import WorkPlacesController
 from Backend.main import initialize_database_and_session

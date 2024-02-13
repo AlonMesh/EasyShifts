@@ -7,12 +7,12 @@ class UserRequestsRepository(BaseRepository):
     def __init__(self, db: Session):
         super().__init__(db, UserRequest)
 
-    def get_request_by_userid(self, id: int):
+    def get_request_by_userid(self, id: str):
         """
         Retrieves a user request by userid.
 
         Parameters:
-            id (int): the user id in db
+            id (str): the user id in db
 
         Returns:
             UserRequest: The user-request object if found, None otherwise.

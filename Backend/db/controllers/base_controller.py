@@ -34,12 +34,12 @@ class BaseController:
         """
         return self.repository.create_entity(entity_data)
 
-    def get_entity(self, entity_id: int) -> EntityType:
+    def get_entity(self, entity_id: str) -> EntityType:
         """
         Retrieves an entity using the associated repository.
 
         Parameters:
-            entity_id (int): ID of the entity to retrieve.
+            entity_id (str): ID of the entity to retrieve.
 
         Returns:
             EntityType: The retrieved entity if found, else None.
@@ -55,12 +55,12 @@ class BaseController:
         """
         return self.repository.get_all_entities()
 
-    def update_entity(self, entity_id: int, updated_data: dict) -> EntityType:
+    def update_entity(self, entity_id: str, updated_data: dict) -> EntityType:
         """
         Updates an entity using the associated repository.
 
         Parameters:
-            entity_id (int): ID of the entity to update.
+            entity_id (str): ID of the entity to update.
             updated_data (dict): Dictionary containing updated entity data.
 
         Returns:
@@ -68,12 +68,12 @@ class BaseController:
         """
         return self.repository.update_entity(entity_id, updated_data)
 
-    def delete_entity(self, entity_id: int) -> EntityType:
+    def delete_entity(self, entity_id: str) -> EntityType:
         """
         Deletes an entity using the associated repository.
 
         Parameters:
-            entity_id (int): ID of the entity to delete.
+            entity_id (str): ID of the entity to delete.
 
         Returns:
             EntityType: The deleted entity if found, else None.
