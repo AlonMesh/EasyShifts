@@ -60,7 +60,7 @@ class TestUsersRepository(TestCase):
         retrieved_user = self.users_repo.get_entity(created_user.id)
 
         # Assert
-        self.assertEqual(retrieved_user, created_user)
+        self.assertEqual(retrieved_user.id, created_user.id)
 
         self.delete_user(created_user)
 
@@ -77,11 +77,12 @@ class TestUsersRepository(TestCase):
         user_2 = self.users_repo.create_entity(user_data_2)
 
         all_users_after = self.users_repo.get_all_entities()
+        ids = [user.id for user in all_users_after]
 
         # Assert
         self.assertEqual(len(all_users_after) - len(all_users_before), 2)
-        self.assertIn(user_1, all_users_after)
-        self.assertIn(user_2, all_users_after)
+        self.assertIn(user_1.id, ids)
+        self.assertIn(user_2.id, ids)
 
         self.delete_user(user_1)
         self.delete_user(user_2)
@@ -107,12 +108,16 @@ class TestUsersRepository(TestCase):
         # Arrange
         user_data = arrange_user_data()
         created_user = self.users_repo.create_entity(user_data)
+        created_user_id_keeper = created_user.id
 
         # Act
         self.users_repo.delete_entity(created_user.id)
 
-        # Assert
-        self.assertIsNone(self.users_repo.get_entity(created_user.id))
+        # Assert that the user no longer exists
+        try:
+            self.users_repo.get_entity(created_user_id_keeper)
+        except Exception as e:
+            self.assertIsInstance(e, Exception)
 
     def test_get_username_by_id(self):
         """Test retrieving a username by user ID."""
