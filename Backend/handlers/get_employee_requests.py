@@ -4,10 +4,6 @@ from Backend.db.controllers.workPlaces_controller import WorkPlacesController
 
 
 def handle_get_employee_requests(data, user_session):
-    if user_session is None:
-        print("User session not found.")
-        return False
-
     if user_session.can_access_manager_page():
         work_places_controller = WorkPlacesController(db)
         user_id = user_session.get_id

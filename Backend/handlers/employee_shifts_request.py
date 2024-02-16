@@ -4,9 +4,6 @@ from Backend.db.controllers.userRequests_controller import UserRequestsControlle
 
 
 def handle_employee_shifts_request(data, user_session):
-    if user_session is None:
-        print("User session not found.")
-        return False
     user_id = user_session.get_id
     shifts_string = data.get('shiftsString')
 

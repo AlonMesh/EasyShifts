@@ -15,9 +15,6 @@ def handle_send_profile(user_session: UserSession) -> dict:
     Raises:
         Exception: If the user session is not found.
     """
-    if user_session is None:
-        raise Exception("User session not found.")
-
     # Retrieve the user ID from the user session
     user_id = user_session.get_id
 

@@ -17,9 +17,15 @@ def handle_request(request_id, data):
         request_id: 2-digit number representing the request type (e.g. 10 for login request).
         data: The content of the request.
 
+    Raises: ValueError if the user session is None and the request_id is not login or signin.
+
     Returns: The response from the handler to be sent back to the client.
     """
     global user_session  # Use the global user_session variable
+
+    # If the user session is None and the request_id is not login or signin (10, 20, or 30) raise a ValueError
+    if user_session is None and request_id not in {10, 20, 30}:
+        raise ValueError("User session is None for request ID:", request_id)
 
     if request_id == 10:
         # Login request handling
@@ -74,6 +80,12 @@ def handle_request(request_id, data):
 
 
 async def handle_client(websocket):
+    """
+    Handle communication with a client over a WebSocket connection.
+
+    Args:
+        websocket: The WebSocket connection to the client.
+    """
     try:
         async for message in websocket:
             # Parse the JSON message
@@ -93,6 +105,17 @@ async def handle_client(websocket):
 
 
 async def start_server():
+    """
+    Start the WebSocket server and handle incoming connections.
+
+    The server will listen on localhost:8080.
+    Pressing Enter will stop the server.
+    Note: The server uses the handle_client function to manage communication with clients.
+
+    Raises:
+        asyncio.CancelledError: Raised when the server is stopped.
+        Exception: Raised for unexpected errors during server initialization.
+    """
     try:
         db, _ = initialize_database_and_session()
         async with websockets.serve(handle_client, "localhost", 8080):

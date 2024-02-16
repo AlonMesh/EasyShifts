@@ -11,10 +11,6 @@ from Backend.db.controllers.workPlaces_controller import WorkPlacesController
 
 
 def handle_manager_insert_shifts(data, user_session: UserSession):
-    if user_session is None:
-        print("User session not found.")
-        return False
-
     if user_session.can_access_manager_page():
         work_places_controller = WorkPlacesController(db)
         shifts_controller = ShiftsController(db)
@@ -46,10 +42,6 @@ def handle_manager_insert_shifts(data, user_session: UserSession):
         return False
 
 def make_shifts(user_session: UserSession):
-    if user_session is None:
-        print("User session not found.")
-        return False
-
     if user_session.can_access_manager_page():
         shifts_controller = ShiftsController(db)
         current_date = datetime.now()

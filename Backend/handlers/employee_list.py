@@ -8,10 +8,6 @@ def handle_employee_list(user_session: UserSession) -> str:
     # TODO: This returns bools, fix it
     # TODO: This is a manager-specific page, so the user_session should be a manager
     # TODO: I offer to change the return type to List[dict[str, str]] which stands for id and name of the worker
-    if user_session is None:
-        print("User session not found.")
-        return False
-
     if user_session.can_access_manager_page():
         work_places_controller = WorkPlacesController(db)
         user_id = user_session.get_id
