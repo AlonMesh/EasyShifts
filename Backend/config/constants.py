@@ -5,4 +5,3 @@ session = None
 
 # Initialize the database and session
 db, session = initialize_database_and_session()
-

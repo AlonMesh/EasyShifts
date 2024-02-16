@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime
+from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 import enum
@@ -105,4 +105,32 @@ class ShiftWorker(Base):
 
     __table_args__ = (
         PrimaryKeyConstraint('shiftID', 'userID'),
+    )
+
+
+class ShiftBoard(Base):
+    """
+    Represents the workplace's shift-board.
+
+    Attributes:
+        weekStartDate (Date): Start date of the week.
+        workplaceID (str): ID of the associated workplace.
+        isPublished (bool): Indicates if the shift is published and visible to workers.
+        content (JSON): Stores the shift-board content.
+        preferences (JSON): Stores workplace's preferences/settings.
+            - number_of_shifts_per_day
+            - max_workers_per_shift
+            - closed_days
+            - etc.
+    """
+    __tablename__ = "shiftBoards"
+
+    weekStartDate = Column(Date, nullable=False)
+    workplaceID = Column(String(ID_LEN), ForeignKey('users.id'), nullable=False)
+    isPublished = Column(Boolean, nullable=False, default=False)
+    content = Column(JSON)
+    preferences = Column(JSON)
+
+    __table_args__ = (
+        PrimaryKeyConstraint('weekStartDate', 'workplaceID'),
     )
