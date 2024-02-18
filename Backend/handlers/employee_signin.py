@@ -25,6 +25,7 @@ def handle_employee_signin(data):
         'name': name,
         'isManager': False,
         'isActive': True,
+        'isApproval': False,
     }
     user_controller.create_entity(user_data)
 

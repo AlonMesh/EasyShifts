@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime, JSON
+import datetime
+from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime, JSON, func
 from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 import enum
@@ -125,12 +126,19 @@ class ShiftBoard(Base):
     """
     __tablename__ = "shiftBoards"
 
-    weekStartDate = Column(Date, nullable=False)
+    weekStartDate = Column(Date, nullable=False, default=lambda: next_sunday())
     workplaceID = Column(String(ID_LEN), ForeignKey('users.id'), nullable=False)
     isPublished = Column(Boolean, nullable=False, default=False)
-    content = Column(JSON)
-    preferences = Column(JSON)
+    content = Column(JSON, default=dict)
+    preferences = Column(JSON, default=dict)
 
     __table_args__ = (
         PrimaryKeyConstraint('weekStartDate', 'workplaceID'),
     )
+
+
+# Define the next_sunday function to be used as the default value
+def next_sunday():
+    today = datetime.date.today()
+    days_until_sunday = (6 - today.weekday() + 7) % 7
+    return today + datetime.timedelta(days=days_until_sunday)
