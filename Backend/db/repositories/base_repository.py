@@ -48,12 +48,12 @@ class BaseRepository:
         # Return the created entity
         return db_entity
 
-    def get_entity(self, entity_id: int) -> EntityType:
+    def get_entity(self, entity_id: str) -> EntityType:
         """
         Retrieves an entity by its ID.
 
         Parameters:
-            entity_id (int): ID of the entity to retrieve.
+            entity_id (str): ID of the entity to retrieve.
 
         Raises:
             NoResultFound: If the entity with the specified ID is not found.
@@ -64,7 +64,7 @@ class BaseRepository:
         entity = self.db.query(self.entity_type).filter(self.entity_type.id == entity_id).first()
 
         if entity is None:
-            raise NoResultFound(f"Entity with ID {entity_id} not found")
+            raise NoResultFound(f'Entity with ID {entity_id} not found')
 
         return entity
 
@@ -77,12 +77,12 @@ class BaseRepository:
         """
         return self.db.query(self.entity_type).all()
 
-    def update_entity(self, entity_id: int, updated_data: dict) -> EntityType | None:
+    def update_entity(self, entity_id: str, updated_data: dict) -> EntityType | None:
         """
         Updates an entity in the database.
 
         Parameters:
-            entity_id (int): ID of the entity to update.
+            entity_id (str): ID of the entity to update.
             updated_data (dict): Dictionary containing updated entity data.
 
         Returns:
@@ -100,7 +100,7 @@ class BaseRepository:
 
         return db_entity
 
-    def delete_entity(self, entity_id: int) -> EntityType | None:
+    def delete_entity(self, entity_id: str) -> EntityType | None:
         """
         Deletes an entity from the database.
 

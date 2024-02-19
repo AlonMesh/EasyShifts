@@ -59,3 +59,47 @@ class UsersService(BaseService):
         if user:
             return user.id
         return None
+
+    def get_user_id_by_username(self, username: str):
+        """
+        Retrieves the user ID by username.
+
+        Parameters:
+            username (str): The username of the user to retrieve.
+
+        Returns:
+            Optional[int]: The user ID if the user exists, None otherwise.
+        """
+        user = self.repository.get_user_by_username(username)
+        if user:
+            return user.id
+        return None
+
+    def get_username_by_id(self, user_id: str):
+        """
+        Retrieves the username by user ID.
+
+        Args:
+            user_id (int): The user ID of the user to retrieve.
+
+        Raises:
+            NoResultFound: If the user does not exist.
+
+        Returns: The username if the user exists.
+
+        """
+        user = self.repository.get_entity(user_id)  # Raises an exception if the user does not exist
+        return user.username
+
+    def get_name_by_id(self, user_id: str):
+        """
+        Retrieves the name by user ID.
+
+        Parameters:
+            user_id (int): The user ID of the user to retrieve.
+
+        Returns:
+            str: The name if the user exists, None otherwise.
+        """
+        user = self.repository.get_entity(user_id)  # Raises an exception if the user does not exist
+        return user.name

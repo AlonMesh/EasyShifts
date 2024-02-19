@@ -1,6 +1,7 @@
 from __future__ import annotations
 from sqlalchemy.orm import Session
 from Backend.db.controllers.base_controller import BaseController
+from Backend.db.models import WorkPlace
 from Backend.db.repositories.workPlaces_repository import WorkPlacesRepository
 from Backend.db.services.workPlaces_service import WorkPlacesService
 
@@ -49,7 +50,7 @@ class WorkPlacesController(BaseController):
             List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
         """
         # Retrieve the workplace ID for the specified user
-        workplace_id = self.repository.get_workplace_id_by_userid(user_id)
+        workplace_id = self.repository.get_workplace_id_by_user_id(user_id)
 
         if workplace_id is not None:
             # Utilize the service method to get active workers by workplace ID
@@ -57,3 +58,41 @@ class WorkPlacesController(BaseController):
         else:
             # If the user does not work in any workplace, return an empty list
             return []
+
+    def get_workplace_by_worker_id(self, user_id: int) -> WorkPlace:
+        """
+        Retrieves the workplace where the specified user works.
+
+        Parameters:
+            user_id (int): ID of the user.
+
+        Returns:
+            WorkPlace: The workplace where the user works.
+        """
+        # Utilize the service method to get the workplace name by user ID
+        return self.repository.get_workplace_by_worker_id(user_id)
+
+    def get_workplace_id_by_user_id(self, user_id: str) -> str | None:
+        """
+        Retrieves the workplace ID for the specified user.
+
+        Parameters:
+            user_id (str): ID of the user.
+
+        Returns:
+            str | None: The workplace ID if the user works in a workplace, else None.
+        """
+        # Utilize the repository method to get the workplace ID by user ID
+        return self.repository.get_workplace_id_by_user_id(user_id)
+
+    def get_workplace_name_by_worker_id(self, user_id: str) -> str:
+        """
+        Retrieves the name of the workplace where the specified user works.
+
+        Parameters:
+            user_id (str): ID of the user.
+
+        Returns:
+            str: The name of the workplace.
+        """
+        return self.repository.get_workplace_name_by_worker_id(user_id)

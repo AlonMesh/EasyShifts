@@ -3,6 +3,7 @@ from datetime import datetime
 from Backend.main import initialize_database_and_session
 from Backend.db.controllers import userRequests_controller, workPlaces_controller, shiftWorkers_controller, \
     users_controller, shifts_controller
+from Backend.db.models import ShiftPart
 
 
 # If importing `initialize_database_and_session` and `create_tables` don't work, put them here:
@@ -15,69 +16,88 @@ class TestCheckSetup(TestCase):
         # Initialize a test database and session
         self.db, _ = initialize_database_and_session()
 
-    def test_user_creation(self):
+    def test_check_setup(self, keep_entities=False):
+        """
+        Test the setup and entity creation. Args: keep_entities: If True, the entities will not be removed after the
+        test. It is recommended to change it to True in the first time to see how the entities are looking like.
+        Then, delete all tables and recreate it when it is False.
+        """
         # Check User creation
         user_data = {
-            "username": "ori",
-            "password": "12345",
+            "username": "test_worker",
+            "password": "pass",
             "isManager": 0,
             "isActive": 1,
             "name": "test user"
         }
 
         # Initialize Controller
-        controller = users_controller.UsersController(self.db)
+        user_controller = users_controller.UsersController(self.db)
 
-        created_user = controller.create_entity(entity_data=user_data)
+        created_user = user_controller.create_entity(entity_data=user_data)
         self.assertIsNotNone(created_user)
 
-    def test_workplace_creation(self):
+        manager_data = {
+            "username": "test_Manager",
+            "password": "pass",
+            "isManager": 1,
+            "isActive": 1,
+            "name": "Manager Company"
+        }
+        created_manager = user_controller.create_entity(entity_data=manager_data)  # Assume it works well
+
         # Check WorkPlace creation
         workplace_data = {
-            "id": 1,
-            "workPlaceID": 1
+            "id": created_user.id,
+            "workPlaceID": created_manager.id
         }
 
         # Initialize Controller
-        controller = workPlaces_controller.WorkPlacesController(self.db)
+        workplace_controller = workPlaces_controller.WorkPlacesController(self.db)
 
-        created_workplace = controller.create_entity(entity_data=workplace_data)
+        created_workplace = workplace_controller.create_entity(entity_data=workplace_data)
         self.assertIsNotNone(created_workplace)
 
-    def test_user_request_creation(self):
         # Check UserRequest creation
         user_request_data = {
-            "id": 1,
+            "id": created_user.id,
             "modifyAt": datetime(2024, 1, 30, 12, 0, 0),
             "requests": "Any request..."
         }
         # Initialize Controller
-        controller = userRequests_controller.UserRequestsController(self.db)
+        user_request_controller = userRequests_controller.UserRequestsController(self.db)
 
-        created_user_request = controller.create_entity(entity_data=user_request_data)
+        created_user_request = user_request_controller.create_entity(entity_data=user_request_data)
         self.assertIsNotNone(created_user_request)
 
-    def test_shift_creation(self):
         # Check Shift creation
         shift_data = {
-            "workPlaceID": 1,
-            "shiftDate": datetime(2024, 1, 30, 8, 0, 0),
-            "shiftPart": "Morning"
+            "workPlaceID": created_manager.id,
+            "shiftDate": datetime(2024, 1, 30, ),
+            "shiftPart": ShiftPart.Morning.value
         }
         # Initialize Controller
-        controller = shifts_controller.ShiftsController(self.db)
+        shift_controller = shifts_controller.ShiftsController(self.db)
 
-        created_shift = controller.create_entity(entity_data=shift_data)
+        created_shift = shift_controller.create_entity(entity_data=shift_data)
         self.assertIsNotNone(created_shift)
 
-    def test_z_shift_worker_creation(self):
         # Check ShiftWorker creation
         shift_worker_data = {
-            "shiftID": 1,
-            "userID": 1
+            "shiftID": created_shift.id,
+            "userID": created_user.id
         }
         # Initialize Controller
-        controller = shiftWorkers_controller.ShiftWorkersController(self.db)
+        shift_workers_controller = shiftWorkers_controller.ShiftWorkersController(self.db)
 
-        created_shift_workers = controller.create_entity(entity_data=shift_worker_data)
+        created_shift_workers = shift_workers_controller.create_entity(entity_data=shift_worker_data)
         self.assertIsNotNone(created_shift_workers)
+
+        if not keep_entities:
+            # Remove entities
+            shift_workers_controller.delete_entity_shift_worker(created_shift_workers.shiftID, created_shift_workers.userID)
+            workplace_controller.delete_entity(created_workplace.id)
+            user_request_controller.delete_entity(created_user_request.id)
+            shift_controller.delete_entity(created_shift.id)
+            user_controller.delete_entity(created_user.id)
+            user_controller.delete_entity(created_manager.id)

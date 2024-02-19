@@ -22,3 +22,19 @@ class UserRequestsService(BaseService):
         Actual implementation is not provided yet.
         """
         pass
+
+    def get_request_by_userid(self, id: int):
+        """
+        Retrieves a user request by userid.
+
+        Parameters:
+            id (int): the user id in db
+
+        Returns:
+            UserRequest: The user-request object if found, None otherwise.
+        """
+
+        user_request = self.repository.get_request_by_userid(id)
+        if user_request:
+            return user_request.requests
+        return None

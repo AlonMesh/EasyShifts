@@ -51,3 +51,39 @@ class UsersController(BaseController):
             Optional[int]: The user ID if the user exists, None otherwise.
         """
         return self.service.get_user_id_by_username_and_password(username, password)
+
+    def get_user_id_by_username(self, username: str):
+        """
+        Retrieves the user ID by username.
+
+        Parameters:
+            username (str): The username of the user to retrieve.
+
+        Returns:
+            Optional[int]: The user ID if the user exists, None otherwise.
+        """
+        return self.service.get_user_id_by_username(username)
+
+    def get_username_by_id(self, user_id: str):
+        """
+        Retrieves the username by user ID.
+
+        Parameters:
+            user_id (str): The user ID of the user to retrieve.
+
+        Returns:
+            Optional[str]: The username if the user exists, None otherwise.
+        """
+        return self.service.get_username_by_id(user_id)
+
+    def get_name_by_id(self, user_id: str):
+        """
+        Retrieves the name by user ID.
+
+        Parameters:
+            user_id (int): The user ID of the user to retrieve.
+
+        Returns:
+            str: The name if the user exists, None otherwise.
+        """
+        return self.service.get_name_by_id(user_id)
