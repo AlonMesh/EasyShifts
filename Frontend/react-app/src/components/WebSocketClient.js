@@ -1,15 +1,15 @@
 // WebSocketClient.js
 
-
+import React from 'react';
 import './WebSocketClient.css'; // Import your CSS file if you have one
 
 class WebSocketClient extends React.Component {
   redirectToLogin = () => {
-    //login component
+    // login component
   };
 
   redirectToSignUp = () => {
-    //sign up component
+    // sign up component
   };
 
   render() {
