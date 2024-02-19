@@ -92,19 +92,27 @@ class ShiftBoardRepository:
         # Return the updated entity
         return entity
 
-    def delete_entity(self, week_start_day: Date, workplace_id: str) -> Type[ShiftBoard]:
+    def delete_entity(self, week_start_day, workplace_id: str) -> Type[ShiftBoard]:
         """
         Deletes an entity from the database.
 
         Parameters:
-            week_start_day (Date): Date of the week.
+            week_start_day: Date of the week.
             workplace_id (str): ID of the workplace.
 
         Returns:
             EntityType: The deleted entity.
         """
 
-        # TODO: first, delete all shifts related to this shift board
+        # Delete all shifts related to this shift board first
+        shift_controller = ShiftsController(self.db)
+
+        # Get all shifts related to this shift board since the shift board is going to be deleted
+        shifts = shift_controller.get_all_shifts_since_date_for_given_workplace(week_start_day, workplace_id)
+
+        # Delete all shifts related to this shift board
+        for shift in shifts:
+            shift_controller.delete_entity(shift.id)
 
         # Get the entity to delete
         entity = self.get_entity(week_start_day, workplace_id)

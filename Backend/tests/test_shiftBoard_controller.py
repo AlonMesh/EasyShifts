@@ -47,34 +47,36 @@ class TestShiftBoardController(TestCase):
         self.board = self.shiftBoardController.create_shift_board(board_data)
 
     def test_crud_shift_board(self):
-        # Assert is not None
-        self.assertTrue(self.board)
+        NEXT_SUNDAY = datetime.date(2024, 2, 25)  # Modify this date to the next Sunday
 
-        # Assert is equal
-        self.assertEqual(self.board.workplaceID, self.manager.id)
-        self.assertEqual(self.board.isPublished, False)
+        try:
+            # Assert is not None
+            self.assertTrue(self.board)
 
-        # Get the shift board
-        NEXT_SUNDAY = datetime.date(2024, 2, 18)  # Modify this date to the next Sunday
-        board_get = self.shiftBoardController.get_shift_board(NEXT_SUNDAY, self.manager.id)
+            # Assert is equal
+            self.assertEqual(self.board.workplaceID, self.manager.id)
+            self.assertEqual(self.board.isPublished, False)
 
-        # Assert it equals to the created one
-        self.assertEqual(self.board.workplaceID, board_get.workplaceID)
+            # Get the shift board
+            board_get = self.shiftBoardController.get_shift_board(NEXT_SUNDAY, self.manager.id)
 
-        # Update the shift board
-        board_update_data = {
-            "isPublished": True,
-        }
+            # Assert it equals to the created one
+            self.assertEqual(self.board.workplaceID, board_get.workplaceID)
 
-        # Update the shift board
-        board_update = self.shiftBoardController.update_shift_board(NEXT_SUNDAY, self.manager.id, board_update_data)
+            # Update the shift board
+            board_update_data = {
+                "isPublished": True,
+            }
 
-        # Check it's updated
-        self.assertEqual(board_update.isPublished, True)
+            # Update the shift board
+            board_update = self.shiftBoardController.update_shift_board(NEXT_SUNDAY, self.manager.id, board_update_data)
 
-        # Delete the shift board and the manager
-        self.shiftBoardController.delete_shift_board(NEXT_SUNDAY, self.manager.id)
-        self.users_controller.delete_entity(self.manager.id)
+            # Check it's updated
+            self.assertEqual(board_update.isPublished, True)
+        finally:
+            # Delete the shift board and the manager
+            self.shiftBoardController.delete_shift_board(NEXT_SUNDAY, self.manager.id)
+            self.users_controller.delete_entity(self.manager.id)
 
         # Check it's deleted
         with self.assertRaises(Exception):

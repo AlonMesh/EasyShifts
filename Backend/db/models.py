@@ -123,6 +123,8 @@ class ShiftBoard(Base):
             - max_workers_per_shift
             - closed_days
             - etc.
+        requests_window_start (DateTime): Start date and time of the requests window.
+        requests_window_end (DateTime): End date and time of the requests window.
     """
     __tablename__ = "shiftBoards"
 
@@ -131,6 +133,8 @@ class ShiftBoard(Base):
     isPublished = Column(Boolean, nullable=False, default=False)
     content = Column(JSON, default=dict)
     preferences = Column(JSON, default=dict)
+    requests_window_start = Column(DateTime)
+    requests_window_end = Column(DateTime)
 
     __table_args__ = (
         PrimaryKeyConstraint('weekStartDate', 'workplaceID'),

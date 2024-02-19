@@ -96,3 +96,15 @@ class WorkPlacesController(BaseController):
             str: The name of the workplace.
         """
         return self.repository.get_workplace_name_by_worker_id(user_id)
+
+    def get_all_workers_by_workplace_id(self, workplace_id: str):
+        """
+        Retrieves all active users working in the specified workplace.
+
+        Parameters:
+            workplace_id (int): ID of the workplace.
+
+        Returns:
+            List[User]: A list of active users working in the specified workplace.
+        """
+        return self.repository.get_users_by_workplace_id(workplace_id)
