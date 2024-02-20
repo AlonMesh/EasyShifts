@@ -1,6 +1,10 @@
-// components/index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App/App'; // Assuming your root component is named App and located in App.js
 
-export { default as App } from './App/App';
-export { default as Home } from './components/Home';
-export { default as Login } from './components/Login';
-export { default as SignUp } from './components/SignUp';
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
