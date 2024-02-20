@@ -52,5 +52,7 @@ class ShiftBoardService:
         # Get all shiftboard-s by workplace_id
         all_boards = self.repository.get_all_shift_boards_by_workplace(workplace_id)
 
+        print("len(all_boards): ", len(all_boards))
+
         # Return the last shiftboard
         return all_boards[-1]

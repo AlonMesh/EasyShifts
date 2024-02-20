@@ -1,5 +1,4 @@
 from datetime import timedelta
-
 from Backend.db.controllers.shiftWorkers_controller import ShiftWorkersController
 from Backend.db.models import ShiftBoard
 from Backend.user_session import UserSession
@@ -26,7 +25,7 @@ def handle_create_new_board(user_session: UserSession):
     last_board = shift_board_controller.get_last_shift_board(user_session.get_id)
 
     # Create a new shift board
-    new_week_start_date = last_board.week_start_date + timedelta(days=7)  # A week after the last shift board
+    new_week_start_date = last_board.weekStartDate + timedelta(days=7)  # A week after the last shift board
     new_board = shift_board_controller.create_shift_board(
         {"weekStartDate": new_week_start_date, "workplaceID": user_session.get_id})
 
@@ -64,7 +63,7 @@ def handle_reset_board(user_session: UserSession) -> ShiftBoard:
     last_board = shift_board_controller.get_last_shift_board(user_session.get_id)
 
     # Update the shift board with the default content
-    updated_board = shift_board_controller.update_shift_board(last_board.week_start_date, user_session.get_id,
+    updated_board = shift_board_controller.update_shift_board(last_board.weekStartDate, user_session.get_id,
                                                               {"content": {}})
 
     # Return the updated shift board
@@ -158,3 +157,17 @@ def watch_workers_requests(user_session: UserSession):
 
     # Return the combined list
     return combined_list
+
+
+def open_requests_windows(data: dict, user_session: UserSession) -> bool:
+    # Extract the start and end datetimes for the requests window
+    requests_window_start = data["requests_window_start"]  # TODO: Depending on the client!
+    requests_window_end = data["requests_window_end"]  # TODO: Depending on the client!
+    updated_data = {"requests_window_start": requests_window_start, "requests_window_end": requests_window_end}
+
+    # Update the shift board with the new requests window
+    shift_board_controller = ShiftBoardController(db)
+    shift_board_controller.update_shift_board(next_sunday, user_session.get_id, updated_data)
+
+    # Return True if the requests window is open
+    return True

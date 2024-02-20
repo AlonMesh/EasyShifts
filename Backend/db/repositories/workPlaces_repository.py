@@ -47,7 +47,7 @@ class WorkPlacesRepository(BaseRepository):
             .all()
         )
 
-    def get_workplace_id_by_user_id(self, user_id: str) -> str | None:
+    def get_workplace_id_by_user_id(self, user_id: str) -> str:
         """
         Retrieves the workplace ID for the specified user.
 
@@ -55,12 +55,15 @@ class WorkPlacesRepository(BaseRepository):
             user_id (str): ID of the user.
 
         Returns:
-            str | None: The workplace ID if the user works in a workplace, else None.
+            str: The workplace ID if the user works in a workplace.
+
+        Raises:
+            NoResultFound: If the workplace for the specified user is not found.
         """
         # Query the WorkPlace table to find the workplace associated with the user
         workplace = (
             self.db.query(WorkPlace)
-            .filter(WorkPlace.workPlaceID == user_id)  # Assuming id represents user ID in WorkPlace
+            .filter(WorkPlace.id == user_id)  # Assuming id represents user ID in WorkPlace
             .first()
         )
 
@@ -69,7 +72,7 @@ class WorkPlacesRepository(BaseRepository):
             raise NoResultFound(f"Workplace for user with ID {user_id} not found")
 
         # Return the workplace ID
-        return workplace.workPlaceID if workplace else None
+        return workplace.workPlaceID
 
     def get_workplace_by_worker_id(self, user_id: str) -> WorkPlace:
         """
@@ -95,7 +98,7 @@ class WorkPlacesRepository(BaseRepository):
         if workplace is None:
             raise NoResultFound(f"Workplace for user with ID {user_id} not found")
 
-        # Return the workplace name
+        # Return the workplace itself
         return workplace
 
     def get_workplace_name_by_worker_id(self, workplace_id: str) -> str:
