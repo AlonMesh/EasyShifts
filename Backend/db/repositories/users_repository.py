@@ -1,12 +1,28 @@
 from sqlalchemy.orm import Session
 from Backend.db.models import User
 from Backend.db.repositories.base_repository import BaseRepository
+from Backend.db.repositories.userRequests_repository import UserRequestsRepository
 
 
 class UsersRepository(BaseRepository):
     def __init__(self, db: Session):
         super().__init__(db, User)
-        
+
+    def delete_entity(self, entity_id: str):
+        """
+        """
+        # If the user have a request, delete it
+        userRequestsRepository = UserRequestsRepository(self.db)
+        try:
+            user_request = userRequestsRepository.get_entity(entity_id)
+            if user_request:
+                userRequestsRepository.delete_entity(entity_id)
+        except:
+            pass
+
+        # Delete the user
+        super().delete_entity(entity_id)
+
     def check_user_credentials(self, username: str, password: str) -> bool:
         """
         Check if a user with the given username and password exists.

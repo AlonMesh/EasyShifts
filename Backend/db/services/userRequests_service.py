@@ -23,18 +23,37 @@ class UserRequestsService(BaseService):
         """
         pass
 
-    def get_request_by_userid(self, id: int):
+    def get_request_by_userid(self, user_id: str):
         """
         Retrieves a user request by userid.
 
         Parameters:
-            id (int): the user id in db
+            user_id (str): the user id in db
 
         Returns:
             UserRequest: The user-request object if found, None otherwise.
         """
 
-        user_request = self.repository.get_request_by_userid(id)
+        user_request = self.repository.get_request_by_userid(user_id)
         if user_request:
             return user_request.requests
         return None
+
+    def get_request_content_by_user_id_between_datetimes(self, user_id: str, start_datetime, end_datetime):
+        """
+        Retrieves a user request by userid between two datetimes.
+
+        Parameters:
+            user_id (int): the user id in db
+            start_datetime: the start datetime to check
+            end_datetime: the end datetime to check
+
+        Returns:
+            UserRequest: The request content if found, None otherwise.
+        """
+        # Get the user request
+        user_request = self.get_request_by_userid(user_id)
+
+        # Check if the user request is between the start and end datetimes
+        if user_request and start_datetime <= user_request.modifyAt <= end_datetime:
+            return user_request.requests
