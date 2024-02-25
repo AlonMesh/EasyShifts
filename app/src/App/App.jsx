@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from '../components/Login';
 import SignUp from '../components/SignUp';
 import Home from '../components/Home';
+import ManagerSchedule from '../components/ManagerSchedule/ManagerSchedule';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path={"/manager-schedule"} element={<ManagerSchedule />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

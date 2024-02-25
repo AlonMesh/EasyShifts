@@ -36,10 +36,13 @@ def handle_create_new_board(user_session: UserSession):
 def handle_get_board(user_session: UserSession) -> dict:
     # Get the last shift board
     shift_board_controller = ShiftBoardController(db)
-    board_data = shift_board_controller.get_last_shift_board(user_session.get_id)
+    last_board = shift_board_controller.get_last_shift_board(user_session.get_id)
+
+    # Extract the content from the shift board
+    content = last_board.content
 
     # Return the shift board as a dictionary (JSON)
-    return board_data
+    return content
 
 
 def handle_save_board(data, user_session: UserSession) -> ShiftBoard:

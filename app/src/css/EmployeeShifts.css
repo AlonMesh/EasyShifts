@@ -1,0 +1,12 @@
+.employee-shifts {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    overflow-y: scroll;
+    height: 400px;
+    width: 400px;
+}
+
+.shift_list {
+    padding: 20px;
+}

@@ -72,6 +72,9 @@ class ShiftBoardController:
     def get_last_shift_board(self, workplace_id: str):
         return self.service.get_last_board_by_workplace_id(workplace_id)
 
+    def get_content_template_by_preferences(self, preferences, workplace_id) -> dict:
+        self.repository.get_content_template_by_preferences(preferences, workplace_id)
+
 
 def convert_shiftBoard_to_client(shift_board):
     """
