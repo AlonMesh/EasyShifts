@@ -1,13 +1,19 @@
+// App.jsx
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Home from '../components/Home';
 import Login from '../components/Login';
 import SignUp from '../components/SignUp';
-import Home from '../components/Home';
 import SignUpManager from '../components/SignUpManager';
 import SignUpEmployee from '../components/SignUpEmployee';
-import managerProfile from '../components/managerProfile';
-import employeeProfile from '../components/employeeProfile';
-import './App.css';
+import ManagerProfile from '../components/ManagerProfile';
+import EmployeeProfile from '../components/EmployeeProfile';
+import Profile from '../components/Profile';
+import SignInShifts from '../components/SignInShifts';
+import ManagerViewShiftsRequests from '../components/ManagerViewShiftsRequests';
+import ManagerWorkersList from '../components/ManagerWorkersList';
+import ShiftsPage from '../components/ShiftsPage';
+import EmployeeListPage from '../components/EmployeeListPage';
 
 function App() {
   const [socket, setSocket] = useState(null);
@@ -19,6 +25,11 @@ function App() {
     // Event listener for WebSocket errors
     newSocket.onerror = (error) => {
       console.error('WebSocket error:', error);
+    };
+
+    // Event listener for WebSocket open
+    newSocket.onopen = () => {
+      console.log('WebSocket connection established successfully.');
     };
 
     // Update the socket state
@@ -40,8 +51,14 @@ function App() {
           <Route path="/signup" element={<SignUp socket={socket} />} />
           <Route path="/signupManager" element={<SignUpManager socket={socket} />} />
           <Route path="/signupEmployee" element={<SignUpEmployee socket={socket} />} />
-          <Route path="/managerProfile" element={<managerProfile socket={socket} />} />
-          <Route path="/employeeProfile" element={<employeeProfile socket={socket} />} />
+          <Route path="/managerProfile" element={<ManagerProfile socket={socket} />} />
+          <Route path="/employeeProfile" element={<EmployeeProfile socket={socket} />} />
+          <Route path="/profile" element={<Profile socket={socket} />} />
+          <Route path="/signInShifts" element={<SignInShifts socket={socket} />} />
+          <Route path="/managerViewShiftsRequests" element={<ManagerViewShiftsRequests socket={socket} />} />
+          <Route path="/managerWorkersList" element={<ManagerWorkersList socket={socket} />} />
+          <Route path="/shiftsPage" element={<ShiftsPage socket={socket} />} />
+          <Route path="/employeeListPage" element={<EmployeeListPage socket={socket} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

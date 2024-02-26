@@ -1,83 +1,65 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const SignUpManager = ({ socket }) => {
-  const [managerUsername, setManagerUsername] = useState('');
-  const [managerPassword, setManagerPassword] = useState('');
-  const [businessName, setBusinessName] = useState('');
-  const [log, setLog] = useState('');
+function SignUpManager() {
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+        name: ''
+    });
 
-  const sendManagerSignUpRequest = () => {
-    if (!socket) {
-      console.error("Socket connection is not available.");
-      return;
-    }
-
-    const requestData = {
-      request_id: 30, // This should match the request ID expected by your server
-      data: {
-        username: managerUsername,
-        password: managerPassword,
-        name: businessName
-      }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
-    // Send sign-up request to the server using WebSocket
-    socket.send(JSON.stringify(requestData));
-
-    // Handle response from the server
-    socket.onmessage = (event) => {
-      const response = JSON.parse(event.data);
-      if (response.success) {
-        // Sign-up successful
-        setLog(response.message);
-        // Redirect or perform any other necessary action
-        setTimeout(() => {
-          window.location.replace("../pages/manager_page.html");
-        }, 2000); // Redirect after 2 seconds (adjust as needed)
-      } else {
-        // Sign-up failed
-        setLog(response.message);
-      }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/signup/manager', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert('Manager sign-up successful');
+                // Optionally, you can redirect to ManagerProfile or any other page here
+            } else {
+                alert('Error during manager sign-up: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error during sign-up:', error);
+            alert('Error during sign-up. Please try again later.');
+        }
     };
-  };
 
-  return (
-    <div>
-      <h1>Manager Sign Up</h1>
-      <label htmlFor="managerUsername">Username:</label>
-      <input
-        type="text"
-        id="managerUsername"
-        name="managerUsername"
-        value={managerUsername}
-        onChange={(e) => setManagerUsername(e.target.value)}
-        required
-      />
-      <br />
-      <label htmlFor="managerPassword">Password:</label>
-      <input
-        type="password"
-        id="managerPassword"
-        name="managerPassword"
-        value={managerPassword}
-        onChange={(e) => setManagerPassword(e.target.value)}
-        required
-      />
-      <br />
-      <label htmlFor="name">Business Name:</label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        value={businessName}
-        onChange={(e) => setBusinessName(e.target.value)}
-        required
-      />
-      <br />
-      <button type="button" onClick={sendManagerSignUpRequest}>Sign Up</button>
-      <div id="log">{log}</div>
-    </div>
-  );
-};
+    return (
+        <div>
+            <h2>Manager Sign Up</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Username:</label>
+                    <input type="text" name="username" value={formData.username} onChange={handleChange} required />
+                </div>
+                <div>
+                    <label>Password:</label>
+                    <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+                </div>
+                <div>
+                    <label>Name:</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <Link to="/sign-in">Sign In</Link></p>
+        </div>
+    );
+}
 
 export default SignUpManager;

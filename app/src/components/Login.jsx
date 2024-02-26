@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import ManagerProfile from './managerProfile.jsx';
-import EmployeeProfile from './employeeProfile.jsx';
+import ManagerProfile from './ManagerProfile.jsx';
+import EmployeeProfile from './EmployeeProfile.jsx';
 
 const Login = ({ socket }) => {
   const [username, setUsername] = useState('');

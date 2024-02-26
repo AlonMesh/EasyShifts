@@ -102,31 +102,30 @@ def handle_employee_signin(data):
 
 def handle_manager_signin(data):
     """
-        Handles the manager signin process by creating a new user using the UsersController.
+    Handles the manager sign-up process by creating a new user using the UsersController.
 
-        Parameters:
-            data (dict): A dictionary containing user data for signin.
-                Example: {'username': 'manager1', 'password': 'password123', 'isManager': True, 'isActive': True, 'name': 'Place Name'}
-        """
-    # TODO: Add a check to see if the user is already logged in. If so, return an error message to the client.
+    Parameters:
+        data (dict): A dictionary containing user data for sign-up.
+            Example: {'username': 'manager1', 'password': 'password123', 'name': 'Place Name'}
 
-    # TODO: Add a check to see if the username already exists. If so, return an error message to the client.
+    Returns:
+        dict: A dictionary containing the response to be sent back to the client.
+            Example: {'success': True, 'message': 'Manager sign-up successful'}
+    """
+    try:
+        # Initialize the users controller
+        user_controller = UsersController(db)
 
-    # TODO: Add a check to see if the workplace name already exists. If so, return an error message to the client.
+        # Insert the new manager into the database
+        user_controller.create_entity(data)
 
-    # TODO: Add a check to see if username is valid. If not, return an error message to the client.
-
-    # TODO: Add a check to see if password is valid. If not, return an error message to the client.
-
-    # Initialize the users controller, passing the database session
-    user_controller = UsersController(db)
-    user_controller.create_entity(data)
-
-    # Send the username and password to the login function to create a user session
-    login_data = {"username": data["username"], "password": data["password"]}
-    handle_login(login_data)  # NEVER BEEN TESTED! Depends on the `handle_login` function to work properly.
-
-    return None  # Should not return a response to the client
+        # Optionally, you can send a success response back to the client
+        return {'success': True, 'message': 'Manager sign-up successful'}
+    except Exception as e:
+        # Handle any errors that occur during the sign-up process
+        error_message = 'Error during manager sign-up: ' + str(e)
+        print(error_message)
+        return {'success': False, 'message': error_message}
 
 
 def handle_employee_shifts_request(data):

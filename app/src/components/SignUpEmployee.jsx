@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const SignUpEmployee = ({ socket }) => {
   const [employeeUsername, setEmployeeUsername] = useState('');
@@ -32,9 +33,6 @@ const SignUpEmployee = ({ socket }) => {
       const { success, message } = response.data;
       if (success) {
         setLog(message);
-        setTimeout(() => {
-          window.location.replace("../pages/employee_page.html");
-        }, 2000); // Redirect after 2 seconds (adjust as needed)
       } else {
         setLog('Sign up failed. Please try again.');
       }
@@ -84,7 +82,10 @@ const SignUpEmployee = ({ socket }) => {
         required
       />
       <br />
-      <button type="button" onClick={sendEmployeeSignUpRequest}>Sign Up</button>
+      {/* Use Link component to navigate to employeeProfile */}
+      <Link to="/employeeProfile">
+        <button type="button" onClick={sendEmployeeSignUpRequest}>Sign Up</button>
+      </Link>
       <div id="log">{log}</div>
     </div>
   );
