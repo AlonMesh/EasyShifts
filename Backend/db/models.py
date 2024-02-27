@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime
+from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 import enum
@@ -7,7 +7,7 @@ Base = declarative_base()
 
 NAMES_LEN = 20
 PASS_LEN = 50
-ID_LEN = 36
+ID_LEN = 500
 REQUEST_LEN = 255
 
 
@@ -26,7 +26,7 @@ class User(Base):
     """
     __tablename__ = "users"
 
-    id = Column(String(ID_LEN), primary_key=True, index=True, nullable=False, default=uuid4)  # userID
+    id = Column(Integer, primary_key=True, index=True, nullable=False)  # userID
     username = Column(String(NAMES_LEN), unique=True, nullable=False)
     password = Column(String(PASS_LEN), nullable=False)
     isManager = Column(Boolean, nullable=False)

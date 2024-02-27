@@ -113,10 +113,12 @@ def handle_manager_signin(data):
             Example: {'success': True, 'message': 'Manager sign-up successful'}
     """
     try:
+        print("IN")
         # Initialize the users controller
         user_controller = UsersController(db)
 
         # Insert the new manager into the database
+        print(data)
         user_controller.create_entity(data)
 
         # Optionally, you can send a success response back to the client
