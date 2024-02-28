@@ -49,15 +49,13 @@ function App() {
         <h1>Welcome to Easy Shifts!</h1>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login socket={socket} />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path={"/manager-schedule"} element={<ManagerSchedule />} />
-          <Route path={"/manager-profile"} element={<ManagerProfile />} />
-          <Route path={"/manager-settings"} element={<ManagerSettings />} />
+          <Route path={"/manager-schedule"} element={<ManagerSchedule socket={socket}/>} />
+          <Route path={"/manager-profile"} element={<ManagerProfile socket={socket}/>} />
+          <Route path={"/manager-settings"} element={<ManagerSettings socket={socket}/>} />
           <Route path="/signupManager" element={<SignUpManager socket={socket} />} />
           <Route path="/signupEmployee" element={<SignUpEmployee socket={socket} />} />
-          <Route path="/managerProfile" element={<ManagerProfile socket={socket} />} />
-          <Route path="/employeeProfile" element={<EmployeeProfile socket={socket} />} />
           <Route path="/signInShifts" element={<SignInShifts socket={socket} />} />
           <Route path="/managerViewShiftsRequests" element={<ManagerViewShiftsRequests socket={socket} />} />
           <Route path="/managerWorkersList" element={<ManagerWorkersList socket={socket} />} />
