@@ -19,7 +19,6 @@ function WorkerList({allWorkers, selectedWorkers, onSelect}) {
     return (
         <Select
             className={"worker-list"}
-            closeMenuOnSelect={false}
             components={animatedComponents}
             isMulti
             options={availableWorkers.map(worker => ({value: worker.name, label: worker.name}))}
