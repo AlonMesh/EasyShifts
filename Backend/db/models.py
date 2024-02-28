@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime, Integer
+import datetime
+from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime, JSON, func, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 import enum
@@ -26,7 +27,7 @@ class User(Base):
     """
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True, nullable=False)  # userID
+    id = Column(Integer, primary_key=True, index=True, nullable=False)  # userID  # TODO: MAKE IT UUID
     username = Column(String(NAMES_LEN), unique=True, nullable=False)
     password = Column(String(PASS_LEN), nullable=False)
     isManager = Column(Boolean, nullable=False)
@@ -106,3 +107,42 @@ class ShiftWorker(Base):
     __table_args__ = (
         PrimaryKeyConstraint('shiftID', 'userID'),
     )
+
+
+class ShiftBoard(Base):
+    """
+    Represents the workplace's shift-board.
+
+    Attributes:
+        weekStartDate (Date): Start date of the week.
+        workplaceID (str): ID of the associated workplace.
+        isPublished (bool): Indicates if the shift is published and visible to workers.
+        content (JSON): Stores the shift-board content.
+        preferences (JSON): Stores workplace's preferences/settings.
+            - number_of_shifts_per_day
+            - max_workers_per_shift
+            - closed_days
+            - etc.
+        requests_window_start (DateTime): Start date and time of the requests window.
+        requests_window_end (DateTime): End date and time of the requests window.
+    """
+    __tablename__ = "shiftBoards"
+
+    weekStartDate = Column(Date, nullable=False, default=lambda: next_sunday())
+    workplaceID = Column(String(ID_LEN), ForeignKey('users.id'), nullable=False)
+    isPublished = Column(Boolean, nullable=False, default=False)
+    content = Column(JSON, default=dict)
+    preferences = Column(JSON, default=dict)
+    requests_window_start = Column(DateTime)
+    requests_window_end = Column(DateTime)
+
+    __table_args__ = (
+        PrimaryKeyConstraint('weekStartDate', 'workplaceID'),
+    )
+
+
+# Define the next_sunday function to be used as the default value
+def next_sunday():
+    today = datetime.date.today()
+    days_until_sunday = (6 - today.weekday() + 7) % 7
+    return today + datetime.timedelta(days=days_until_sunday)

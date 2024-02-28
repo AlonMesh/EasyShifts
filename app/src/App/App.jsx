@@ -14,6 +14,7 @@ import ManagerViewShiftsRequests from '../components/ManagerViewShiftsRequests';
 import ManagerWorkersList from '../components/ManagerWorkersList';
 import ShiftsPage from '../components/ShiftsPage';
 import EmployeeListPage from '../components/EmployeeListPage';
+import './App.css';
 
 function App() {
   const [socket, setSocket] = useState(null);
