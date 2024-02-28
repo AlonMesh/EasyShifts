@@ -17,28 +17,26 @@
     align-items: center;
     margin-bottom: 10px;
     background: #eee;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
 }
 
 .info-icon {
     z-index: 1;
-    flex-shrink: 0;
     width: 20px;
     height: 20px;
-    background: #ddd;
-    border-radius: 50%;
-    margin-right: 10px;
     cursor: pointer;
 }
 
 .edit-workers {
-    z-index: 1;
     width: 20px;
-    margin-left: auto;
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
     color: #007bff;
-
 }
 
 .shift-workers button {
@@ -48,6 +46,7 @@
     font-weight: bold;
     color: #999;
     width: 80%;
+    font-size: 16px;
 }
 
 .shift-info {
@@ -64,7 +63,7 @@
 
 .shift-workers {
     position: absolute;
-    top: 25px; /* Below header */
+    top: 20px; /* Below header */
     bottom: 0;
     left: 5%;
     right: 5%;
@@ -84,7 +83,7 @@
 
 .edit-workers-panel {
     position: absolute;
-    top: 20px; /* Below header */
+    top: 20px;
     bottom: 0;
     left: 5%;
     right: 5%;
