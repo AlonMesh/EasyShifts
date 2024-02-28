@@ -1,0 +1,38 @@
+.react-select {
+    width: 200px; /* Fixed width */
+}
+
+.react-select__control {
+    min-height: 30px; /* Prevent height change */
+      background: #f9f9f9;
+
+}
+
+.react-select__value-container {
+    padding: 2px 10px; /* Reduce padding */
+}
+
+.react-select__input {
+    font-size: 14px; /* Reduce font size */
+}
+
+.react-select__indicators {
+    display: none; /* Hide dropdown icon */
+}
+
+.react-select__menu {
+    font-size: 14px; /* Reduce options font size */
+}
+
+.react-select__option {
+    padding: 4px 10px; /* Reduce option padding */
+}
+
+.react-select__option--is-focused {
+  background: #f0f0f0;
+}
+
+.react-select__option--is-selected {
+  background: #007bff;
+  color: #fff;
+}

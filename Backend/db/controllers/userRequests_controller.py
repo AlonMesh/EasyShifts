@@ -23,15 +23,28 @@ class UserRequestsController(BaseController):
         self.service = UserRequestsService(self.repository)
         super().__init__(self.repository, self.service)
 
-    def get_request_by_userid(self, id: int):
+    def get_request_by_userid(self, user_id: str):
         """
         Retrieves a user request by userid.
 
         Parameters:
-            id (int): the user id in db
+            user_id (int): the user id in db
 
         Returns:
             UserRequest: The user-request object if found, None otherwise.
         """
 
-        return self.service.get_request_by_userid(id)
+        return self.service.get_request_by_userid(user_id)
+
+    def get_request_content_by_user_id_between_datetimes(self, user_id: str, start_datetime, end_datetime):
+        """
+        Retrieves a user request by userid after a certain datetime.
+
+        Parameters:
+            user_id (int): the user id in db
+            start_datetime: the start datetime to check
+            end_datetime: the end datetime to check
+
+        Returns: The request content if found, None otherwise.
+        """
+        return self.service.get_request_content_by_user_id_between_datetimes(user_id, start_datetime, end_datetime)

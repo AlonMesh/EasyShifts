@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 
 # Initialize the database and session
 db, _ = initialize_database_and_session()
+
 # Global variable declaration
 user_session: UserSession | None = None
 
@@ -112,6 +113,7 @@ def handle_manager_signin(data):
             Example: {'success': True, 'message': 'Manager sign-up successful'}
     """
     try:
+        print("IN")
         # Initialize the users controller
         user_controller = UsersController(db)
 
