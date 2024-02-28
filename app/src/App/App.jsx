@@ -10,7 +10,6 @@ import ManagerSettings from '../components/ManagerSettings';
 import SignUpManager from '../components/SignUpManager';
 import SignUpEmployee from '../components/SignUpEmployee';
 import EmployeeProfile from '../components/EmployeeProfile';
-import Profile from '../components/Profile';
 import SignInShifts from '../components/SignInShifts';
 import ManagerViewShiftsRequests from '../components/ManagerViewShiftsRequests';
 import ManagerWorkersList from '../components/ManagerWorkersList';
@@ -59,7 +58,6 @@ function App() {
           <Route path="/signupEmployee" element={<SignUpEmployee socket={socket} />} />
           <Route path="/managerProfile" element={<ManagerProfile socket={socket} />} />
           <Route path="/employeeProfile" element={<EmployeeProfile socket={socket} />} />
-          <Route path="/profile" element={<Profile socket={socket} />} />
           <Route path="/signInShifts" element={<SignInShifts socket={socket} />} />
           <Route path="/managerViewShiftsRequests" element={<ManagerViewShiftsRequests socket={socket} />} />
           <Route path="/managerWorkersList" element={<ManagerWorkersList socket={socket} />} />
