@@ -34,7 +34,7 @@ const SignUp = () => {
             Employee
           </label>
         </div>
-        <Link to={role === 'manager' ? '/signupManager' : (role === 'employee' ? '/SignUpEmployee' : '/signup' )}>
+        <Link to={role === 'manager' ? '/SignUpManager' : (role === 'employee' ? '/SignUpEmployee' : '/signup' )}>
           <button disabled={!role}>Continue</button>
         </Link>
       </form>

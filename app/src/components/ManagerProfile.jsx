@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Import Link component
 
 const EmployeeProfile = ({ socket }) => {
   useEffect(() => {
@@ -52,7 +53,7 @@ const EmployeeProfile = ({ socket }) => {
     }
   };
 
-  const getProfileRequest = () => {
+  const getProfileRequest = () => { // Need to change to manager-profile request (relevant id)
     // Implement logic to send request to view employee profile using the existing socket
     if (socket && socket.readyState === WebSocket.OPEN) {
       // Example request
@@ -84,8 +85,11 @@ const EmployeeProfile = ({ socket }) => {
       <h2>What would you like to do?</h2>
       <button onClick={getEmployeesShiftsRequest}>Schedule shifts</button>
       <button onClick={createNewShifts}>Create new week shifts</button>
-      <button onClick={getProfileRequest}>View my profile</button>
-      <button onClick={getEmployeesList}>View my employees</button>
+      <button onClick={getProfileRequest}>View my profile</button> {/*Here we need to add a function that returns the current manager data such name,user etc*/}
+      {/* Use Link component for navigation */}
+       <Link to="/EmployeeListPage">
+        <button onClick={getEmployeesList}>View my employees</button>
+      </Link>
       <div id="log"></div>
       {/* Example HTML structure with a container for displaying profile information */}
       <div id="profileContainer"></div>
