@@ -46,8 +46,8 @@ class WorkPlace(Base):
     """
     __tablename__ = "workPlaces"
 
-    id = Column(String(ID_LEN), ForeignKey('users.id'), primary_key=True, index=True, nullable=False)  # userID
-    workPlaceID = Column(String(ID_LEN), nullable=False)
+    id = Column(Integer, ForeignKey('users.id'), primary_key=True, index=True, nullable=False)  # userID ,String(ID_LEN)
+    workPlaceID = Column(Integer, nullable=False) # String(ID_LEN)
 
 
 class UserRequest(Base):
@@ -61,7 +61,7 @@ class UserRequest(Base):
     """
     __tablename__ = "userRequests"
 
-    id = Column(String(ID_LEN), ForeignKey('users.id'), primary_key=True, index=True)  # userID
+    id = Column(Integer, ForeignKey('users.id'), primary_key=True, index=True)  # userID , String(ID_LEN)
     modifyAt = Column(DateTime)
     requests = Column(String(REQUEST_LEN))
 
@@ -85,8 +85,8 @@ class Shift(Base):
     """
     __tablename__ = "shifts"
 
-    id = Column(String(ID_LEN), primary_key=True, index=True, default=uuid4)  # shiftID
-    workPlaceID = Column(String(ID_LEN), nullable=False)
+    id = Column(Integer, primary_key=True, index=True, default=uuid4)  # shiftID , String(ID_LEN)
+    workPlaceID = Column(Integer, nullable=False)  #String(ID_LEN)
     shiftDate = Column(Date, nullable=False)
     shiftPart = Column(Enum(ShiftPart), nullable=False)
 
@@ -101,8 +101,8 @@ class ShiftWorker(Base):
     """
     __tablename__ = "shiftWorkers"
 
-    shiftID = Column(String(ID_LEN), ForeignKey('shifts.id'), nullable=False)
-    userID = Column(String(ID_LEN), ForeignKey('users.id'), nullable=False)
+    shiftID = Column(Integer, ForeignKey('shifts.id'), nullable=False)  # String(ID_LEN)
+    userID = Column(Integer, ForeignKey('users.id'), nullable=False)  # String(ID_LEN)
 
     __table_args__ = (
         PrimaryKeyConstraint('shiftID', 'userID'),
@@ -129,7 +129,7 @@ class ShiftBoard(Base):
     __tablename__ = "shiftBoards"
 
     weekStartDate = Column(Date, nullable=False, default=lambda: next_sunday())
-    workplaceID = Column(String(ID_LEN), ForeignKey('users.id'), nullable=False)
+    workplaceID = Column(Integer, ForeignKey('users.id'), nullable=False)  # String(ID_LEN)
     isPublished = Column(Boolean, nullable=False, default=False)
     content = Column(JSON, default=dict)
     preferences = Column(JSON, default=dict)

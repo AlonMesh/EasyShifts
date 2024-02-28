@@ -235,7 +235,6 @@ def handle_employee_list():
         print("User session not found.")
         return False
 
-    print("here")
     if user_session.can_access_manager_page():
         work_places_controller = WorkPlacesController(db)
         user_id = user_session.get_id
