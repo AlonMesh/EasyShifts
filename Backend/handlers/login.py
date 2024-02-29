@@ -23,6 +23,9 @@ def handle_login(data):
     except ValueError:
         raise ValueError("User does not exist")
 
-    # Return the pair of boolean values and the user session
-    response = [user_exists, is_manager]
+    # Return if the user exists and is a manager, and the user session
+    response = {
+        "user_exists": user_exists,
+        "is_manager": is_manager
+    }
     return response, user_session

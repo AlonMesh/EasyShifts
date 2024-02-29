@@ -36,10 +36,13 @@ def handle_create_new_board(user_session: UserSession):
 def handle_get_board(user_session: UserSession) -> dict:
     # Get the last shift board
     shift_board_controller = ShiftBoardController(db)
-    board_data = shift_board_controller.get_last_shift_board(user_session.get_id)
+    last_board = shift_board_controller.get_last_shift_board(user_session.get_id)
+
+    # Extract the content from the shift board
+    content = last_board.content
 
     # Return the shift board as a dictionary (JSON)
-    return board_data
+    return content
 
 
 def handle_save_board(data, user_session: UserSession) -> ShiftBoard:
@@ -171,3 +174,28 @@ def open_requests_windows(data: dict, user_session: UserSession) -> bool:
 
     # Return True if the requests window is open
     return True
+
+
+def handle_get_preferences(user_session: UserSession) -> dict:
+    # Get the last shift board
+    shift_board_controller = ShiftBoardController(db)
+    last_board = shift_board_controller.get_last_shift_board(user_session.get_id)
+
+    # Extract the preferences from the shift board
+    preferences = last_board.preferences
+
+    # Return the preferences as a dictionary (JSON)
+    return preferences
+
+
+def handle_save_preferences(data: dict, user_session: UserSession) -> ShiftBoard:
+    # Extract the preferences from the data
+    preferences = data["preferences"]  # TODO: Depending on the client!
+
+    # Update the shift board with the new preferences
+    shift_board_controller = ShiftBoardController(db)
+    updated_shift_board = shift_board_controller.update_shift_board(next_sunday, user_session.get_id,
+                                                                    {"preferences": preferences})
+
+    # Return the updated shift board
+    return updated_shift_board

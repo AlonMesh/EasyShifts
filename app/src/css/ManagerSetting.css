@@ -1,0 +1,57 @@
+.setting-box {
+    align-items: center;
+    width: 600px;
+    margin: 0 auto;
+    height: 300px;
+    background: lightgrey;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.title-box {
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    background: #f0f0f0;
+    }
+
+.selects-container {
+    /* In the middle of x and y axis */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    /* spaces between selects */
+    gap: 20px;
+    margin: 0 auto;
+}
+
+label {
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    /* bold */
+    font-weight: bold;
+    color: gray;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: normal;
+    justify-content: center;
+    position: relative;
+    bottom: 10%;
+    width: 300px;
+    margin: 0 auto;
+    gap: 10px;
+}
+
+.datetime{
+    border-radius: 3px;
+    padding: 5px;
+    font-size: 15px;
+    width: 100%;
+    color: gray;
+    border: gray 1px solid;
+}
