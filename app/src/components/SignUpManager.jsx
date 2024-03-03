@@ -19,7 +19,7 @@ function SignUpManager({ socket }) {
       socket.send(JSON.stringify(request));
       // You might want to handle responses from the server here
       // For simplicity, let's assume a successful response means navigation to ManagerProfile
-      navigate('/managerProfile');
+      navigate('/manager-profile');
     } else {
       console.log('Not connected to the server');
     }
