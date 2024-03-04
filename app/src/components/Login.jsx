@@ -11,32 +11,6 @@ function Login() {
     const [isManager, setIsManager] = useState(false);
     const socket = useSocket();
 
-    useEffect(() => {
-        // Add event listener to handle messages from the server
-        const handleMessage = (event) => {
-            const data = JSON.parse(event.data);
-            const { userExists, isManager } = data;
-
-            if (userExists === 'f') {
-                setError('Invalid Username or Password');
-            } else {
-                setIsManager(isManager === 't');
-                setLoggedIn(true);
-            }
-        };
-
-        if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.addEventListener('message', handleMessage);
-        }
-
-        // Cleanup function
-        return () => {
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                socket.removeEventListener('message', handleMessage);
-            }
-        };
-    }, [socket]);
-
     const handleLogin = () => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             const request = {
@@ -45,8 +19,32 @@ function Login() {
             };
 
             socket.send(JSON.stringify(request));
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.addEventListener('message', handleMessage);
+            }
         } else {
             setError('Not connected to the server');
+        }
+    };
+
+    const handleMessage = (event) => {
+        if (event.data !== null && event.data !== undefined) {
+            // event.data is not null or undefined, proceed with further processing
+            console.log(event.data);
+            const data = JSON.parse(event.data);
+            const userExists = data['user_exists'];
+            const isManager = data['is_manager'];
+
+            if (userExists === false) {
+                setError('Invalid Username or Password');
+            } else {
+                setIsManager(isManager === true);
+                setLoggedIn(true);
+            }
+            socket.removeEventListener('message', handleMessage);
+        } else {
+            // Handle the case where event.data is null or undefined
+            console.error('Received null or undefined data.');
         }
     };
 
