@@ -87,3 +87,13 @@ class UsersController(BaseController):
             str: The name if the user exists, None otherwise.
         """
         return self.service.get_name_by_id(user_id)
+
+    def approve_user(self, user_id: str):
+        """
+        Approve a user by setting isApproval to True.
+
+        Parameters:
+            user_id (str): The ID of the user to approve.
+        """
+        # Call the repository method to approve the user
+        self.repository.approve_user(user_id)
