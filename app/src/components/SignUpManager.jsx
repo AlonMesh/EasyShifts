@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSocket } from '../utils';
 
-function SignUpManager({ socket }) {
+function SignUpManager() {
   const navigate = useNavigate();
+  const socket = useSocket(); // Call the useSocket hook directly
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -19,7 +21,7 @@ function SignUpManager({ socket }) {
       socket.send(JSON.stringify(request));
       // You might want to handle responses from the server here
       // For simplicity, let's assume a successful response means navigation to ManagerProfile
-      navigate('/managerProfile');
+      navigate('/manager-profile');
     } else {
       console.log('Not connected to the server');
     }

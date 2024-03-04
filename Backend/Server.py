@@ -36,13 +36,13 @@ def handle_login(data):
     # Access the username and password
     username = data['username']
     password = data['password']
-
     # Initialize the users controller, passing the database session
     users_controller = UsersController(db)
 
     # Check if the user exists and is a manager
     user_exists, is_manager = users_controller.check_user_existence_and_manager_status(username, password)
-
+    print(user_exists)
+    print(is_manager)
     if user_exists:
         # Retrieve the actual user ID from the database
         user_id = users_controller.get_user_id_by_username_and_password(username, password)

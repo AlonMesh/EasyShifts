@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import * as socket_object from '../utils'
 
-const EmployeeListPage = ({ socket }) => {
+const EmployeeListPage = () => {
   const [employeesList, setEmployeesList] = useState('');
 
   useEffect(() => {
     const getEmployeesList = () => {
-      if (socket && socket.readyState === WebSocket.OPEN) {
+      if (socket_object.useSocket() && socket_object.useSocket().readyState === WebSocket.OPEN) {
         const request = {
           request_id: 60,
         };
-        socket.send(JSON.stringify(request));
+        socket_object.useSocket().send(JSON.stringify(request));
       } else {
         console.log('Socket not available or not open');
       }
@@ -27,13 +28,13 @@ const EmployeeListPage = ({ socket }) => {
     };
 
     // Add event listener for incoming messages
-    socket.addEventListener('message', handleMessage);
+    socket_object.useSocket().addEventListener('message', handleMessage);
 
     // Clean up function to remove event listener when component unmounts
     return () => {
-      socket.removeEventListener('message', handleMessage);
+      socket_object.useSocket().removeEventListener('message', handleMessage);
     };
-  }, [socket]);
+  }, [socket_object.useSocket()]);
 
   return (
     <div>

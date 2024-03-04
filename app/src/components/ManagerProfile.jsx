@@ -1,11 +1,13 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import '../css/ManagerProfile.css';
-import {SolarSettingsBoldDuotone} from "./Icons/SolarSettingsBoldDuotone";
-import {UimSchedule} from "./Icons/UimSchedule";
-import {FluentPeopleTeam20Filled} from "./Icons/Team";
+import { SolarSettingsBoldDuotone } from "./Icons/SolarSettingsBoldDuotone";
+import { UimSchedule } from "./Icons/UimSchedule";
+import { FluentPeopleTeam20Filled } from "./Icons/Team";
+import { useSocket } from '../utils'; // Import useSocket hook
 
-const ManagerProfile = ({name = "Joe's Caffe", socket}) => {
-    // Implement logic to send request for employee shifts using the existing socket
+const ManagerProfile = ({ name = "Joe's Caffe" }) => {
+    const socket = useSocket(); // Call the useSocket hook directly
+
     useEffect(() => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             // Example request
@@ -19,9 +21,7 @@ const ManagerProfile = ({name = "Joe's Caffe", socket}) => {
     }, [socket]);
 
     const createNewShifts = () => {
-        // Implement logic to create new week shifts using the existing socket
         if (socket && socket.readyState === WebSocket.OPEN) {
-            // Example request
             const request = {
                 request_id: 80,
             };
@@ -32,9 +32,7 @@ const ManagerProfile = ({name = "Joe's Caffe", socket}) => {
     };
 
     const getProfileRequest = () => {
-        // Implement logic to send request to view employee profile using the existing socket
         if (socket && socket.readyState === WebSocket.OPEN) {
-            // Example request
             const request = {
                 request_id: 70,
             };
@@ -45,9 +43,7 @@ const ManagerProfile = ({name = "Joe's Caffe", socket}) => {
     };
 
     const getEmployeesList = () => {
-        // Implement logic to get list of employees using the existing socket
         if (socket && socket.readyState === WebSocket.OPEN) {
-            // Example request
             const request = {
                 request_id: 60,
             };
@@ -63,20 +59,20 @@ const ManagerProfile = ({name = "Joe's Caffe", socket}) => {
 
             <div className="menu">
                 <a href="/manager-settings">
-                    <SolarSettingsBoldDuotone className="icon" style={{width: '5em', height: '5em'}}/>
-                    <br/>
+                    <SolarSettingsBoldDuotone className="icon" style={{ width: '5em', height: '5em' }} />
+                    <br />
                     Settings
                 </a>
 
                 <a href="/manager-schedule">
-                    <UimSchedule className="icon" style={{width: '5em', height: '5em'}}/>
-                    <br/>
+                    <UimSchedule className="icon" style={{ width: '5em', height: '5em' }} />
+                    <br />
                     Schedule
                 </a>
 
                 <a href="/managing-workers">
-                    <FluentPeopleTeam20Filled className="icon" style={{width: '5em', height: '5em'}}/>
-                    <br/>
+                    <FluentPeopleTeam20Filled className="icon" style={{ width: '5em', height: '5em' }} />
+                    <br />
                     Workers
                 </a>
             </div>
@@ -88,7 +84,6 @@ const ManagerProfile = ({name = "Joe's Caffe", socket}) => {
                 <button onClick={getProfileRequest}>View my profile</button>
                 <button onClick={getEmployeesList}>View my employees</button>
                 <div id="log"></div>
-                {/* Example HTML structure with a container for displaying profile information */}
                 <div id="profileContainer"></div>
             </div>
         </div>
