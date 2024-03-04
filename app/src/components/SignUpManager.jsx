@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSocket } from '../utils';
 
-function SignUpManager({ socket }) {
+function SignUpManager() {
   const navigate = useNavigate();
+  const socket = useSocket(); // Call the useSocket hook directly
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
