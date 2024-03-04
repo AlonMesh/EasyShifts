@@ -134,8 +134,21 @@ class ShiftBoardRepository:
         Returns:
             List of all shift boards.
         """
-        return self.db.query(self.shiftBoard).filter(self.shiftBoard.workplaceID == workplace_id).order_by(
+        all_boards = self.db.query(self.shiftBoard).filter(self.shiftBoard.workplaceID == workplace_id).order_by(
             self.shiftBoard.weekStartDate).all()
+
+        # If there's no boards, create the first
+        if not all_boards:
+            print("Alert: No shift boards found for the workplace. Creating the first one.")
+            self.create_entity({
+                "weekStartDate": next_sunday,
+                "workplaceID": workplace_id
+            })
+
+        all_boards = self.db.query(self.shiftBoard).filter(self.shiftBoard.workplaceID == workplace_id).order_by(
+            self.shiftBoard.weekStartDate).all()
+
+        return all_boards
 
     def get_content_template_by_preferences(self, preferences, workplace_id) -> dict:
         """

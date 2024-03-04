@@ -1,10 +1,11 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from Backend.db.controllers.shiftWorkers_controller import ShiftWorkersController
 from Backend.db.models import ShiftBoard
 from Backend.user_session import UserSession
 from Backend.db.controllers.shiftBoard_controller import ShiftBoardController
 from Backend.db.controllers.workPlaces_controller import WorkPlacesController
 from Backend.db.controllers.userRequests_controller import UserRequestsController
+from Backend.db.controllers.shifts_controller import ShiftsController, convert_shifts_for_client
 from Backend.config.constants import db, next_sunday
 
 
@@ -43,6 +44,18 @@ def handle_get_board(user_session: UserSession) -> dict:
 
     # Return the shift board as a dictionary (JSON)
     return content
+
+
+def handle_get_start_date(user_session: UserSession) -> dict:
+    # Get the last shift board
+    shift_board_controller = ShiftBoardController(db)
+    last_board = shift_board_controller.get_last_shift_board(user_session.get_id)
+
+    # Extract the start date from the shift board
+    start_date = last_board.weekStartDate
+
+    # Return the start date as a dictionary (JSON)
+    return start_date
 
 
 def handle_save_board(data, user_session: UserSession) -> ShiftBoard:
@@ -151,9 +164,7 @@ def watch_workers_requests(user_session: UserSession):
     # Create a dictionary with keys "name" and "request_content"
     combined_list = [
         {"name": name,
-         "request_content": user_requests_controller.get_request_content_by_user_id_between_datetimes(worker_id,
-                                                                                                      requests_window_start,
-                                                                                                      requests_window_end)}
+         "request_content": user_requests_controller.get_request_by_userid(worker_id)}
         # Iterate over workers_info to generate dictionaries for each worker
         for worker_id, name in workers_info
     ]
@@ -199,3 +210,52 @@ def handle_save_preferences(data: dict, user_session: UserSession) -> ShiftBoard
 
     # Return the updated shift board
     return updated_shift_board
+
+
+def get_all_workers_names_by_workplace_id(user_session):
+    # Get all workers in the workplace
+    workplace_controller = WorkPlacesController(db)
+    workers = workplace_controller.get_all_workers_by_workplace_id(user_session.get_id)
+
+    # Extract the names of the workers
+    workers_names = [worker.name for worker in workers]
+
+    # Return the names of the workers
+    return workers_names
+
+
+def handle_get_assigned_shifts(user_session, data):
+    print("data: ", data)
+    # data represents start and end dates
+    start_date_str = data["start_date"]
+
+    print("start_date_str: ", start_date_str)
+
+    # Convert the start date to a datetime object
+    start_date = datetime.strptime(start_date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+    # Get the end date, a week after the start date
+    end_date = start_date + timedelta(days=7)
+
+    # Create an array where each element is a dictionary with the worker's name and the shifts he is assigned to
+    assigned_shifts = []
+
+    # Get all workers in the workplace
+    workplace_controller = WorkPlacesController(db)
+    workers = workplace_controller.get_all_workers_by_workplace_id(user_session.get_id)
+
+    # Iterate over the workers
+    for worker in workers:
+        # Get all shifts assigned to the worker
+        shifts_controller = ShiftsController(db)
+        shifts = shifts_controller.get_all_shifts_between_dates_for_given_worker(worker.id, start_date, end_date)
+
+        # Convert the shifts to a format that the client can understand
+        converted_shifts = convert_shifts_for_client(shifts, db)
+
+        # Add the worker's name and the shifts he is assigned to the array
+        assigned_shifts.append({"name": worker.name, "shifts": converted_shifts})
+
+    # Return the array
+    print("assigned_shifts: ", assigned_shifts)
+    return assigned_shifts

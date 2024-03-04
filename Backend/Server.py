@@ -12,7 +12,7 @@ import websockets
 import asyncio
 import json
 from datetime import datetime, timedelta
-from Backend.handlers import login
+from Backend.handlers import login, manager_schedule
 
 # Initialize the database and session
 db, _ = initialize_database_and_session()
@@ -321,7 +321,7 @@ def handle_request(request_id, data):
         print(data)
 
         response, user_session = login.handle_login(data)
-        return response
+        return {"request_id": request_id, "data": response}
 
     elif request_id == 20:
         # Employee Sign in request handling
@@ -364,6 +364,45 @@ def handle_request(request_id, data):
         print("Make new week shifts")
         make_shifts()
 
+    elif request_id == 91:
+        # Get Employees Requests Data
+        print("Get Employees Requests Data")
+        res = manager_schedule.watch_workers_requests(user_session)
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 93:
+        # Get all workers
+        print("Get all workers")
+        res = manager_schedule.get_all_workers_names_by_workplace_id(user_session)
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 95:
+        # Get preferences
+        print("Get preferences")
+        res = manager_schedule.handle_get_preferences(user_session)
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 97:
+        # Get start date
+        print("Get start date")
+        res = manager_schedule.handle_get_start_date(user_session).isoformat()  # Convert to ISO format
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 98:
+        # Get assigned shifts
+        print("Get assigned shifts")
+        res = manager_schedule.handle_get_assigned_shifts(user_session, data)
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 99:
+        # Set assigned shifts
+        print("Set assigned shifts")
+
     else:
         print("Unknown request ID:", request_id)
 
@@ -382,7 +421,6 @@ async def handle_client(websocket, path):
             json_data = json.dumps(response)
             await websocket.send(json_data)
             print(response)
-
     except websockets.exceptions.ConnectionClosed:
         print(f"Connection closed for {websocket.remote_address}")
 

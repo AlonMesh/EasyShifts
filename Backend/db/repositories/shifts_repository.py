@@ -11,7 +11,8 @@ class ShiftsRepository(BaseRepository):
         super().__init__(db, Shift)
 
     def get_shift_by_day_and_part_and_workplace(self, day: str, part: str, workplace: int):
-        return self.db.query(Shift).filter(Shift.shiftDay == day, Shift.shiftPart == part, Shift.workPlaceID == workplace).first()
+        return self.db.query(Shift).filter(Shift.shiftDay == day, Shift.shiftPart == part,
+                                           Shift.workPlaceID == workplace).first()
 
     def get_all_shifts_since_date(self, given_date: date):
         """
@@ -62,3 +63,43 @@ class ShiftsRepository(BaseRepository):
         # Filter shifts based on the given workplace ID
         shifts_for_workplace = [shift for shift in shifts if shift.workPlaceID == workplace_id]
         return shifts_for_workplace
+
+    def get_all_shifts_between_dates_for_given_workplace(self, start_date, end_date, workplace_id):
+        """
+        Retrieves all shifts of a workplace between two given dates.
+        Args:
+            start_date (date): Start date to retrieve the shifts from.
+            end_date (date): End date to retrieve the shifts until.
+            workplace_id (str): ID of the workplace to retrieve shifts for.
+
+        Returns: List of shifts of the workplace between the given dates.
+        """
+        return self.db.query(Shift).filter(
+            Shift.shiftDate >= start_date,
+            Shift.shiftDate <= end_date,
+            Shift.workPlaceID == workplace_id
+        ).all()
+
+    def get_all_shifts_between_dates_for_given_worker(self, worker_id, start_date, end_date):
+        """
+        Retrieves all shifts of a worker between two given dates.
+        Args:
+            worker_id (str): ID of the worker to retrieve shifts for.
+            start_date (date): Start date to retrieve the shifts from.
+            end_date (date): End date to retrieve the shifts until.
+
+        Returns: List of shifts of the worker between the given dates.
+        """
+        # Get the shift workers repository
+        shift_workers_repository = ShiftWorkersRepository(self.db)
+
+        # Get all shifts between the given dates
+        shifts = self.db.query(Shift).filter(
+            Shift.shiftDate >= start_date,
+            Shift.shiftDate <= end_date
+        ).all()
+
+        # Filter shifts based on the given worker ID
+        shifts_for_worker = [shift for shift in shifts if
+                             shift_workers_repository.is_shift_assigned_to_worker(shift.id, worker_id)]
+        return shifts_for_worker
