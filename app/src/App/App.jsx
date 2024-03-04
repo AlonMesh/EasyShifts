@@ -16,51 +16,31 @@ import ManagerWorkersList from '../components/ManagerWorkersList';
 import ShiftsPage from '../components/ShiftsPage';
 import EmployeeListPage from '../components/EmployeeListPage';
 import './App.css';
+import * as socket_object from '../utils'
 
 function App() {
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    // Establish WebSocket connection when the component mounts
-    const newSocket = new WebSocket('ws://localhost:8080');
-
-    // Event listener for WebSocket errors
-    newSocket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    // Event listener for WebSocket open
-    newSocket.onopen = () => {
-      console.log('WebSocket connection established successfully.');
-    };
-
-    // Update the socket state
-    setSocket(newSocket);
-
-    // Cleanup function
-    return () => {
-      newSocket.close();
-    };
-  }, []);
+  socket_object.useSocket();
 
   return (
     <Router>
       <div className="App">
         <h1>Welcome to Easy Shifts!</h1>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login socket={socket} />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path={"/manager-schedule"} element={<ManagerSchedule socket={socket}/>} />
-          <Route path={"/manager-profile"} element={<ManagerProfile socket={socket}/>} />
-          <Route path={"/manager-settings"} element={<ManagerSettings socket={socket}/>} />
-          <Route path="/signupManager" element={<SignUpManager socket={socket} />} />
-          <Route path="/signupEmployee" element={<SignUpEmployee socket={socket} />} />
-          <Route path="/signInShifts" element={<SignInShifts socket={socket} />} />
-          <Route path="/managerViewShiftsRequests" element={<ManagerViewShiftsRequests socket={socket} />} />
-          <Route path="/managerWorkersList" element={<ManagerWorkersList socket={socket} />} />
-          <Route path="/shiftsPage" element={<ShiftsPage socket={socket} />} />
-          <Route path="/employeeListPage" element={<EmployeeListPage socket={socket} />} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/signup" element={<SignUp/>} />
+          <Route path={"/manager-schedule"} element={<ManagerSchedule />} />
+          <Route path={"/manager-profile"} element={<ManagerProfile  />} />
+          <Route path={"/manager-settings"} element={<ManagerSettings/>} />
+          <Route path="/signupManager" element={<SignUpManager  />} />
+          <Route path="/signupEmployee" element={<SignUpEmployee  />} />
+          <Route path="/managerProfile" element={<ManagerProfile  />} />
+          <Route path="/employeeProfile" element={<EmployeeProfile  />} />
+          <Route path="/signInShifts" element={<SignInShifts  />} />
+          <Route path="/managerViewShiftsRequests" element={<ManagerViewShiftsRequests  />} />
+          <Route path="/managerWorkersList" element={<ManagerWorkersList  />} />
+          <Route path="/shiftsPage" element={<ShiftsPage  />} />
+          <Route path="/employeeListPage" element={<EmployeeListPage  />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
