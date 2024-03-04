@@ -10,7 +10,7 @@ function EmployeeShifts({employees}) {
                 {employees.map(emp => (
                     <EmployeeShiftItem
                         name={emp.name}
-                        request={emp.request}
+                        request={emp.request_content}
                     />
                 ))}
             </div>

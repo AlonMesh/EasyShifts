@@ -95,6 +95,19 @@ class ShiftsController(BaseController):
         """
         return self.repository.get_all_shifts_since_date_for_given_workplace(given_date, workplace_id)
 
+    def get_all_shifts_between_dates_for_given_workplace(self, start_date: date, end_date: date, workplace_id: str):
+        """
+        Retrieves all shifts of a workplace between two given dates.
+
+        Args:
+            start_date (date): Start date to retrieve the shifts from.
+            end_date (date): End date to retrieve the shifts until.
+            workplace_id (str): ID of the workplace to retrieve shifts for.
+
+        Returns: List of shifts of the workplace between the given dates.
+        """
+        return self.repository.get_all_shifts_between_dates_for_given_workplace(start_date, end_date, workplace_id)
+
     def get_future_shifts_for_workplace(self, workplace_id: str):
         """
         Retrieves all future shifts for the specified workplace.
@@ -110,6 +123,9 @@ class ShiftsController(BaseController):
 
     def get_shift_id_by_day_and_part_and_workplace(self, day: str, part: str, workplace: int):
         return self.service.get_shift_id_by_day_and_part_and_workplace(day, part, workplace)
+
+    def get_all_shifts_between_dates_for_given_worker(self, id, start_date, end_date):
+        return self.repository.get_all_shifts_between_dates_for_given_worker(id, start_date, end_date)
 
 
 def convert_shift_for_client(shift: Shift, db, is_manager=True) -> dict:
@@ -131,7 +147,8 @@ def convert_shift_for_client(shift: Shift, db, is_manager=True) -> dict:
         "workPlaceID": shift.workPlaceID,
         # JSON can't handle date objects, so we convert them to strings
         'shiftDate': shift.shiftDate.isoformat() if shift.shiftDate else None,
-        "shiftPart": shift.shiftPart,
+        # JSON can't handle enum objects, so we take their values
+        "shiftPart": shift.shiftPart.value
     }
 
     # If the user is a manager, we also include the workers assigned to the shift

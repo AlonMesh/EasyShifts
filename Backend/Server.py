@@ -12,7 +12,7 @@ import websockets
 import asyncio
 import json
 from datetime import datetime, timedelta
-from Backend.handlers import login
+from Backend.handlers import login, manager_schedule
 
 # Initialize the database and session
 db, _ = initialize_database_and_session()
@@ -242,12 +242,19 @@ def handle_employee_list():
         workplace_id = work_places_controller.get_workplace_id_by_user_id(user_id)
         if workplace_id is not None:
             # Assuming get_active_workers_for_user returns a list of active workers
-            active_workers = work_places_controller.get_active_workers_for_user(user_id)
+            active_workers_approved = work_places_controller.get_active_approve_workers_for_user(user_id)
+            active_workers_unapproved = work_places_controller.get_active_unapprove_workers_for_user(user_id)
 
-            # Convert list of tuples to a string
-            active_workers_str = ' ,'.join(f'{worker[0]}: {worker[1]}' for worker in active_workers)
+            # Convert list of tuples to a list of dictionaries
+            active_workers = []
+            for worker in active_workers_approved:
+                active_workers.append({"id": worker[0], "name": worker[1], "approved": True})
+            for worker in active_workers_unapproved:
+                active_workers.append({"id": worker[0], "name": worker[1], "approved": False})
 
-            return active_workers_str  # return active workers as a string
+            # Serialize the list of dictionaries to JSON
+            json_response = json.dumps(active_workers)
+            return json_response  # return JSON response
         else:
             print("User does not work in any workplace.")
             return False
@@ -325,7 +332,7 @@ def handle_request(request_id, data):
         print(data)
 
         response, user_session = login.handle_login(data)
-        return response
+        return {"request_id": request_id, "data": response}
 
     elif request_id == 20:
         # Employee Sign in request handling
@@ -369,10 +376,49 @@ def handle_request(request_id, data):
         make_shifts()
 
     elif request_id == 90:
-        # Get Employees shifts handling
+        # Get Employee's shifts handling
         print("Send employees shifts")
         employees_shifts = handle_send_shifts()
         return employees_shifts
+      
+    elif request_id == 91:
+        # Get Employees Requests Data
+        print("Get Employees Requests Data")
+        res = manager_schedule.watch_workers_requests(user_session)
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 93:
+        # Get all workers
+        print("Get all workers")
+        res = manager_schedule.get_all_workers_names_by_workplace_id(user_session)
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 95:
+        # Get preferences
+        print("Get preferences")
+        res = manager_schedule.handle_get_preferences(user_session)
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 97:
+        # Get start date
+        print("Get start date")
+        res = manager_schedule.handle_get_start_date(user_session).isoformat()  # Convert to ISO format
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 98:
+        # Get assigned shifts
+        print("Get assigned shifts")
+        res = manager_schedule.handle_get_assigned_shifts(user_session, data)
+        print(res)
+        return {"request_id": request_id, "data": res}
+
+    elif request_id == 99:
+        # Set assigned shifts
+        print("Set assigned shifts")
 
     else:
         print("Unknown request ID:", request_id)
@@ -392,7 +438,6 @@ async def handle_client(websocket, path):
             json_data = json.dumps(response)
             await websocket.send(json_data)
             print(response)
-
     except websockets.exceptions.ConnectionClosed:
         print(f"Connection closed for {websocket.remote_address}")
     except Exception as e:

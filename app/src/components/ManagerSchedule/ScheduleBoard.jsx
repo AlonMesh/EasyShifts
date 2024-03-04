@@ -4,14 +4,27 @@ import '../../css/ScheduleBoard.css';
 
 function ScheduleBoard({partsCount, closedDays, startDate, allWorkers, assignedShifts}) {
 
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const shiftNames = ['morning', 'evening', 'noon'];
 
     function getWorkers(date, part) {
         return assignedShifts.filter(worker => {
             return worker.shifts.some(shift => {
-                return shift.date === date && shift.part === part;
+                const shiftDate = new Date(shift.shiftDate);
+                const dayOfWeek = getDayName(shiftDate);
+
+                console.log('known-shift:', shift);
+                console.log('date:', dayOfWeek);
+                console.log('part:', part);
+
+                return dayOfWeek === date && shift.shiftPart === part;
             });
         }).map(worker => worker.name);
+    }
+
+    function getDayName(date) {
+        const options = {weekday: 'long'};
+        return date.toLocaleDateString('en-US', options).toLowerCase();
     }
 
     function getDate(i) {
@@ -41,19 +54,10 @@ function ScheduleBoard({partsCount, closedDays, startDate, allWorkers, assignedS
                                     <div className="closed-day">Closed</div>
                                 ) :
                                 <Shift
-                                    workplaceId="123"
                                     date={day}
-                                    part={`Part ${i + 1}`}
-                                    workers={getWorkers(day, `Part ${i + 1}`)}
-                                    allWorkers={[
-                                        {name: "John Doe"},
-                                        {name: "Jane Smith"},
-                                        {name: "Mike Wilson"},
-                                        {name: "Sarah Johnson"},
-                                        {name: "Chris Brown"},
-                                        {name: "Amanda Miller"}
-                                    ]
-                                    }
+                                    part={shiftNames[i]}
+                                    workers={getWorkers(day, shiftNames[i])}
+                                    allWorkers={allWorkers}
                                     workersShifts={assignedShifts}
                                 />
                             }

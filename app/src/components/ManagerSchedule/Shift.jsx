@@ -7,6 +7,13 @@ import {EditIcon} from "../Icons/Edit";
 import {SaveIcon} from "../Icons/Save";
 
 function Shift({workplaceId, date, part, workers, allWorkers, workersShifts}) {
+    console.log("workplaceID:", workplaceId)
+    console.log("date:", date)
+    console.log("part:", part)
+    console.log("workerss:", workers)
+    console.log("allWorkers:", allWorkers)
+    console.log("workersShifts:", workersShifts)
+
     const [showTooltip, setShowTooltip] = useState(false);
     const [editing, setEditing] = useState(false);
     const [selectedWorkers, setSelectedWorkers] = useState(workers);
@@ -62,7 +69,6 @@ function Shift({workplaceId, date, part, workers, allWorkers, workersShifts}) {
 
                 <Tooltip show={showTooltip}>
                     <div className="shift-info">
-                        <p>Workplace: {workplaceId}</p>
                         <p>Date: {date}</p>
                         <p>Part: {part}</p>
                     </div>

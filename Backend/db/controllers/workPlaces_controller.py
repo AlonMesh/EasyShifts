@@ -59,6 +59,46 @@ class WorkPlacesController(BaseController):
             # If the user does not work in any workplace, return an empty list
             return []
 
+    def get_active_approve_workers_for_user(self, user_id: int) -> List[Tuple[int, str]]:
+        """
+        Retrieves the names and IDs of all active workers in the workplace where the specified user works.
+
+        Parameters:
+            user_id (int): ID of the user.
+
+        Returns:
+            List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
+        """
+        # Retrieve the workplace ID for the specified user
+        workplace_id = self.repository.get_workplace_id_by_user_id(user_id)
+
+        if workplace_id is not None:
+            # Utilize the service method to get active workers by workplace ID
+            return self.service.get_active_approved_workers_by_workplace_id(workplace_id)
+        else:
+            # If the user does not work in any workplace, return an empty list
+            return []
+
+    def get_active_unapprove_workers_for_user(self, user_id: int) -> List[Tuple[int, str]]:
+        """
+        Retrieves the names and IDs of all active workers in the workplace where the specified user works.
+
+        Parameters:
+            user_id (int): ID of the user.
+
+        Returns:
+            List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
+        """
+        # Retrieve the workplace ID for the specified user
+        workplace_id = self.repository.get_workplace_id_by_user_id(user_id)
+
+        if workplace_id is not None:
+            # Utilize the service method to get active workers by workplace ID
+            return self.service.get_active_unapproved_workers_by_workplace_id(workplace_id)
+        else:
+            # If the user does not work in any workplace, return an empty list
+            return []
+
     def get_workplace_by_worker_id(self, user_id: int) -> WorkPlace:
         """
         Retrieves the workplace where the specified user works.
