@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import webSocket from 'ws'; // Import WebSocket library
 import axios from 'axios'; // Make sure to install axios using npm or yarn
-
+import { useSocket } from '../utils';
 
 const EmployListPage = () => {
   const [employees, setEmployees] = useState([]);
   const [approvedEmployees, setApprovedEmployees] = useState([]);
   const [unapprovedEmployees, setUnapprovedEmployees] = useState([]);
+  const socket = useSocket();
 
   useEffect(() => {
     fetchEmployees();

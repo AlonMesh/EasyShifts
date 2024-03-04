@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import * as socket_object from '../utils'
+import { useSocket } from '../utils';
 
 const SignUpEmployee = () => {
-  const socket = socket_object.useSocket(); // Call useSocket hook directly
+  const socket = useSocket(); // Call useSocket hook directly
 
   const [employeeUsername, setEmployeeUsername] = useState('');
   const [employeePassword, setEmployeePassword] = useState('');

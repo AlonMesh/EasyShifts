@@ -3,9 +3,10 @@ import '../css/ManagerProfile.css';
 import {SolarSettingsBoldDuotone} from "./Icons/SolarSettingsBoldDuotone";
 import {UimSchedule} from "./Icons/UimSchedule";
 import {FluentPeopleTeam20Filled} from "./Icons/Team";
+import { useSocket } from '../utils';
 
-const ManagerProfile = ({name = "Joe's Caffe", socket}) => {
-
+const ManagerProfile = ({name = "Joe's Caffe"}) => {
+    const socket = useSocket();
     return (
         <div className="manager-profile">
             <div className="profile-header">{name}' works management</div>

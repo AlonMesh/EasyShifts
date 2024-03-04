@@ -31,7 +31,8 @@ function Login() {
         if (event.data !== null && event.data !== undefined) {
             // event.data is not null or undefined, proceed with further processing
             console.log(event.data);
-            const data = JSON.parse(event.data);
+            const packetPayload = JSON.parse(event.data);
+            const data = packetPayload["data"];
             const userExists = data['user_exists'];
             const isManager = data['is_manager'];
 
