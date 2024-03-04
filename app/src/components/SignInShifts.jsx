@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSocket } from '../utils';
 
-const SignInShifts = ({ socket }) => {
+const SignInShifts = () => {
   
-    const [shiftsString, setShiftsString] = useState('')
-    const [sent, setSent] = useState(false)
+    const socket = useSocket(); // Call the useSocket hook directly
+    const [checkboxes, setCheckboxes] = useState(Array(21).fill(false));
 
-    const onSubmit = () => {
+    const shifts = ['Morning', 'Noon', 'Evening'];
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    const handleCheckboxChange = (index) => {
+        setCheckboxes((prevCheckboxes) => {
+        const newCheckboxes = [...prevCheckboxes];
+        newCheckboxes[index] = !newCheckboxes[index];
+        return newCheckboxes;
+        });
+    };
+
+    const handleSubmit = () => {
+        let resultString = '';
+        daysOfWeek.forEach((day, dayIndex) => {
+            shifts.forEach((shift, shiftIndex) => {
+                const checkboxIndex = dayIndex * shifts.length + shiftIndex;
+                resultString += `${dayIndex + 1}${shift.charAt(0).toLowerCase()}-${checkboxes[checkboxIndex] ? 't' : 'f'}_`;
+            });
+        });
         if (socket && socket.readyState === WebSocket.OPEN) {
             const request = {
                 request_id: 40,
-                data: {shiftsString},
+                data: {resultString},
             };
         socket.send(JSON.stringify(request));
-        setSent(true)
-        console.log("sent:", sent)
         }
     }
 
@@ -23,10 +40,37 @@ const SignInShifts = ({ socket }) => {
     return (
         <div>
         <h1>What is your availability next week?</h1>
-        <textarea cols={65} rows={5} onChange={(e)=>{setShiftsString(e.currentTarget.textContent)}}/>
-        <br/>
-        <button onClick={() => onSubmit()}>submit</button>
-        {sent&&<h1>Request for shifts has been submitted</h1>}
+        <table border="1">
+            <thead>
+            <tr>
+                <th></th>
+                {daysOfWeek.map((day) => (
+                <th key={day} style={{ padding: '10px' }} >{day}</th>
+                ))}
+            </tr>
+            
+            </thead>
+            <tbody>
+            {shifts.map((shift) => (
+                <tr key={shift}>
+                <td>{shift}</td>
+                {Array(7)
+                    .fill(0)
+                    .map((_, dayIndex) => (
+                    <td key={dayIndex}>
+                        <input
+                        type="checkbox"
+                        checked={checkboxes[dayIndex * 3 + shifts.indexOf(shift)]}
+                        onChange={() => handleCheckboxChange(dayIndex * 3 + shifts.indexOf(shift))}
+                        />
+                    </td>
+                    ))}
+                </tr>
+            ))}
+            </tbody>
+        </table>
+        <button onClick={handleSubmit } style={{ display: 'block', margin: '20px auto', fontSize: '16px' }} >Submit</button>
+
         {/* Link back to home page */}
         <Link to="/">Go back to home page</Link>
         </div>
@@ -34,52 +78,3 @@ const SignInShifts = ({ socket }) => {
 };
 
 export default SignInShifts;
-
-/*
-<table id='table'>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Sunday</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Morning</td>
-                <td><input type="checkbox" id="1m"/></td>
-                <td><input type="checkbox" id="2m"/></td>
-                <td><input type="checkbox" id="3m"/></td>
-                <td><input type="checkbox" id="4m"/></td>
-                <td><input type="checkbox" id="5m"/></td>
-                <td><input type="checkbox" id="6m"/></td>
-                <td><input type="checkbox" id="7m"/></td>
-            </tr>
-            <tr>
-                <td>Noon</td>
-                <td><input type="checkbox" id="1n"/></td>
-                <td><input type="checkbox" id="2n"/></td>
-                <td><input type="checkbox" id="3n"/></td>
-                <td><input type="checkbox" id="4n"/></td>
-                <td><input type="checkbox" id="5n"/></td>
-                <td><input type="checkbox" id="6n"/></td>
-                <td><input type="checkbox" id="7n"/></td>
-            </tr>
-            <tr>
-                <td>Evening</td>
-                <td><input type="checkbox" id="1e"/></td>
-                <td><input type="checkbox" id="2e"/></td>
-                <td><input type="checkbox" id="3e"/></td>
-                <td><input type="checkbox" id="4e"/></td>
-                <td><input type="checkbox" id="5e"/></td>
-                <td><input type="checkbox" id="6e"/></td>
-                <td><input type="checkbox" id="7e"/></td>
-            </tr>
-        </tbody>
-    </table>
-*/
