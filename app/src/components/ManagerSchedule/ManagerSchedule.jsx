@@ -3,90 +3,6 @@ import EmployeeShifts from './EmployeeShifts';
 import ScheduleBoard from "./ScheduleBoard";
 import '../../css/ManagerSchedule.css';
 
-// const allWorkers_const = [
-//     {name: "John Doe"},
-//     {name: "Jane Smith"},
-//     {name: "Mike Wilson"},
-//     {name: "Sarah Johnson"},
-//     {name: "Chris Brown"},
-//     {name: "Amanda Miller"}]
-//
-//
-// const employees_const = [
-//     {
-//         name: 'John Doe',
-//         request: 'Monday off'
-//     },
-//
-//     {
-//         name: 'Jane Smith',
-//         request: 'Thursday off please'
-//     },
-//
-//     {
-//         name: 'Mike Wilson',
-//         request: 'Schedule me for 3-11pm on Friday'
-//     },
-//
-//     {
-//         name: 'Sarah Johnson',
-//         request: 'I need Tuesday off'
-//     },
-//
-//     {
-//         name: 'Chris Brown',
-//         request: 'Can I work 8am-4pm on Saturday?'
-//     },
-//
-//     {
-//         name: 'Amanda Miller',
-//         request: 'I need Sunday off'
-//     }
-//     // other employees
-// ];
-//
-// const assignedShifts_const = [
-//     {
-//         name: 'John Doe',
-//         shifts: [
-//             {date: 'Monday', part: 'Part 1'},
-//             {date: 'Tuesday', part: 'Part 2'}
-//         ]
-//     },
-//     {
-//         name: 'Jane Smith',
-//         shifts: [
-//             {date: 'Monday', part: 'Part 2'},
-//             {date: 'Tuesday', part: 'Part 1'}
-//         ]
-//     },
-//     {
-//         name: 'Mike Wilson',
-//         shifts: [
-//             {date: 'Monday', part: 'Part 1'},
-//             {date: 'Tuesday', part: 'Part 2'}
-//         ]
-//     },
-//     {
-//         name: 'Sarah Johnson',
-//         shifts: [
-//             {date: 'Monday', part: 'Part 2'},
-//             {date: 'Wednesday', part: 'Part 1'}
-//         ]
-//     },
-//     {
-//         name: 'Chris Brown',
-//         shifts: []
-//     },
-//     {
-//         name: 'Amanda Miller',
-//         shifts: []
-//     }
-// ];
-//
-// const startDate_const = new Date('2024-02-18')
-// const preferences_const = [2, ["Sunday", "Friday"]]
-
 function ManagerSchedule({socket}) {
     // State
     const [loading, setLoading] = useState(true);
@@ -98,13 +14,10 @@ function ManagerSchedule({socket}) {
     });
     const [startDate, setStartDate] = useState(null);
     const [assignedShifts, setAssignedShifts] = useState([]);
-    console.log("hey1")
 
-    const getEmployeesRequestsData = ({socket}) => {
+    const getEmployeesRequestsData = () => {
         return new Promise((resolve, reject) => {
-            console.log("step1")
             try {
-                console.log("step2")
                 if (!socket) {
                     console.error('Socket connection is not available - GERD.');
                     reject('Socket connection is not available - GERD.');
@@ -115,7 +28,6 @@ function ManagerSchedule({socket}) {
                     request_id: 91,
                 };
 
-                console.log("step3")
                 // Send the request to the server
                 socket.send(JSON.stringify(request));
 
@@ -131,18 +43,19 @@ function ManagerSchedule({socket}) {
                         reject('WebSocket connection is closed');
                     }
                 };
-
-                // Attach the message handler to the onmessage event
-                socket.addEventListener('message', handleMessage);
+                if (socket) {
+                    console.log("Action: addEventListener")
+                    // Attach the message handler to the onmessage event
+                    socket.addEventListener('message', handleMessage);
+                }
             } catch (error) {
                 console.error('Error occurred while getting employees requests data:', error);
-                console.log('Error occurred while getting employees requests data:', error);
                 reject(error);
             }
         });
     };
 
-    const getAllWorkers = ({socket}) => {
+    const getAllWorkers = () => {
         return new Promise((resolve, reject) => {
             try {
                 if (!socket) {
@@ -175,13 +88,12 @@ function ManagerSchedule({socket}) {
                 socket.addEventListener('message', handleMessage);
             } catch (error) {
                 console.error('Error occurred while getting all employees names:', error);
-                console.log('Error occurred while getting all employees names:', error);
                 reject(error);
             }
         });
     };
 
-    const getPreferences = ({socket}) => {
+    const getPreferences = () => {
         return new Promise((resolve, reject) => {
             try {
                 if (!socket) {
@@ -214,13 +126,12 @@ function ManagerSchedule({socket}) {
                 socket.addEventListener('message', handleMessage);
             } catch (error) {
                 console.error('Error occurred while getting preferences:', error);
-                console.log('Error occurred while getting preferences:', error);
                 reject(error);
             }
         });
     };
 
-    const getStartDate = ({socket}) => {
+    const getStartDate = () => {
         return new Promise((resolve, reject) => {
             try {
                 if (!socket) {
@@ -253,13 +164,12 @@ function ManagerSchedule({socket}) {
                 socket.addEventListener('message', handleMessage);
             } catch (error) {
                 console.error('Error occurred while getting preferences:', error);
-                console.log('Error occurred while getting preferences:', error);
                 reject(error);
             }
         });
     };
 
-    const getAssignedShifts = ({socket, startDate}) => {
+    const getAssignedShifts = ({startDate}) => {
         return new Promise((resolve, reject) => {
             try {
                 if (!socket) {
@@ -302,7 +212,6 @@ function ManagerSchedule({socket}) {
                 socket.addEventListener('message', handleMessage);
             } catch (error) {
                 console.error('Error occurred while getting preferences:', error);
-                console.log('Error occurred while getting preferences:', error);
                 reject(error);
             }
         });
@@ -342,26 +251,32 @@ function ManagerSchedule({socket}) {
         };
 
         // Attach the message handler to the onmessage event
-        socket.addEventListener('message', handleMessage);
+        if (socket) {
+            console.log("Action: addEventListener")
+            socket.addEventListener('message', handleMessage);
+        }
 
         // Fetch initial data
         const fetchData = async () => {
             try {
+                // Set loading to true
                 setLoading(true);
 
-                const employeesRequests = await getEmployeesRequestsData({socket});
+                console.log('socket2: ' + socket);
+
+                const employeesRequests = await getEmployeesRequestsData();
                 setEmployeesRequests(employeesRequests);
 
-                const allWorkers = await getAllWorkers({socket});
+                const allWorkers = await getAllWorkers();
                 setAllWorkers(allWorkers);
 
-                const preferences = await getPreferences({socket});
+                const preferences = await getPreferences();
                 setPreferences(preferences);
 
-                const startDate = await getStartDate({socket});
+                const startDate = await getStartDate();
                 setStartDate(startDate);
 
-                const assignedShifts = await getAssignedShifts({socket, startDate});
+                const assignedShifts = await getAssignedShifts({startDate});
                 setAssignedShifts(assignedShifts);
                 console.log('DONE: assignedShifts:', assignedShifts);
             } catch (error) {
@@ -375,9 +290,12 @@ function ManagerSchedule({socket}) {
 
         // Clean up the event listener when the component is unmounted
         return () => {
-            socket.removeEventListener('message', handleMessage);
+            if (socket) {
+                console.log("Action: removeEventListener");
+                socket.removeEventListener('message', handleMessage);
+            }
         };
-    }, []);
+    }, [socket]);
     // Render the ManagerSchedule component
     return (
         <div className="manager-schedule">
