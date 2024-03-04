@@ -263,6 +263,60 @@ def handle_employee_list():
         return False
 
 
+def handle_employee_approval(data, users_controller):
+    """
+    Handles the approval of an employee.
+
+    Parameters:
+        data (dict): A dictionary containing the employee ID.
+        users_controller (UsersController): An instance of UsersController for user management.
+
+    Returns:
+        bool: True if the approval was successful, False otherwise.
+    """
+    if user_session is None:
+        print("User session not found.")
+        return False
+
+    if user_session.can_access_manager_page():
+        employee_id = data.get('employeeId')
+        if employee_id:
+            users_controller.approve_user(employee_id)
+            return True
+        else:
+            print("Employee ID not provided in the data.")
+            return False
+    else:
+        print("User does not have access to manager-specific pages.")
+        return False
+
+
+def handle_employee_rejection(data):
+    if user_session is None:
+        print("User session not found.")
+        return False
+
+    if user_session.can_access_manager_page():
+        # Access the UsersController
+        users_controller = UsersController(db)
+
+        # Extract the employee ID from the data
+        employee_id = data.get('employeeId')
+
+        # Delete the user from the database
+        deleted_entity = users_controller.delete_entity(employee_id)
+
+        if deleted_entity:
+            print(f"Employee with ID {employee_id} has been successfully deleted.")
+            return True
+        else:
+            print(f"Failed to delete employee with ID {employee_id}.")
+            return False
+    else:
+        print("User does not have access to manager-specific pages.")
+        return False
+
+
 def handle_send_profile() -> dict:
     """
     Handles the request to send the user's profile data to the client.
@@ -359,11 +413,20 @@ def handle_request(request_id, data):
         profile_data = handle_send_profile()
         return {"request_id": request_id, "success": True, "data": profile_data}
 
+    elif request_id == 72:
+        # Employee approval request handling
+        print("Received Employee Approval request")
+        return {"success": handle_employee_approval(data)}
+
+    elif request_id == 74:
+        # Employee rejection request handling
+        print("Received Employee Rejection request")
+        return {"success": handle_employee_rejection(data)}
+
     elif request_id == 80:
         # Make new week shifts
         print("Make new week shifts")
         make_shifts()
-
     else:
         print("Unknown request ID:", request_id)
 

@@ -70,7 +70,7 @@ const ManagerProfile = ({ name = "Joe's Caffe" }) => {
                     Schedule
                 </a>
 
-                <a href="/managing-workers">
+                <a href="/../components/EmployeeListPage">
                     <FluentPeopleTeam20Filled className="icon" style={{ width: '5em', height: '5em' }} />
                     <br />
                     Workers
