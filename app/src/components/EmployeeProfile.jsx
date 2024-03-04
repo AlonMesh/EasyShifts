@@ -50,6 +50,10 @@ function EmployeeProfile() {
         <div>
           <p>Username: {profileData.username}</p>
           {/* Display other profile data here */}
+
+          <button><Link to="/SignInShifts">Sign in shifts</Link></button>
+          <button><Link to="/ShiftsPage">View your shifts</Link></button>
+          
         </div>
       ) : (
         <p>Loading...</p>
