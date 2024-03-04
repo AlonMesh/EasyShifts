@@ -5,9 +5,10 @@ import '../../css/WorkerList.css';
 const animatedComponents = makeAnimated();
 
 function WorkerList({allWorkers, selectedWorkers, onSelect}) {
+    console.log("WorkerList: ", allWorkers, selectedWorkers)
 
     const availableWorkers = allWorkers.filter(
-        worker => !selectedWorkers.includes(worker.name)
+        worker => !selectedWorkers.includes(worker)
     );
 
     const handleChange = (selected) => {
@@ -21,7 +22,7 @@ function WorkerList({allWorkers, selectedWorkers, onSelect}) {
             className={"worker-list"}
             components={animatedComponents}
             isMulti
-            options={availableWorkers.map(worker => ({value: worker.name, label: worker.name}))}
+            options={availableWorkers.map(worker => ({value: worker, label: worker}))}
             onChange={handleChange}
         />
     );
