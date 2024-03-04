@@ -38,7 +38,7 @@ def handle_login(data):
     username = data['username']
     password = data['password']
 
-    # Initialize the users controller, passing the database session
+    # Initialize the user's controller, passing the database session
     users_controller = UsersController(db)
 
     # Check if the user exists and is a manager
@@ -55,7 +55,7 @@ def handle_login(data):
     # TODO: else: send a message to the client that the user does not exist
 
     # Return the pair of boolean values
-    response = [user_exists, is_manager]
+    response = {"user_exists": user_exists, "is_manager": is_manager}
     return response
 
 
@@ -313,6 +313,17 @@ def handle_send_profile() -> dict:
     return returned_data
 
 
+def handle_send_shifts():
+    if user_session is None:
+        raise Exception("User session not found.")
+
+    user_id = user_session.get_id
+    shifts_controller = ShiftsController(db)
+    future_shifts = shifts_controller.get_future_shifts_for_user(user_id)
+    future_shifts_for_client = convert_shifts_for_client(future_shifts, db, is_manager=False)
+    return future_shifts_for_client
+
+
 def handle_request(request_id, data):
     global user_session
     if request_id == 10:
@@ -354,7 +365,7 @@ def handle_request(request_id, data):
         return handle_employee_list()
 
     elif request_id == 70:
-        # Employees list request handling
+        # Send user profile handling
         print("Send user profile")
         profile_data = handle_send_profile()
         return {"request_id": request_id, "success": True, "data": profile_data}
@@ -364,6 +375,12 @@ def handle_request(request_id, data):
         print("Make new week shifts")
         make_shifts()
 
+    elif request_id == 90:
+        # Get Employee's shifts handling
+        print("Send employees shifts")
+        employees_shifts = handle_send_shifts()
+        return employees_shifts
+      
     elif request_id == 91:
         # Get Employees Requests Data
         print("Get Employees Requests Data")
@@ -423,6 +440,15 @@ async def handle_client(websocket, path):
             print(response)
     except websockets.exceptions.ConnectionClosed:
         print(f"Connection closed for {websocket.remote_address}")
+    except Exception as e:
+        if "User session not found" in str(e):
+            # Handle the "User session not found" exception here
+            print("User session not found. Sending an appropriate response.")
+            await websocket.send("User session not found. Please log in.")
+        else:
+            # Handle other exceptions
+            print(f"An unexpected error occurred: {e}")
+            await websocket.send("An unexpected error occurred. Please try again later.")
 
 
 async def start_server():
