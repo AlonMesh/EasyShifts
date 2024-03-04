@@ -12,6 +12,7 @@ import websockets
 import asyncio
 import json
 from datetime import datetime, timedelta
+from Backend.handlers import login
 
 # Initialize the database and session
 db, _ = initialize_database_and_session()
@@ -36,13 +37,13 @@ def handle_login(data):
     # Access the username and password
     username = data['username']
     password = data['password']
+
     # Initialize the users controller, passing the database session
     users_controller = UsersController(db)
 
     # Check if the user exists and is a manager
     user_exists, is_manager = users_controller.check_user_existence_and_manager_status(username, password)
-    print(user_exists)
-    print(is_manager)
+
     if user_exists:
         # Retrieve the actual user ID from the database
         user_id = users_controller.get_user_id_by_username_and_password(username, password)
@@ -306,12 +307,14 @@ def handle_send_profile() -> dict:
 
 
 def handle_request(request_id, data):
+    global user_session
     if request_id == 10:
         # Login request handling
         print("Received Login request")
         print(data)
 
-        return handle_login(data)
+        response, user_session = login.handle_login(data)
+        return response
 
     elif request_id == 20:
         # Employee Sign in request handling
