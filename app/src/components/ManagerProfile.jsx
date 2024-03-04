@@ -1,36 +1,82 @@
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 import '../css/ManagerProfile.css';
 import {SolarSettingsBoldDuotone} from "./Icons/SolarSettingsBoldDuotone";
 import {UimSchedule} from "./Icons/UimSchedule";
 import {FluentPeopleTeam20Filled} from "./Icons/Team";
-import { useSocket } from '../utils';
+import {useSocket} from '../utils';
+import ManagerSchedule from "./ManagerSchedule/ManagerSchedule";
+import ManagerSettings from "./ManagerSettings";
 
 const ManagerProfile = ({name = "Joe's Caffe"}) => {
     const socket = useSocket();
+    const [showSettings, setShowSettings] = useState(false);
+    const [showSchedule, setShowSchedule] = useState(false);
+    const [showWorkers, setShowWorkers] = useState(false);
+
+    const handleSettingsClick = () => {
+        setShowSettings(!showSettings);
+        setShowSchedule(false);
+        setShowWorkers(false);
+    };
+
+    const handleScheduleClick = () => {
+        setShowSettings(false);
+        setShowSchedule(!showSchedule);
+        setShowWorkers(false);
+    };
+
+    const handleWorkersClick = () => {
+        setShowSettings(false);
+        setShowSchedule(false);
+        setShowWorkers(!showWorkers);
+    };
+
     return (
-        <div className="manager-profile">
-            <div className="profile-header">{name}' works management</div>
+        <div className="full-page">
+            <div className="manager-profile">
+                <div className="profile-header">{name}' works management</div>
 
-            <div className="menu">
-                <a href="/manager-settings">
-                    <SolarSettingsBoldDuotone className="icon" style={{width: '5em', height: '5em'}}/>
-                    <br/>
-                    Settings
-                </a>
+                <div className="menu">
+                    <div className="icon-wrapper" onClick={handleSettingsClick}>
+                        <SolarSettingsBoldDuotone className="icon" style={{width: '5em', height: '5em'}}/>
+                        <br/>
+                        Settings
+                    </div>
 
-                <a href="/manager-schedule">
-                    <UimSchedule className="icon" style={{width: '5em', height: '5em'}}/>
-                    <br/>
-                    Schedule
-                </a>
+                    <div className="icon-wrapper" onClick={handleScheduleClick}>
+                        <UimSchedule className="icon" style={{width: '5em', height: '5em'}}/>
+                        <br/>
+                        Schedule
+                    </div>
 
-                <a href="/managing-workers">
-                    <FluentPeopleTeam20Filled className="icon" style={{width: '5em', height: '5em'}}/>
-                    <br/>
-
-                    Workers
-                </a>
+                    <div className="icon-wrapper" onClick={handleWorkersClick}>
+                        <FluentPeopleTeam20Filled className="icon" style={{width: '5em', height: '5em'}}/>
+                        <br/>
+                        Workers
+                    </div>
+                </div>
             </div>
+
+            {showSchedule && (
+                <div className="submenu">
+                    {/* Add submenu content for Schedule here */}
+                    <ManagerSchedule socket={socket}/>
+                </div>
+            )}
+
+            {showSettings && (
+                <div className="submenu">
+                    {/* Add submenu content for Settings here */}
+                    <ManagerSettings socket={socket}/>
+                </div>
+            )}
+
+            {showWorkers && (
+                <div className="submenu">
+                    {/* Add submenu content for Workers here */}
+                    <div>Workers</div>
+                </div>
+            )}
         </div>
     );
 };
