@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as socket_object from '../utils';
+import { useSocket } from '../utils';
 
 function EmployeeProfile() {
   const socket = socket_object.useSocket(); // Call useSocket hook directly
@@ -49,6 +50,10 @@ function EmployeeProfile() {
         <div>
           <p>Username: {profileData.username}</p>
           {/* Display other profile data here */}
+
+          <button><Link to="/SignInShifts">Sign in shifts</Link></button>
+          <button><Link to="/ShiftsPage">View your shifts</Link></button>
+          
         </div>
       ) : (
         <p>Loading...</p>
