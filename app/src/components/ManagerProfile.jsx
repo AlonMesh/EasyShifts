@@ -27,6 +27,7 @@ const ManagerProfile = ({name = "Joe's Caffe"}) => {
                 <a href="/managing-workers">
                     <FluentPeopleTeam20Filled className="icon" style={{width: '5em', height: '5em'}}/>
                     <br/>
+
                     Workers
                 </a>
             </div>
