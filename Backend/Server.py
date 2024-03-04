@@ -242,12 +242,19 @@ def handle_employee_list():
         workplace_id = work_places_controller.get_workplace_id_by_user_id(user_id)
         if workplace_id is not None:
             # Assuming get_active_workers_for_user returns a list of active workers
-            active_workers = work_places_controller.get_active_workers_for_user(user_id)
+            active_workers_approved = work_places_controller.get_active_approve_workers_for_user(user_id)
+            active_workers_unapproved = work_places_controller.get_active_unapprove_workers_for_user(user_id)
 
-            # Convert list of tuples to a string
-            active_workers_str = ' ,'.join(f'{worker[0]}: {worker[1]}' for worker in active_workers)
+            # Convert list of tuples to a list of dictionaries
+            active_workers = []
+            for worker in active_workers_approved:
+                active_workers.append({"id": worker[0], "name": worker[1], "approved": True})
+            for worker in active_workers_unapproved:
+                active_workers.append({"id": worker[0], "name": worker[1], "approved": False})
 
-            return active_workers_str  # return active workers as a string
+            # Serialize the list of dictionaries to JSON
+            json_response = json.dumps(active_workers)
+            return json_response  # return JSON response
         else:
             print("User does not work in any workplace.")
             return False

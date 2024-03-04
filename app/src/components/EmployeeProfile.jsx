@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import * as socket_object from '../utils';
 
-function EmployeeProfile({ socket }) {
+function EmployeeProfile() {
+  const socket = socket_object.useSocket(); // Call useSocket hook directly
+
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
-    // Fetch employee profile data when the component mounts
-    const getProfileRequest = {
-      request_id: 70
-    };
-
     if (socket && socket.readyState === WebSocket.OPEN) {
+      // Fetch employee profile data when the component mounts
+      const getProfileRequest = {
+        request_id: 70
+      };
+
       socket.send(JSON.stringify(getProfileRequest));
+
+      // Event listener for messages received on the WebSocket
+      const handleSocketMessage = (event) => {
+        const response = JSON.parse(event.data);
+        if (response && response.request_id === 70) { // Check if response is not null
+          handleProfileResponse(response);
+        }
+      };
+
+      // Attach event listener for WebSocket messages
+      socket.addEventListener('message', handleSocketMessage);
+
+      // Cleanup function
+      return () => {
+        socket.removeEventListener('message', handleSocketMessage);
+      };
     }
-
-    // Event listener for messages received on the WebSocket
-    const handleSocketMessage = (event) => {
-      const response = JSON.parse(event.data);
-      if (response.request_id === 70) {
-        handleProfileResponse(response);
-      }
-    };
-
-    // Attach event listener for WebSocket messages
-    socket.addEventListener('message', handleSocketMessage);
-
-    // Cleanup function
-    return () => {
-      socket.removeEventListener('message', handleSocketMessage);
-    };
   }, [socket]);
 
   // Function to handle profile response

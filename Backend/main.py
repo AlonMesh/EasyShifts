@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from Backend.db.models import Base
-from Backend.config.private_password import PASSWORD  # Create this file locally, set private_password.py = ... and DON'T upload to GitHub!
+from Backend.config.private_password import PASSWORD  # Create this file locally, set private_password.py.py = ... and DON'T upload to GitHub!
 
 
 def initialize_database_and_session():
