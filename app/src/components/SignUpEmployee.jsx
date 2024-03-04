@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import * as socket_object from '../utils'
 
-const SignUpEmployee = ({ socket }) => {
+const SignUpEmployee = () => {
+  const socket = socket_object.useSocket(); // Call useSocket hook directly
+
   const [employeeUsername, setEmployeeUsername] = useState('');
   const [employeePassword, setEmployeePassword] = useState('');
   const [businessNumber, setBusinessNumber] = useState('');
@@ -26,18 +29,29 @@ const SignUpEmployee = ({ socket }) => {
 
     // Send sign-up request to the server using WebSocket
     socket.send(JSON.stringify(requestData));
-
-    // Handle response from the server
-    socket.onmessage = (event) => {
-      const response = JSON.parse(event.data);
-      const { success, message } = response.data;
-      if (success) {
-        setLog(message);
-      } else {
-        setLog('Sign up failed. Please try again.');
-      }
-    };
   };
+
+  useEffect(() => {
+    if (socket) {
+      // Handle response from the server
+      const handleResponse = (event) => {
+        const response = JSON.parse(event.data);
+        const { success, message } = response.data;
+        if (success) {
+          setLog(message);
+        } else {
+          setLog('Sign up failed. Please try again.');
+        }
+      };
+
+      socket.addEventListener('message', handleResponse);
+
+      // Cleanup function
+      return () => {
+        socket.removeEventListener('message', handleResponse);
+      };
+    }
+  }, [socket]);
 
   return (
     <div>
