@@ -15,6 +15,7 @@ db, _ = initialize_database_and_session()
 # Global variable declaration
 user_session: UserSession | None = None
 
+
 def handle_request(request_id, data):
     global user_session
     if request_id == 10:
@@ -60,6 +61,16 @@ def handle_request(request_id, data):
         print("Send user profile")
         profile_data = send_profile.handle_send_profile(user_session)
         return {"request_id": request_id, "success": True, "data": profile_data}
+
+    elif request_id == 72:
+        # Employee approval request handling
+        print("Received Employee Approval request")
+        return {"success": handle_employee_approval(data)}
+
+    elif request_id == 74:
+        # Employee rejection request handling
+        print("Received Employee Rejection request")
+        return {"success": handle_employee_rejection(data)}
 
     elif request_id == 80:
         # Make new week shifts
@@ -110,6 +121,7 @@ def handle_request(request_id, data):
     elif request_id == 99:
         # Set assigned shifts
         print("Set assigned shifts")
+
 
     else:
         print("Unknown request ID:", request_id)
