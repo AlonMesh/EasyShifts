@@ -59,15 +59,15 @@ class WorkPlacesController(BaseController):
             # If the user does not work in any workplace, return an empty list
             return []
 
-    def get_active_approve_workers_for_user(self, user_id: int) -> List[Tuple[int, str]]:
+    def get_active_approve_workers_for_user(self, user_id: int) -> List[Tuple[str, str]]:
         """
         Retrieves the names and IDs of all active workers in the workplace where the specified user works.
 
         Parameters:
-            user_id (int): ID of the user.
+            user_id (str): username of the user.
 
         Returns:
-            List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
+            List[Tuple[str, str]]: A list of tuples containing worker IDs and names.
         """
         # Retrieve the workplace ID for the specified user
         workplace_id = self.repository.get_workplace_id_by_user_id(user_id)
@@ -79,15 +79,15 @@ class WorkPlacesController(BaseController):
             # If the user does not work in any workplace, return an empty list
             return []
 
-    def get_active_unapprove_workers_for_user(self, user_id: int) -> List[Tuple[int, str]]:
+    def get_active_unapprove_workers_for_user(self, user_id: int) -> List[Tuple[str, str]]:
         """
         Retrieves the names and IDs of all active workers in the workplace where the specified user works.
 
         Parameters:
-            user_id (int): ID of the user.
+            user_name (str): ID of the user.
 
         Returns:
-            List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
+            List[Tuple[str, str]]: A list of tuples containing worker userName and names.
         """
         # Retrieve the workplace ID for the specified user
         workplace_id = self.repository.get_workplace_id_by_user_id(user_id)

@@ -1,13 +1,14 @@
 from __future__ import annotations
+
+from Backend.handlers.employee_list import handle_employee_approval, handle_employee_rejection
 from Backend.user_session import UserSession
 from Backend.main import initialize_database_and_session
 import websockets
 import asyncio
 import json
 from Backend.handlers import login, employee_signin, manager_signin, employee_shifts_request, \
-    get_employee_requests, manager_insert_shifts, employee_list, send_profile, manager_schedule,\
+    get_employee_requests, manager_insert_shifts, employee_list, send_profile, manager_schedule, \
     send_shifts_to_employee, make_shifts
-
 # Initialize the database and session
 db, _ = initialize_database_and_session()
 
@@ -55,21 +56,21 @@ def handle_request(request_id, data):
         print("Received Employees list request")
         return employee_list.handle_employee_list(user_session)
 
+    elif request_id == 62:
+        # Employee approval request handling
+        print("Received Employee Approval request")
+        return {"success": handle_employee_approval(data, user_session)}
+
+    elif request_id == 64:
+        # Employee rejection request handling
+        print("Received Employee Rejection request")
+        return {"success": handle_employee_rejection(data, user_session)}
+
     elif request_id == 70:
         # Send user profile handling
         print("Send user profile")
         profile_data = send_profile.handle_send_profile(user_session)
         return {"request_id": request_id, "success": True, "data": profile_data}
-
-    elif request_id == 72:
-        # Employee approval request handling
-        print("Received Employee Approval request")
-        # return {"success": handle_employee_approval(data)}
-
-    elif request_id == 74:
-        # Employee rejection request handling
-        print("Received Employee Rejection request")
-        # return {"success": handle_employee_rejection(data)}
 
     elif request_id == 80:
         # Make new week shifts
@@ -81,7 +82,7 @@ def handle_request(request_id, data):
         print("Send employees shifts")
         employees_shifts = send_shifts_to_employee.handle_send_shifts(user_session)
         return employees_shifts
-      
+
     elif request_id == 91:
         # Get Employees Requests Data
         print("Get Employees Requests Data")
