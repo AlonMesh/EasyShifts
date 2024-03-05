@@ -102,4 +102,3 @@ def handle_employee_rejection(data, user_session):
     else:
         print("User does not have access to manager-specific pages.")
         return False
-#ori
