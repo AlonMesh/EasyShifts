@@ -15,6 +15,7 @@ import ManagerViewShiftsRequests from '../components/ManagerViewShiftsRequests';
 import ManagerWorkersList from '../components/ManagerWorkersList';
 import ShiftsPage from '../components/ShiftsPage';
 import EmployeeListPage from '../components/EmployeeListPage';
+import Toolbar from '../components/Toolbar';
 import './App.css';
 import * as socket_object from '../utils'
 
@@ -24,7 +25,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <h1>Welcome to Easy Shifts!</h1>
+        <Toolbar />
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login/>} />
