@@ -11,25 +11,30 @@ const SignUpEmployee = () => {
   const [businessNumber, setBusinessNumber] = useState('');
   const [employeeName, setEmployeeName] = useState('');
   const [log, setLog] = useState('');
+  const [error, setError] = useState('');
 
   const sendEmployeeSignUpRequest = () => {
-    if (!socket) {
+
+    if (employeeUsername.trim() === '' || employeePassword.trim() === '' ||
+      businessNumber.trim() === '' || employeeName.trim() === '') {
+        setError('Please fill in all fields');
+    }
+    else if (!socket) {
       console.error("Socket connection is not available.");
       return;
     }
-
-    const requestData = {
-      request_id: 20,
-      data: {
-        username: employeeUsername,
-        password: employeePassword,
-        businessNumber: businessNumber,
-        employeeName: employeeName
-      }
-    };
-
-    // Send sign-up request to the server using WebSocket
-    socket.send(JSON.stringify(requestData));
+    else {
+      const requestData = {
+        request_id: 20,
+        data: {
+          username: employeeUsername,
+          password: employeePassword,
+          businessNumber: businessNumber,
+          employeeName: employeeName
+        }
+      };
+      socket.send(JSON.stringify(requestData));
+    }
   };
 
   useEffect(() => {
@@ -102,7 +107,7 @@ const SignUpEmployee = () => {
         <button type="button" onClick={sendEmployeeSignUpRequest}>Sign Up</button>
       </Link>
       <div id="log">{log}</div>
-    </div>
+    </div> 
   );
 };
 
