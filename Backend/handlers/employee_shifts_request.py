@@ -8,7 +8,7 @@ from Backend.user_session import UserSession
 
 def handle_employee_shifts_request(data, user_session):
     user_id = user_session.get_id
-    shifts_string = data['shiftsResult']
+    shifts_string = data['shiftsString']
 
     shifts_request_data = {"id": user_id, "modifyAt": datetime.now(), "requests": shifts_string}
     user_request_controller = UserRequestsController(db)

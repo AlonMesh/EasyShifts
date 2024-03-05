@@ -7,8 +7,7 @@ import {EditIcon} from "../Icons/Edit";
 import {SaveIcon} from "../Icons/Save";
 import {useSocket} from "../../utils";
 
-function Shift({workplaceId, date, part, workers, allWorkers, workersShifts}) {
-    console.log("workplaceID:", workplaceId)
+function Shift({date, part, workers, allWorkers, workersShifts}) {
     console.log("date:", date)
     console.log("part:", part)
     console.log("workerss:", workers)

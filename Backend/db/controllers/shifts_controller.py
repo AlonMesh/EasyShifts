@@ -145,8 +145,6 @@ def convert_shift_for_client(shift: Shift, db, is_manager=True) -> dict:
     """
     shift_workers_controller = ShiftWorkersController(db)
     shifts_for_client = {
-        "id": shift.id,
-        "workPlaceID": shift.workPlaceID,
         # JSON can't handle date objects, so we convert them to strings
         'shiftDate': shift.shiftDate.isoformat() if shift.shiftDate else None,
         # JSON can't handle enum objects, so we take their values
