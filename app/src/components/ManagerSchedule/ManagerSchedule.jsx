@@ -320,11 +320,11 @@ function ManagerSchedule({socket}) {
             )}
 
             {/* Action Buttons */}
-            <div className="buttons">
-                <button>Save</button>
-                <button>Clean</button>
-                <button>Publish</button>
-            </div>
+            {/*<div className="buttons">*/}
+            {/*    <button>Save</button>*/}
+            {/*    <button>Clean</button>*/}
+            {/*    <button>Publish</button>*/}
+            {/*</div>*/}
         </div>
     );
 }

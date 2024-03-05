@@ -40,6 +40,7 @@ def handle_request(request_id, data):
         # Employee's Shifts Request handling
         print("Received Employee's Shifts Request")
         employee_shifts_request.handle_employee_shifts_request(data, user_session)
+        return {"request_id": request_id, "success": True}
 
     elif request_id == 50:
         # Manager Get Employees Requests Request

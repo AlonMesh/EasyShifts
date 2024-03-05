@@ -25,6 +25,8 @@ export default function SettingsForm() {
 
     function handleSubmit(e) {
         if (socket && socket.readyState === WebSocket.OPEN) {
+            // save days to const, if days is null or empty, set to empty array
+            const days = days ? days : [];
             const request = {
                 request_id: 991,
                 data: {

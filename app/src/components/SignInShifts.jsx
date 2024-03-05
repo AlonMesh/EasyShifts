@@ -12,10 +12,10 @@ const SignInShifts = () => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             const request = {
                 request_id: 40,
-                data: {shiftsString},
+                data: {shiftsString: shiftsString},
             };
             socket.send(JSON.stringify(request));
-            console.log('Request for shifts has been submitted')
+            console.log('Request for shifts has been submitted - ', request);
         }
     };
 

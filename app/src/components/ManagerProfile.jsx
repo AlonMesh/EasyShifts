@@ -38,18 +38,21 @@ const ManagerProfile = ({name = "Joe's Caffe"}) => {
 
                 <div className="menu">
                     <div className="icon-wrapper" onClick={handleSettingsClick}>
+                        {/* Replace with your Settings icon */}
                         <SolarSettingsBoldDuotone className="icon" style={{width: '5em', height: '5em'}}/>
                         <br/>
                         Settings
                     </div>
 
                     <div className="icon-wrapper" onClick={handleScheduleClick}>
+                        {/* Replace with your Schedule icon */}
                         <UimSchedule className="icon" style={{width: '5em', height: '5em'}}/>
                         <br/>
                         Schedule
                     </div>
 
                     <div className="icon-wrapper" onClick={handleWorkersClick}>
+                        {/* Replace with your Workers icon */}
                         <FluentPeopleTeam20Filled className="icon" style={{width: '5em', height: '5em'}}/>
                         <br/>
                         Workers
