@@ -1,5 +1,4 @@
 from __future__ import annotations
-from Backend.db.controllers.shifts_controller import ShiftsController, convert_shifts_for_client
 from Backend.user_session import UserSession
 from Backend.main import initialize_database_and_session
 import websockets
@@ -65,12 +64,12 @@ def handle_request(request_id, data):
     elif request_id == 72:
         # Employee approval request handling
         print("Received Employee Approval request")
-        return {"success": handle_employee_approval(data)}
+        # return {"success": handle_employee_approval(data)}
 
     elif request_id == 74:
         # Employee rejection request handling
         print("Received Employee Rejection request")
-        return {"success": handle_employee_rejection(data)}
+        # return {"success": handle_employee_rejection(data)}
 
     elif request_id == 80:
         # Make new week shifts

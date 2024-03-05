@@ -15,22 +15,13 @@ def handle_manager_signin(data):  # TODO: modify the function as the data will b
                 Example: {'username': 'manager1', 'password': '123', 'isManager': True,
                  'isActive': True, 'isApproval': True, 'name': 'Place Name'}
         """
-    # Validate the user registration
-    auth = BackendAuthenticationUser(data['register_details']['username'], data['register_details']['password'])
-    if not auth.validate_registration():
-        # TODO: raise error to the client
-        pass
-
-    # Extract details and preferences from the data
-    register_details = data['register_details']
-    preferences = data['preferences']
 
     # Initialize the users controller, passing the database session
     user_controller = UsersController(db)
-    user_controller.create_entity(register_details)
+    user_controller.create_entity(data)
 
     # Send the username and password to the login function to create a user session
-    login_data = {"username": register_details["username"], "password": register_details["password"]}
+    login_data = {"username": data["username"], "password": data["password"]}
 
     # Send the username and password to the login function to create a user session
     _, user_session = handle_login(login_data)  # Depends on the `handle_login` function to work properly.
@@ -42,7 +33,6 @@ def handle_manager_signin(data):  # TODO: modify the function as the data will b
         "workplaceID": user_session.get_id,
         "isPublished": False,
         "content": "",
-        "preferences": preferences
     })
 
     return user_session
