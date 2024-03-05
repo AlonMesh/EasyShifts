@@ -1,6 +1,9 @@
 from Backend.db.controllers.users_controller import UsersController
 from Backend.user_session import UserSession
-from Backend.config.constants import db
+from Backend.main import initialize_database_and_session
+
+# Initialize the database and session
+db, _ = initialize_database_and_session()
 
 
 def handle_login(data):

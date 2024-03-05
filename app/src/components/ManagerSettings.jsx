@@ -3,11 +3,29 @@ import React, {useState} from "react";
 import "../css/ManagerSetting.css";
 import DateTime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
+import {useSocket} from "../utils";
 
 export default function ManagerSettings() {
+    const socket = useSocket();
 
     function handleSubmit(event) {
         event.preventDefault();
+
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            const request = {
+                request_id: 992,
+                data: {
+                    requests_window_start: startTime,
+                    requests_window_end: endTime,
+                },
+            };
+            socket.send(JSON.stringify(request));
+            console.log("Sent to server: ", request);
+        }
+        else {
+            console.error("Socket is not open");
+        }
+
         alert("Start Time: " + startTime + "\nEnd Time: " + endTime);
     }
 

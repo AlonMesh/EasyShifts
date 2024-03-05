@@ -5,6 +5,7 @@ import WorkerList from "./WorkerList";
 import {InfoIcon} from "../Icons/Info";
 import {EditIcon} from "../Icons/Edit";
 import {SaveIcon} from "../Icons/Save";
+import {useSocket} from "../../utils";
 
 function Shift({workplaceId, date, part, workers, allWorkers, workersShifts}) {
     console.log("workplaceID:", workplaceId)
@@ -17,6 +18,7 @@ function Shift({workplaceId, date, part, workers, allWorkers, workersShifts}) {
     const [showTooltip, setShowTooltip] = useState(false);
     const [editing, setEditing] = useState(false);
     const [selectedWorkers, setSelectedWorkers] = useState(workers);
+    const socket = useSocket();
 
     function handleEditClick() {
         return !editing
@@ -33,7 +35,24 @@ function Shift({workplaceId, date, part, workers, allWorkers, workersShifts}) {
         // Remove shift from worker
         worker.shifts = worker.shifts.filter(shift => shift.date !== date || shift.part !== part);
 
-        console.log(workersShifts) // TODO: Remove
+        console.log("Lets remove ", worker, " from the shift ", date, " ", part, "socket", socket) // TODO: Remove
+        // Send to the server those details to remove the shift from the worker
+
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            const request = {
+                request_id: 99,
+                data: {
+                    type: "removeShift",
+                    worker_name: worker,
+                    day: date,
+                    part: part,
+                },
+            };
+
+            socket.send(JSON.stringify(request));
+            console.log("Sent to server: ", request);
+        }
+
     }
 
     function handleAddWorker(name) {
@@ -50,7 +69,23 @@ function Shift({workplaceId, date, part, workers, allWorkers, workersShifts}) {
                     part: part
                 });
 
-                console.log(workersShifts) // TODO: Remove
+                console.log("Lets add ", worker, " to the shift ", date, " ", part, "socket", socket) // TODO: Remove
+                // Send to the server those details to add the shift to the worker
+
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    const request = {
+                        request_id: 99,
+                        data: {
+                            type: "addShift",
+                            worker_name: worker,
+                            day: date,
+                            part: part,
+                        },
+                    };
+
+                    socket.send(JSON.stringify(request));
+                    console.log("Sent to server: ", request);
+                }
             }
         }
     }
