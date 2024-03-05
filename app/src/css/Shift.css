@@ -49,6 +49,13 @@
     font-size: 16px;
 }
 
+.shift-workers button:hover {
+    /*width: 5px;*/
+    /*height: 5px;*/
+    background: #f6f6f6;
+
+}
+
 .shift-info {
     width: 200px;
     background: #eee;

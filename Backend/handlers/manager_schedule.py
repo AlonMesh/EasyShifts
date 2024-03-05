@@ -200,6 +200,9 @@ def watch_workers_requests(user_session: UserSession):
     workplace_controller = WorkPlacesController(db)
     workers = workplace_controller.get_all_workers_by_workplace_id(user_session.get_id)
 
+    # Get only workers where worker.isApproval is True
+    workers = [worker for worker in workers if worker.isApproval]
+
     # Extract the IDs and names of the workers
     workers_info = [(worker.id, worker.name) for worker in workers]
 
@@ -287,6 +290,9 @@ def get_all_workers_names_by_workplace_id(user_session):
     # Get all workers in the workplace
     workplace_controller = WorkPlacesController(db)
     workers = workplace_controller.get_all_workers_by_workplace_id(user_session.get_id)
+
+    # Get only workers where worker.isApproval is True
+    workers = [worker for worker in workers if worker.isApproval]
 
     # Extract the names of the workers
     workers_names = [worker.name for worker in workers]
