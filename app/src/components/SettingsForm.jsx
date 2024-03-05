@@ -1,7 +1,9 @@
 import {useState} from "react";
 import Select from "react-select";
+import {useSocket} from "../utils";
 
 export default function SettingsForm() {
+    const socket = useSocket();
     const [shifts, setShifts] = useState(null);
     const [days, setDays] = useState(null);
 
@@ -22,6 +24,23 @@ export default function SettingsForm() {
     ];
 
     function handleSubmit(e) {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            // save days to const, if days is null or empty, set to empty array
+            const days = days ? days : [];
+            const request = {
+                request_id: 991,
+                data: {
+                    number_of_shifts_per_day: shifts.value,
+                    closed_days: days.map(day => day.value),
+                },
+            };
+
+            socket.send(JSON.stringify(request));
+            console.log("Sent to server: ", request);
+        } else {
+            console.error("Socket not connected");
+        }
+
         e.preventDefault();
         alert('Saved!');
     }

@@ -6,6 +6,7 @@ import {FluentPeopleTeam20Filled} from "./Icons/Team";
 import {useSocket} from '../utils';
 import ManagerSchedule from "./ManagerSchedule/ManagerSchedule";
 import ManagerSettings from "./ManagerSettings";
+import EmployeeListPage from "./EmployeeListPage";
 
 const ManagerProfile = ({name = "Joe's Caffe"}) => {
     const socket = useSocket();
@@ -38,18 +39,21 @@ const ManagerProfile = ({name = "Joe's Caffe"}) => {
 
                 <div className="menu">
                     <div className="icon-wrapper" onClick={handleSettingsClick}>
+                        {/* Replace with your Settings icon */}
                         <SolarSettingsBoldDuotone className="icon" style={{width: '5em', height: '5em'}}/>
                         <br/>
                         Settings
                     </div>
 
                     <div className="icon-wrapper" onClick={handleScheduleClick}>
+                        {/* Replace with your Schedule icon */}
                         <UimSchedule className="icon" style={{width: '5em', height: '5em'}}/>
                         <br/>
                         Schedule
                     </div>
 
                     <div className="icon-wrapper" onClick={handleWorkersClick}>
+                        {/* Replace with your Workers icon */}
                         <FluentPeopleTeam20Filled className="icon" style={{width: '5em', height: '5em'}}/>
                         <br/>
                         Workers
@@ -74,7 +78,7 @@ const ManagerProfile = ({name = "Joe's Caffe"}) => {
             {showWorkers && (
                 <div className="submenu">
                     {/* Add submenu content for Workers here */}
-                    <div>Workers</div>
+                    <EmployeeListPage socket={socket}/>
                 </div>
             )}
         </div>

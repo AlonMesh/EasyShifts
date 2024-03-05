@@ -1,49 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import webSocket from 'ws'; // Import WebSocket library
-import axios from 'axios'; // Make sure to install axios using npm or yarn
+import React, { useState, useEffect } from 'react';
 import { useSocket } from '../utils';
 
-const EmployListPage = () => {
+const EmployeeListPage = () => {
   const [employees, setEmployees] = useState([]);
-  const [approvedEmployees, setApprovedEmployees] = useState([]);
-  const [unapprovedEmployees, setUnapprovedEmployees] = useState([]);
   const socket = useSocket();
 
-  useEffect(() => {
-    if (socket) {
-      fetchEmployees();
-    }
-  }, [socket]);
-
   const fetchEmployees = () => {
-    if (socket.readyState === WebSocket.OPEN) {
-      const request = {
-        request_id: 60,
-      };
-      socket.send(JSON.stringify(request));
-    } else {
-      console.error('WebSocket connection not open.');
-    }
-  };
-
-  const handleApprove = (employeeId) => {
-    if (socket.readyState === WebSocket.OPEN) {
-      const request = {
-        request_id: 72,
-        data: { employeeId },
-      };
-      socket.send(JSON.stringify(request));
-    } else {
-      console.error('WebSocket connection not open.');
-    }
-  };
-
- const handleReject = (employeeId) => {
   if (socket.readyState === WebSocket.OPEN) {
     const request = {
-      request_id: 74, // Assuming 100 is the request ID for employee rejection
-      data: { employeeId },
+      request_id: 60,
     };
     socket.send(JSON.stringify(request));
   } else {
@@ -51,19 +16,40 @@ const EmployListPage = () => {
   }
 };
 
+const handleApprove = (userName) => {
+  if (socket.readyState === WebSocket.OPEN) {
+    const request = {
+      request_id: 62,
+      data: { userName },
+    };
+    socket.send(JSON.stringify(request));
+    fetchEmployees(); // Fetch updated employee list after approval
+  } else {
+    console.error('WebSocket connection not open.');
+  }
+};
+
+const handleReject = (userName) => {
+  if (socket.readyState === WebSocket.OPEN) {
+    const request = {
+      request_id: 64,
+      data: { userName },
+    };
+    socket.send(JSON.stringify(request));
+    fetchEmployees(); // Fetch updated employee list after rejection
+  } else {
+    console.error('WebSocket connection not open.');
+  }
+};
+
 
   useEffect(() => {
-    // Add event listener to handle messages from the server
+    fetchEmployees();
+
     const handleMessage = (event) => {
       const data = JSON.parse(event.data);
-      const { success, employees } = data;
-
-      if (success) {
-        setEmployees(employees);
-        const approved = employees.filter(employee => employee.approved);
-        const unapproved = employees.filter(employee => !employee.approved);
-        setApprovedEmployees(approved);
-        setUnapprovedEmployees(unapproved);
+      if (Array.isArray(data)) { // Check if data is an array (list of employees)
+        setEmployees(data); // Update state with the list of employees
       } else {
         console.error('Error fetching employees:', data.error);
       }
@@ -73,7 +59,6 @@ const EmployListPage = () => {
       socket.addEventListener('message', handleMessage);
     }
 
-    // Cleanup function
     return () => {
       if (socket) {
         socket.removeEventListener('message', handleMessage);
@@ -84,21 +69,16 @@ const EmployListPage = () => {
   return (
     <div>
       <h1>Employee List</h1>
-      <h2>Approved Employees</h2>
       <ul>
-        {approvedEmployees.map(employee => (
-          <li key={employee.id}>
+        {employees.map(employee => (
+          <li key={employee.userName}>
             {employee.name}
-          </li>
-        ))}
-      </ul>
-      <h2>Unapproved Employees</h2>
-      <ul>
-        {unapprovedEmployees.map(employee => (
-          <li key={employee.id}>
-            {employee.name} -
-            <button onClick={() => handleApprove(employee.id)}>Approve</button>
-            <button onClick={() => handleReject(employee.id)}>Reject</button>
+            {!employee.approved && (
+              <>
+                <button onClick={() => handleApprove(employee.userName)}>Approve</button>
+                <button onClick={() => handleReject(employee.userName)}>Reject</button>
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -106,4 +86,4 @@ const EmployListPage = () => {
   );
 };
 
-export default EmployListPage;
+export default EmployeeListPage;

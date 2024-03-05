@@ -63,7 +63,7 @@ class WorkPlacesRepository(BaseRepository):
         # Query the WorkPlace table to find the workplace associated with the user
         workplace = (
             self.db.query(WorkPlace)
-            .filter(WorkPlace.id == user_id)  # Assuming id represents user ID in WorkPlace
+            .filter(WorkPlace.workPlaceID == user_id)  # Assuming id represents user ID in WorkPlace
             .first()
         )
 
@@ -123,3 +123,23 @@ class WorkPlacesRepository(BaseRepository):
             user, workplace = result
             userController = UsersController(self.db)
             return userController.get_name_by_id(workplace.workPlaceID)
+
+    def get_worker_by_name(self, workplace_id, worker_name):
+        """
+        Retrieves the worker by name.
+
+        Parameters:
+            workplace_id (str): ID of the workplace.
+            worker_name (str): Name of the worker.
+
+        Returns:
+            User: The user with the specified name.
+        """
+        # Query the User table to find the user by name
+        return (
+            self.db.query(User)
+            .join(WorkPlace)
+            .filter(WorkPlace.workPlaceID == workplace_id)
+            .filter(User.name == worker_name)
+            .first()
+        )

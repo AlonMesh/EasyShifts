@@ -86,16 +86,15 @@ class UsersRepository(BaseRepository):
     def custom_operation_for_test_only(self):
         return 30
 
-    def approve_user(self, user_id: int):
+    def approve_user(self, user_name: str):
         """
         Approve a user by setting isApproval to True.
 
         Parameters:
-            user_id (int): The ID of the user to approve.
+            user_name (str): The user_name of the user to approve.
         """
         # Retrieve the user by ID
-        user = self.get_entity(user_id)
-
+        user = self.get_user_by_username(user_name)
         # If user is found, update isApproval attribute and commit changes
         if user:
             user.isApproval = True

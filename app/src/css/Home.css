@@ -1,0 +1,70 @@
+/* Home.css */
+.home-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.text-container {
+    margin: 20px 0;
+}
+
+.bullets {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.bullet-item {
+    background-color: #86b9d5;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 0 10px;
+    text-align: center;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.bullet-item:hover {
+    background-color: #2980b9;
+    transform: translateY(-5px);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.login-button,
+.signup-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.login-button:hover,
+.signup-button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05); /* Hover effect to slightly scale the button */
+}
+
+.easy-shifts-image {
+    max-width: 30%;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 8px;
+    position: relative;
+    top: -30px;
+}
+

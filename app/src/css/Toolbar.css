@@ -1,0 +1,49 @@
+/* Reset default body margin and use a modern font stack */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Styling for the toolbar */
+.toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #3498db;
+    color: #fff;
+    padding: 15px 20px; /* Slightly reduce the padding for a sleeker look */
+    z-index: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+}
+
+/* Styling for the toolbar title */
+.toolbar h3 {
+    margin: 0;
+    padding: 0;
+    float: left; /* Float the h3 to the left */
+    font-size: 24px; /* Increase font size for emphasis */
+    font-weight: 700; /* Add boldness for a stronger presence */
+}
+
+/* Styling for the navigation button */
+.but {
+    position: fixed;
+    top: 5px;
+    right: 20px;
+    background-color: #fff; /* Make the background white */
+    color: #3498db; /* Set initial font color to the toolbar color */
+    padding: 10px 15px; /* Adjust padding for better visual balance */
+    border: none; /* Remove border for a cleaner appearance */
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 18px; /* Ensure consistent font size */
+}
+
+/* Styling for the navigation button on hover */
+.but:hover {
+    background-color: #2980b9;
+    color: #fff; /* Set font color to white on hover */
+}

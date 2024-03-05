@@ -1,5 +1,6 @@
 import datetime
-from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime, JSON, func, Integer
+from sqlalchemy import Column, String, Boolean, Date, Enum, PrimaryKeyConstraint, ForeignKey, DateTime, JSON, func, \
+    Integer
 from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 import enum
@@ -47,7 +48,7 @@ class WorkPlace(Base):
     __tablename__ = "workPlaces"
 
     id = Column(Integer, ForeignKey('users.id'), primary_key=True, index=True, nullable=False)  # userID ,String(ID_LEN)
-    workPlaceID = Column(Integer, nullable=False) # String(ID_LEN)
+    workPlaceID = Column(Integer, nullable=False)  # String(ID_LEN)
 
 
 class UserRequest(Base):
@@ -85,8 +86,8 @@ class Shift(Base):
     """
     __tablename__ = "shifts"
 
-    id = Column(Integer, primary_key=True, index=True, default=uuid4)  # shiftID , String(ID_LEN)
-    workPlaceID = Column(Integer, nullable=False)  #String(ID_LEN)
+    id = Column(Integer, primary_key=True, index=True, nullable=False)  # shiftID , String(ID_LEN)
+    workPlaceID = Column(Integer, nullable=False)  # String(ID_LEN)
     shiftDate = Column(Date, nullable=False)
     shiftPart = Column(Enum(ShiftPart), nullable=False)
 
@@ -132,7 +133,7 @@ class ShiftBoard(Base):
     workplaceID = Column(Integer, ForeignKey('users.id'), nullable=False)  # String(ID_LEN)
     isPublished = Column(Boolean, nullable=False, default=False)
     content = Column(JSON, default=dict)
-    preferences = Column(JSON, default=dict)
+    preferences = Column(JSON, default={"closed_days": ["friday"], "number_of_shifts_per_day": 2})
     requests_window_start = Column(DateTime)
     requests_window_end = Column(DateTime)
 
