@@ -51,7 +51,7 @@ class WorkPlacesService(BaseService):
 
         return worker_info
 
-    def get_active_approved_workers_by_workplace_id(self, workplace_id: int) -> List[Tuple[int, str]]:
+    def get_active_approved_workers_by_workplace_id(self, workplace_id: int) -> List[Tuple[str, str]]:
         """
         Retrieves the IDs and names of all active workers with approval in the specified workplace.
 
@@ -59,17 +59,17 @@ class WorkPlacesService(BaseService):
             workplace_id (int): ID of the workplace.
 
         Returns:
-            List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
+            List[Tuple[str, str]]: A list of tuples containing worker usernames and names.
         """
         # Get all active users in the specified workplace
         active_users = self.repository.get_active_users_by_workplace_id(workplace_id)
 
         # Filter active users who have approval
-        approved_users = [(user.id, user.name) for user in active_users if user.isApproval]
+        approved_users = [(user.username, user.name) for user in active_users if user.isApproval]
 
         return approved_users
 
-    def get_active_unapproved_workers_by_workplace_id(self, workplace_id: int) -> List[Tuple[int, str]]:
+    def get_active_unapproved_workers_by_workplace_id(self, workplace_id: int) -> List[Tuple[str, str]]:
         """
         Retrieves the IDs and names of all active workers without approval in the specified workplace.
 
@@ -77,13 +77,13 @@ class WorkPlacesService(BaseService):
             workplace_id (int): ID of the workplace.
 
         Returns:
-            List[Tuple[int, str]]: A list of tuples containing worker IDs and names.
+            List[Tuple[str, str]]: A list of tuples containing worker usersnames and names.
         """
         # Get all active users in the specified workplace
         active_users = self.repository.get_active_users_by_workplace_id(workplace_id)
 
         # Filter active users who do not have approval
-        unapproved_users = [(user.id, user.name) for user in active_users if not user.isApproval]
+        unapproved_users = [(user.username, user.name) for user in active_users if not user.isApproval]
 
         return unapproved_users
 

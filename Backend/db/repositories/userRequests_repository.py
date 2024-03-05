@@ -18,3 +18,18 @@ class UserRequestsRepository(BaseRepository):
             UserRequest: The user-request object if found, None otherwise.
         """
         return self.db.query(UserRequest).filter(UserRequest.id == id).first()
+
+    def get_request_id_by_userid(self, user_id: int) -> int:
+        """
+        Retrieves the ID of the user request by user ID.
+
+        Parameters:
+            user_id (int): The user ID.
+
+        Returns:
+            int: The ID of the user request if found, None otherwise.
+        """
+        user_request = self.db.query(UserRequest).filter(UserRequest.id == user_id).first()
+        if user_request:
+            return user_request.id
+        return None

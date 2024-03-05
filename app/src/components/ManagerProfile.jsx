@@ -6,6 +6,7 @@ import {FluentPeopleTeam20Filled} from "./Icons/Team";
 import {useSocket} from '../utils';
 import ManagerSchedule from "./ManagerSchedule/ManagerSchedule";
 import ManagerSettings from "./ManagerSettings";
+import EmployeeListPage from "./EmployeeListPage";
 
 const ManagerProfile = ({name = "Joe's Caffe"}) => {
     const socket = useSocket();
@@ -77,7 +78,7 @@ const ManagerProfile = ({name = "Joe's Caffe"}) => {
             {showWorkers && (
                 <div className="submenu">
                     {/* Add submenu content for Workers here */}
-                    <div>Workers</div>
+                    <EmployeeListPage socket={socket}/>
                 </div>
             )}
         </div>
