@@ -103,3 +103,18 @@ class ShiftsRepository(BaseRepository):
         shifts_for_worker = [shift for shift in shifts if
                              shift_workers_repository.is_shift_assigned_to_worker(shift.id, worker_id)]
         return shifts_for_worker
+
+    def get_shift_by_day_and_part(self, workplace_id, shift_date, shift_part):
+        """
+        Retrieves the shift by day and part.
+
+        Parameters:
+            workplace_id (int): ID of the workplace.
+            shift_date (date): Date of the shift.
+            shift_part (str): Part of the shift.
+
+        Returns:
+            Shift: The shift by day and part.
+        """
+        return self.db.query(Shift).filter(Shift.workPlaceID == workplace_id, Shift.shiftDate == shift_date,
+                                           Shift.shiftPart == shift_part).first()

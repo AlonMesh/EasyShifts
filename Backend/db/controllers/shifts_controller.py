@@ -127,6 +127,8 @@ class ShiftsController(BaseController):
     def get_all_shifts_between_dates_for_given_worker(self, id, start_date, end_date):
         return self.repository.get_all_shifts_between_dates_for_given_worker(id, start_date, end_date)
 
+    def get_shift_by_day_and_part(self, workplace_id, shift_date, shift_part):
+        return self.repository.get_shift_by_day_and_part(workplace_id, shift_date, shift_part)
 
 def convert_shift_for_client(shift: Shift, db, is_manager=True) -> dict:
     """

@@ -113,14 +113,13 @@ def handle_get_board_content(user_session: UserSession) -> dict:
     return last_board.content
 
 
-def schedule_worker_to_shift(data: dict) -> bool:
+def schedule_worker_to_shift(shift_id, worker_id) -> bool:
     # Assume the data is a dictionary containing the worker's ID and the shift's ID
     shift_workers_data = {
-        "shift_id": data["shift_id"],  # TODO: Depending on the client!
-        "worker_id": data["worker_id"]  # TODO: Depending on the client!
+        "shiftID": shift_id,
+        "userID": worker_id
     }
 
-    # TODO: try to schedule the worker to the shift
     # Schedule the worker to the shift
     shift_workers_controller = ShiftWorkersController(db)
     shift_workers_controller.create_entity(shift_workers_data)
@@ -129,19 +128,71 @@ def schedule_worker_to_shift(data: dict) -> bool:
     return True
 
 
-def unschedule_worker_from_shift(data: dict) -> bool:
-    # Delete the shiftworkers entity
+def unschedule_worker_from_shift(shift_id, worker_id) -> bool:
+    # Unschedule the worker from the shift
     shift_workers_controller = ShiftWorkersController(db)
-    shift_workers_controller.delete_entity_shift_worker(data["shift_id"],
-                                                        data["worker_id"])  # TODO: Depending on the client!
+    shift_workers_controller.delete_entity_shift_worker(shift_id, worker_id)
 
     # Return True if the worker is unscheduled from the shift
     return True
 
 
-def handle_schedules(data: dict):
-    # Get all schedules from the client and schedule/unschedule workers to shifts by calling the appropriate function
-    pass
+def handle_schedules(workplace_id, data: dict) -> bool:
+    print("workplace_id: ", workplace_id)
+    print("data: ", data)
+    # Been called from the client every time a worker is scheduled or unscheduled from a shift
+
+    # The data is a dictionary of worker's name and shift's day and part
+    worker_name = data["worker_name"]["name"]
+    shift_day = data["day"]
+    shift_part = data["part"]
+
+    print("worker_name: ", worker_name)
+    print("shift_day: ", shift_day)
+    print("shift_part: ", shift_part)
+
+    # Get the worker's ID
+    workplace_controller = WorkPlacesController(db)
+    worker = workplace_controller.get_worker_by_name(workplace_id, worker_name)
+
+    # Create shift_date based on next_sunday and shift_day (sunday, monday, etc.)
+    shift_date = next_sunday + timedelta(days=convert_day_name_to_number(shift_day))
+
+    # Get the shift's ID
+    shift_controller = ShiftsController(db)
+    shift = shift_controller.get_shift_by_day_and_part(workplace_id, shift_date, shift_part)
+
+    if shift is None:
+        # If the shift does not exist, create it
+        shift = shift_controller.create_entity(
+            {"workPlaceID": workplace_id, "shiftDate": shift_date, "shiftPart": shift_part})
+
+    print("To schedule worker to shift:", shift.id, worker.id, data["type"])
+
+    if data["type"] == "addShift":
+        # Schedule the worker to the shift
+        return schedule_worker_to_shift(shift.id, worker.id)
+
+    elif data["type"] == "removeShift":
+        # Unschedule the worker from the shift
+        return unschedule_worker_from_shift(shift.id, worker.id)
+
+    else:
+        raise ValueError("Unknown type")
+
+
+def convert_day_name_to_number(day_name: str) -> int:
+    # Convert the day name to a number
+    day_name_to_number = {
+        "sunday": 0,
+        "monday": 1,
+        "tuesday": 2,
+        "wednesday": 3,
+        "thursday": 4,
+        "friday": 5,
+        "saturday": 6
+    }
+    return day_name_to_number[day_name]
 
 
 def watch_workers_requests(user_session: UserSession):
@@ -173,18 +224,30 @@ def watch_workers_requests(user_session: UserSession):
     return combined_list
 
 
-def open_requests_windows(data: dict, user_session: UserSession) -> bool:
+def open_requests_windows(workplace_id, data: dict) -> bool:
     # Extract the start and end datetimes for the requests window
-    requests_window_start = data["requests_window_start"]  # TODO: Depending on the client!
-    requests_window_end = data["requests_window_end"]  # TODO: Depending on the client!
+    requests_window_start = data["requests_window_start"]
+    requests_window_end = data["requests_window_end"]
+
+    # Convert the datetimes to datetime objects
+    requests_window_start = datetime.strptime(requests_window_start, "%Y-%m-%dT%H:%M:%S.%fZ")
+    requests_window_end = datetime.strptime(requests_window_end, "%Y-%m-%dT%H:%M:%S.%fZ")
+
     updated_data = {"requests_window_start": requests_window_start, "requests_window_end": requests_window_end}
 
     # Update the shift board with the new requests window
     shift_board_controller = ShiftBoardController(db)
-    shift_board_controller.update_shift_board(next_sunday, user_session.get_id, updated_data)
+    shift_board_controller.update_shift_board(next_sunday, workplace_id, updated_data)
 
     # Return True if the requests window is open
     return True
+
+
+def get_last_shift_board_window_times(workplace_id):
+    shift_board_controller = ShiftBoardController(db)
+    last_board = shift_board_controller.get_last_shift_board(workplace_id)
+    print("Open requests window times: ", last_board.requests_window_start, last_board.requests_window_end)
+    return last_board.requests_window_start, last_board.requests_window_end
 
 
 def handle_get_preferences(user_session: UserSession) -> dict:
@@ -199,17 +262,25 @@ def handle_get_preferences(user_session: UserSession) -> dict:
     return preferences
 
 
-def handle_save_preferences(data: dict, user_session: UserSession) -> ShiftBoard:
+def handle_save_preferences(workplace_id, data: dict) -> bool:
     # Extract the preferences from the data
-    preferences = data["preferences"]  # TODO: Depending on the client!
+    number_of_shifts_per_day = data["number_of_shifts_per_day"]
+    closed_days = data["closed_days"]
+
+    # Create a dictionary with the preferences
+    new_preferences = {
+        "number_of_shifts_per_day": number_of_shifts_per_day,
+        "closed_days": closed_days
+    }
+
+    print("new_preferences: ", new_preferences)
 
     # Update the shift board with the new preferences
     shift_board_controller = ShiftBoardController(db)
-    updated_shift_board = shift_board_controller.update_shift_board(next_sunday, user_session.get_id,
-                                                                    {"preferences": preferences})
+    shift_board_controller.update_shift_board(next_sunday, workplace_id, {"preferences": new_preferences})
 
-    # Return the updated shift board
-    return updated_shift_board
+    # Return True if the preferences are saved
+    return True
 
 
 def get_all_workers_names_by_workplace_id(user_session):

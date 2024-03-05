@@ -6,33 +6,31 @@ from Backend.config.constants import next_sunday
 from Backend.handlers.auth.authentication import BackendAuthenticationUser
 
 
-def handle_manager_signin(data):  # TODO: modify the function as the data will be different, including preferences!!!
+def handle_manager_signin(data):
     """
-        Handles the manager signin process by creating a new user using the UsersController.
+    Handles the manager sign-up process by creating a new user using the UsersController.
 
-        Parameters:
-            data (dict): A dictionary containing user data for signin.
-                Example: {'username': 'manager1', 'password': '123', 'isManager': True,
-                 'isActive': True, 'isApproval': True, 'name': 'Place Name'}
-        """
+    Parameters:
+        data (dict): A dictionary containing user data for sign-up.
+            Example: {'username': 'manager1', 'password': 'password123', 'name': 'Place Name'}
 
-    # Initialize the users controller, passing the database session
-    user_controller = UsersController(db)
-    user_controller.create_entity(data)
+    Returns:
+        dict: A dictionary containing the response to be sent back to the client.
+            Example: {'success': True, 'message': 'Manager sign-up successful'}
+    """
+    try:
+        print("IN")
+        # Initialize the users controller
+        user_controller = UsersController(db)
 
-    # Send the username and password to the login function to create a user session
-    login_data = {"username": data["username"], "password": data["password"]}
+        # Insert the new manager into the database
+        print(data)
+        user_controller.create_entity(data)
 
-    # Send the username and password to the login function to create a user session
-    _, user_session = handle_login(login_data)  # Depends on the `handle_login` function to work properly.
-
-    # Create a ShiftBoard for the new manager
-    shift_board_controller = ShiftBoardController(db)
-    shift_board_controller.create_shift_board({
-        "weekStartDate": next_sunday,
-        "workplaceID": user_session.get_id,
-        "isPublished": False,
-        "content": "",
-    })
-
-    return user_session
+        # Optionally, you can send a success response back to the client
+        return {'success': True, 'message': 'Manager sign-up successful'}
+    except Exception as e:
+        # Handle any errors that occur during the sign-up process
+        error_message = 'Error during manager sign-up: ' + str(e)
+        print(error_message)
+        return {'success': False, 'message': error_message}
