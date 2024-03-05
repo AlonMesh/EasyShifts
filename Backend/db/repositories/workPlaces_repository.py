@@ -63,7 +63,7 @@ class WorkPlacesRepository(BaseRepository):
         # Query the WorkPlace table to find the workplace associated with the user
         workplace = (
             self.db.query(WorkPlace)
-            .filter(WorkPlace.id == user_id)  # Assuming id represents user ID in WorkPlace
+            .filter(WorkPlace.workPlaceID == user_id)  # Assuming id represents user ID in WorkPlace
             .first()
         )
 

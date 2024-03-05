@@ -48,3 +48,15 @@ class UserRequestsController(BaseController):
         Returns: The request content if found, None otherwise.
         """
         return self.service.get_request_content_by_user_id_between_datetimes(user_id, start_datetime, end_datetime)
+
+    def get_request_id_by_userid(self, user_id: str) -> int:
+        """
+        Retrieves the ID of the user request by user ID.
+
+        Parameters:
+            user_id (str): The user ID.
+
+        Returns:
+            int: The ID of the user request if found, None otherwise.
+        """
+        return self.repository.get_request_id_by_userid(user_id)
