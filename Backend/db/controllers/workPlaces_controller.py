@@ -148,3 +148,16 @@ class WorkPlacesController(BaseController):
             List[User]: A list of active users working in the specified workplace.
         """
         return self.repository.get_users_by_workplace_id(workplace_id)
+
+    def get_worker_by_name(self, workplace_id, worker_name):
+        """
+        Retrieves the worker by name.
+
+        Parameters:
+            workplace_id (int): ID of the workplace.
+            worker_name (str): Name of the worker.
+
+        Returns:
+            User: A user object.
+        """
+        return self.repository.get_worker_by_name(workplace_id, worker_name)
