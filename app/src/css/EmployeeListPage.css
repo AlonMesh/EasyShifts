@@ -1,0 +1,91 @@
+/* Reset default margin and padding */
+body, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Container styling */
+.employee-container {
+    text-align: center;
+    margin: 0 auto;
+    width: 400px;
+    padding: 20px;
+    background: #dbf8ff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling */
+.employee-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 20px;
+}
+
+/* List styling */
+.employee-list {
+    list-style-type: none;
+    padding: 0;
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Employee item styling */
+.employee-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styling */
+.approve-button, .reject-button {
+    color: #5b5b5b;
+    border: none;
+    padding: 8px 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.approve-button {
+    background-color: #7bff93;
+}
+
+/* Button hover styling */
+.approve-button:hover {
+    background-color: #29b957;
+}
+
+.reject-button {
+    background-color: #ff8080;
+}
+
+.reject-button:hover {
+    background-color: #b92e29;
+}
+
+/* Styling for unapproved employees */
+.employee-item:not(.approved) {
+    background-color: #f9f9f9;
+}
+
+/* Styling for the section title */
+.section-title {
+    font-size: 20px;
+    color: #555;
+    margin-top: 20px;
+}
+
+/* Styling for the Waiting for Approval section */
+.employee-list:not(:first-child) {
+    margin-top: 20px;
+}
