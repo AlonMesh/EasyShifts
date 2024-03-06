@@ -13,7 +13,10 @@ function Login() {
     const socket = useSocket();
 
     const handleLogin = () => {
-        if (socket && socket.readyState === WebSocket.OPEN) {
+        if (username.trim() === '' || password.trim() === '') {
+            setError('Please fill in all fields');
+        }
+        else if (socket && socket.readyState === WebSocket.OPEN) {
             const request = {
                 request_id: 10,
                 data: { username, password },
@@ -24,7 +27,7 @@ function Login() {
                 socket.addEventListener('message', handleMessage);
             }
         } else {
-            setError('Not connected to the server');
+            console.error('Not connected to the server');
         }
     };
 

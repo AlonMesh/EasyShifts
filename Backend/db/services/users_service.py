@@ -103,3 +103,8 @@ class UsersService(BaseService):
         """
         user = self.repository.get_entity(user_id)  # Raises an exception if the user does not exist
         return user.name
+
+
+
+
+

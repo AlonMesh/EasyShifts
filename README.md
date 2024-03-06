@@ -1,78 +1,92 @@
+<div style="text-align: center;">
+  <img alt="easyshifts-logo.png" height="200" src="app/public/easyshifts-logo.png"/>
+</div>
+
 # EasyShifts
 
-EasyShifts is a platform designed to simplify shift management for workplaces that operate on a shift-based system, such as restaurants, security companies, and hospitals. The goal is to streamline communication and scheduling processes for both workers and managers.
+## Introduction
+
+EasyShifts is a comprehensive web application designed to streamline the scheduling and shift management process for workplaces operating on a shift-based system. This platform empowers managers to effortlessly handle schedules, assign shifts, and manage employee requests, all within a centralized and user-friendly interface. Employees, on the other hand, can conveniently view their upcoming shifts, submit shift requests, and stay informed about their schedules.
+
+## Features
+
+- **User Authentication**: Secure registration and login system for managers and employees.
+- **Shift Scheduling**: Managers can create, modify, and assign shifts to employees based on availability and requirements.
+- **Shift Requests**: Employees can submit requests for specific shifts or indicate their unavailability.
+- **Shift Board**: A visual representation of the shift schedule, allowing managers to easily view and adjust assignments.
+- **Employee Management**: Managers can approve or reject new employee registrations for their workplaces.
+- **Shift Viewing**: Employees can view their assigned shifts for upcoming dates.
 
 ## Table of Contents
-* [Features](#features)
-* [Project Status](#project-status)
 * [Project Structure](#project-structure)
 * [Installation](#installation)
+* [Running the Application](#running-the-application)
 * [Usage](#usage)
 * [Authors](#authors)
 
-## Features
-* **Unified Communication** - One platform and one place for all communication.
-  * Managers can open (and close) a window for sending requests for shifts.
-  * Workers can submit shifts requests easily during the open window.
-* **Efficient Scheduling** - Clear and easy-to-use scheduling interface.
-  * Requests are visible to managers in real-time alongside the shift scheduling interface.
-  * Managers can schedule shifts using a simple board.
-
-## Project Status
-The project is currently in development. The frontend is in its early stages and has a simple design. Work is ongoing to enhance and expand its features.
 
 ## Project Structure
-The project is divided into two main components: the backend and the frontend.
 
-### Frontend
-* Implemented in JavaScript.
-* Pages for workers and managers interact with the backend using websockets.
-* Includes wide functionality for shift requests, shift scheduling, and shift management.
-
-### Backend
-* Implemented in Python.
-* Includes a server that listens for incoming requests from the frontend.
-* Connects to a MySQL database using the `sqlalchemy` library.
-* Follows the model-repository-service-controller pattern.
+The frontend of EasyShifts is built using React, while the backend is implemented in Python. The backend server listens for incoming requests from the frontend and interacts with a MySQL database.
 
 ### Database
-* **User**
-  * Attributes: `id`, `username`, `password`, `isManager`, `isActive`, and `name`.
-* **WorkPlace** (Represents a user in the system)
-  * Attributes: `id`, `workPlaceID`.
-* **UserRequest** (Represents a request for a shift)
-  * Attributes:  `id`, `modifyAt`, and `requests`.
-* **Shift**
-  * Attributes include `id,` `workPlaceID`, `shiftDate`, and `shiftPart`.
-* ShiftWorker (Represents all shifts of all workers)
-  * Attributes: `userID`, `shiftID`.
+
+The database consists of six tables, each serving a specific purpose:
+
+1. **Users**: Stores user information, including roles (manager or employee).
+2. **Workplaces**: Maintains information about workplaces and their associated users.
+3. **UserRequests**: Keeps track of shift requests submitted by employees.
+4. **Shifts**: Stores shift details, such as start and end times, dates, and associated workplaces.
+5. **ShiftWorkers**: Links users to assigned shifts, enabling tracking of shift assignments.
+6. **ShiftBoard**: Handles the shift board data, allowing managers to view and manage shifts based on dates and workplaces.
+
+The database follows a model-repository-service-controller pattern.
 
 ## Installation
 
-### Prerequisites
+To set up the EasyShifts application locally, follow these steps:
 
-This project requires [Python 3.8](https://www.python.org/downloads/release/python-380/) and [pip](https://pip.pypa.io/en/stable/installing/) to run. 
-It is dependent on `sqlalchemy`, `pymysql`, and `websockets`.
+### Backend Setup
 
-To install the required packages, run the following command:
+1. Clone the repository: 
+```bash
+git clone https://github.com/AlonMesh/EasyShifts.git
+```
+2. Navigate to the project directory: `cd easyshifts`
+
+This project is dependent on `sqlalchemy`, `pymysql`, and `websockets`. To install the required packages, run the following command:
 
 ```bash
 pip install -r Backend/requirements.txt
 ```
 
-### Running the Application
-Clone the repository:
+### Frontend Setup
 
-```bash
-git clone https://github.com/your-username/EasyShifts.git
-cd EasyShifts
-```
+1. Navigate to the frontend directory: `cd App`
+2. Install the required dependencies: `npm install`
+
+
+## Running the Application
+
+### Backend
+
+1. Ensure that the virtual environment is activated.
+2. Navigate to the backend directory: `cd Backend`
+3. Run the backend server: `python Server.py`
+
+### Frontend
+
+1. Navigate to the frontend directory: `cd app`
+2. Start the React development server: `npm start`
+3. The application will be accessible at `http://localhost:3000` in your web browser.
 
 ## Usage
-[Provide instructions on how to use the project. Include examples or commands if applicable.]
+
+Once the application is running, you can access the EasyShifts platform through your web browser. Managers can log in and start managing workplaces, schedules, and employee requests. Employees can register, view their shifts, and submit shift requests.
+
 
 ## Authors
-* [Alon Meshulam](https://github.com/AlonMesh/EasyShifts)
+* [Alon Meshulam](https://github.com/AlonMesh)
 * [Halel Itzhaki](https://github.com/halelitzhaki)
 * [Neta Cohen](https://github.com/NetaCohen4)
 * [Ori Ekshtein](https://github.com/ori-eksh)
