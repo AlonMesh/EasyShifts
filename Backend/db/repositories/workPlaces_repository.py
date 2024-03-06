@@ -143,3 +143,43 @@ class WorkPlacesRepository(BaseRepository):
             .filter(User.name == worker_name)
             .first()
         )
+
+    # def get_business_id_by_name(self, manager_username: str) -> int | None:
+    #     """
+    #     Retrieves the business ID based on the provided manager username.
+    #
+    #     Parameters:
+    #         manager_username (str): The username of the manager.
+    #
+    #     Returns:
+    #         int | None: The ID of the business if found, else None.
+    #     """
+    #     # Query the Users and Workplaces tables to retrieve the workplace ID by manager username
+    #     user = self.db.query(User).filter(User.username == manager_username, User.isManager == True).first()
+    #
+    #     if user and user.workplace:
+    #         return user.workplace.workPlaceid
+    #     else:
+    #         return None
+    def get_business_id_by_name(self, manager_username: str) -> int | None:
+        """
+        Retrieves the business ID based on the provided manager username.
+
+        Parameters:
+            manager_username (str): The username of the manager.
+
+        Returns:
+            int | None: The ID of the business if found, else None.
+        """
+        # Query the Users table to retrieve the user by username
+        user = self.db.query(User).filter(User.username == manager_username).first()
+
+        if user and user.isManager:
+            # Assuming the business ID is stored in a field called 'business_id' in the Users table
+            return user.id
+        else:
+            return None
+
+
+
+
