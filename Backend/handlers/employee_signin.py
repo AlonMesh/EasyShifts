@@ -10,7 +10,7 @@ def handle_employee_signin(data):
     # Get the relevant data from the packet
     username = data['username']
     password = data['password']
-    business_id = data['businessNumber']
+    business_name = data['businessName']  # Modified from 'businessNumber'
     name = data['employeeName']
 
     # Access the relevant db controllers
@@ -29,6 +29,13 @@ def handle_employee_signin(data):
     }
     user_controller.create_entity(user_data)
 
+    # Retrieve business ID based on business name
+    business_id = work_places_controller.get_business_id_by_name(business_name)
+
+    if business_id is None:
+        # Handle the case where the business name is not found in the database
+        return {"success": False, "message": "Business name not found"}
+
     # Insert data into workPlaces table
     work_place_data = {
         'workPlaceID': business_id,
@@ -41,7 +48,6 @@ def handle_employee_signin(data):
         'id': user_controller.get_user_id_by_username_and_password(username, password),
         'modifyAt': datetime.now(),
         'requests': '...'
-
     }
     user_requests_controller.create_entity(user_request_data)
 
@@ -50,3 +56,4 @@ def handle_employee_signin(data):
     # Send the username and password to the login function to create a user session
     _, user_session = handle_login(login_data)  # Depends on the `handle_login` function to work properly.
     return user_session
+

@@ -97,3 +97,15 @@ class UsersController(BaseController):
         """
         # Call the repository method to approve the user
         self.repository.approve_user(user_name)
+
+    # def check_username_existence(self, username: str) -> bool:
+    #     """
+    #     Check if a username already exists in the database.
+    #
+    #     Parameters:
+    #         username (str): The username to check.
+    #
+    #     Returns:
+    #         bool: True if the username exists, False otherwise.
+    #     """
+    #     return self.repository.get_user_by_username(username) is not None

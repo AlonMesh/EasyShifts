@@ -161,3 +161,18 @@ class WorkPlacesController(BaseController):
             User: A user object.
         """
         return self.repository.get_worker_by_name(workplace_id, worker_name)
+
+    def get_business_id_by_name(self, business_name):
+        """
+        Retrieves the business ID based on the provided business name.
+
+        Parameters:
+            business_name (str): The name of the business.
+
+        Returns:
+            int | None: The ID of the business if found, else None.
+        """
+        # Utilize the repository method to get the business ID by name
+        return self.repository.get_business_id_by_name(business_name)
+
+
