@@ -9,7 +9,7 @@ const SignUpEmployee = () => {
 
     const [employeeUsername, setEmployeeUsername] = useState('');
     const [employeePassword, setEmployeePassword] = useState('');
-    const [businessNumber, setBusinessNumber] = useState('');
+    const [businessName, setBusinessName] = useState('');
     const [employeeName, setEmployeeName] = useState('');
     const [log, setLog] = useState('');
 
@@ -24,7 +24,7 @@ const SignUpEmployee = () => {
             data: {
                 username: employeeUsername,
                 password: employeePassword,
-                businessNumber: businessNumber,
+                businessName: businessName,
                 employeeName: employeeName
             }
         };
@@ -79,13 +79,13 @@ const SignUpEmployee = () => {
                     required
                 />
                 <br/>
-                <label htmlFor="businessNumber">Business Number:</label>
+                <label htmlFor="businessName">Business Name:</label>
                 <input
                     type="text"
-                    id="businessNumber"
-                    name="businessNumber"
-                    value={businessNumber}
-                    onChange={(e) => setBusinessNumber(e.target.value)}
+                    id="businessName"
+                    name="businessName"
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
                     required
                 />
                 <br/>
