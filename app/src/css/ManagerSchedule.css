@@ -5,6 +5,7 @@
 .board-and-requests {
     display: flex;
     flex-direction: row;
+    position: absolute;
 }
 
 .buttons {

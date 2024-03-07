@@ -5,6 +5,7 @@ from Backend.user_session import UserSession
 from Backend.db.controllers.shiftBoard_controller import ShiftBoardController
 from Backend.db.controllers.workPlaces_controller import WorkPlacesController
 from Backend.db.controllers.userRequests_controller import UserRequestsController
+from Backend.db.controllers.users_controller import UsersController
 from Backend.db.controllers.shifts_controller import ShiftsController, convert_shifts_for_client
 from Backend.config.constants import db, next_sunday
 
@@ -215,13 +216,12 @@ def watch_workers_requests(user_session: UserSession):
     requests_window_start = relevant_shift_board.requests_window_start
     requests_window_end = relevant_shift_board.requests_window_end
 
-    # Create a dictionary with keys "name" and "request_content"
-    combined_list = [
-        {"name": name,
-         "request_content": user_requests_controller.get_request_by_userid(worker_id)}
-        # Iterate over workers_info to generate dictionaries for each worker
-        for worker_id, name in workers_info
-    ]
+    combined_list = [None] * len(workers_info)
+    user_controller = UsersController(db)
+
+    for i, (worker_id, name) in enumerate(workers_info):
+            combined_list[i] = {"name": name,
+                                "request_content": user_requests_controller.get_request_by_userid(worker_id)}
 
     # Return the combined list
     return combined_list

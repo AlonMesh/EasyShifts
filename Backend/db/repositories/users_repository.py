@@ -70,18 +70,18 @@ class UsersRepository(BaseRepository):
         # Query the database to find a user with the given username and password
         return self.db.query(User).filter(User.username == username, User.password == password).first()
 
-    # def get_user_by_username(self, username: str):
-    #     """
-    #     Retrieves a user by username.
-    #
-    #     Parameters:
-    #         username (str): The username of the user to retrieve.
-    #
-    #     Returns:
-    #         User: The user object if found, None otherwise.
-    #     """
-    #     # Query the database to find a user with the given username and password
-    #     return self.db.query(User).filter(User.username == username).first()
+    def get_user_by_username(self, username: str):
+        """
+        Retrieves a user by username.
+
+        Parameters:
+            username (str): The username of the user to retrieve.
+
+        Returns:
+            User: The user object if found, None otherwise.
+        """
+        # Query the database to find a user with the given username and password
+        return self.db.query(User).filter(User.username == username).first()
 
     def custom_operation_for_test_only(self):
         return 30
@@ -99,3 +99,15 @@ class UsersRepository(BaseRepository):
         if user:
             user.isApproval = True
             self.db.commit()
+
+    def get_user_by_name(self, name: str):
+        """
+        Retrieves a user by name.
+
+        Parameters:
+            name (str): The name of the user to retrieve.
+
+        Returns:
+            User: The user object if found, None otherwise.
+        """
+        return self.db.query(User).filter(User.name == name).first()

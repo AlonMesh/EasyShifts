@@ -1,6 +1,7 @@
 from __future__ import annotations
 from sqlalchemy.orm import Session
 from Backend.db.controllers.base_controller import BaseController
+from Backend.db.controllers.users_controller import UsersController
 from Backend.db.repositories.userRequests_repository import UserRequestsRepository
 from Backend.db.services.userRequests_service import UserRequestsService
 
@@ -33,8 +34,11 @@ class UserRequestsController(BaseController):
         Returns:
             UserRequest: The user-request object if found, None otherwise.
         """
-
-        return self.service.get_request_by_userid(user_id)
+        user_controller = UsersController(self.repository.db)
+        if user_controller.get_entity(user_id).isApproval:
+            request = self.service.get_request_by_userid(user_id)
+            return request
+        return None
 
     def get_request_content_by_user_id_between_datetimes(self, user_id: str, start_datetime, end_datetime):
         """

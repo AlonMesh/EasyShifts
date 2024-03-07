@@ -1,0 +1,48 @@
+/* EmployeeProfile.css */
+
+.ButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.SignInShiftsButton,
+.ViewShiftsButton {
+  background-color: #ffffff;
+  color: #0070c9; /* Blue color */
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px; /* Added margin */
+  font-family: "San Francisco", "Segoe UI", "Roboto", sans-serif; /* Apple-like font */
+  font-size: 16px; /* Slightly larger font size */
+  font-weight: bold; /* Bold text */
+}
+
+.SignInShiftsButton::before,
+.ViewShiftsButton::before {
+  content: '';
+  width: 100px;
+  height: 100px;
+  margin-bottom: 8px;
+}
+
+.SignInShiftsButton::before {
+  background: url('../App/notes.png') center/contain no-repeat;
+}
+
+.ViewShiftsButton::before {
+  background: url('../App/calendar.png') center/contain no-repeat;
+}
+
+.SignInShiftsButton:hover,
+.ViewShiftsButton:hover {
+  background-color: #ffffff;
+}

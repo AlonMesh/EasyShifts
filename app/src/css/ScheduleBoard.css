@@ -1,7 +1,7 @@
 .schedule-board {
     width: 60%;
     background: #dbf8ff;
-    border-radius: 10px;
+    border-radius: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
@@ -12,7 +12,7 @@
 }
 
 .schedule-board th {
-    padding: 10px;
+    padding: 20px;
     position: relative;
 }
 
