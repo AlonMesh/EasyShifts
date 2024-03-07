@@ -64,6 +64,18 @@ class UsersController(BaseController):
         """
         return self.service.get_user_id_by_username(username)
 
+    def get_user_id_by_name(self, name: str):
+        """
+        Retrieves the user ID by username.
+
+        Parameters:
+            name (str): The name of the user to retrieve.
+
+        Returns:
+            Optional[int]: The user ID if the user exists, None otherwise.
+        """
+        return self.service.get_user_id_by_name(name)
+
     def get_username_by_id(self, user_id: str):
         """
         Retrieves the username by user ID.
@@ -98,14 +110,14 @@ class UsersController(BaseController):
         # Call the repository method to approve the user
         self.repository.approve_user(user_name)
 
-    # def check_username_existence(self, username: str) -> bool:
-    #     """
-    #     Check if a username already exists in the database.
-    #
-    #     Parameters:
-    #         username (str): The username to check.
-    #
-    #     Returns:
-    #         bool: True if the username exists, False otherwise.
-    #     """
-    #     return self.repository.get_user_by_username(username) is not None
+    def check_username_existence(self, username: str) -> bool:
+        """
+        Check if a username already exists in the database.
+
+        Parameters:
+            username (str): The username to check.
+
+        Returns:
+            bool: True if the username exists, False otherwise.
+        """
+        return self.repository.get_user_by_username(username) is not None

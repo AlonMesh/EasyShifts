@@ -85,7 +85,6 @@ def handle_employee_rejection(data, user_session):
         user_id = users_controller.get_user_id_by_username(user_name)
 
         if user_id is not None:
-
             workPlacees_controller.delete_entity(user_id)
 
             deleted_entity = users_controller.delete_entity(user_id)

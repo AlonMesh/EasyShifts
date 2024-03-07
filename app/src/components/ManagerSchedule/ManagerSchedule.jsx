@@ -304,14 +304,15 @@ function ManagerSchedule({socket}) {
                 <div>Loading...</div>
             ) : (
                 <div className="board-and-requests">
-                    <EmployeeShifts employees={employeesRequests}/>
-                    {preferences ? ( // Check if preferences is defined
+                    <EmployeeShifts employees={employeesRequests} className="EmployeeShifts" />
+                    {preferences ? (
                         <ScheduleBoard
                             partsCount={preferences.number_of_shifts_per_day}
                             closedDays={preferences.closed_days}
                             startDate={startDate}
                             allWorkers={allWorkers}
                             assignedShifts={assignedShifts}
+                            className="ScheduleBoard"
                         />
                     ) : (
                         <div>No preferences available</div>

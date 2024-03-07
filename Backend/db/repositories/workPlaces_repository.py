@@ -144,35 +144,20 @@ class WorkPlacesRepository(BaseRepository):
             .first()
         )
 
-    # def get_business_id_by_name(self, manager_username: str) -> int | None:
-    #     """
-    #     Retrieves the business ID based on the provided manager username.
-    #
-    #     Parameters:
-    #         manager_username (str): The username of the manager.
-    #
-    #     Returns:
-    #         int | None: The ID of the business if found, else None.
-    #     """
-    #     # Query the Users and Workplaces tables to retrieve the workplace ID by manager username
-    #     user = self.db.query(User).filter(User.username == manager_username, User.isManager == True).first()
-    #
-    #     if user and user.workplace:
-    #         return user.workplace.workPlaceid
-    #     else:
-    #         return None
-    def get_business_id_by_name(self, manager_username: str) -> int | None:
+    def get_business_id_by_name(self, work_place_name: str) -> int | None:
         """
         Retrieves the business ID based on the provided manager username.
 
         Parameters:
-            manager_username (str): The username of the manager.
+            work_place_name (str): The username of the manager.
 
         Returns:
             int | None: The ID of the business if found, else None.
         """
         # Query the Users table to retrieve the user by username
-        user = self.db.query(User).filter(User.username == manager_username).first()
+        user_controller = UsersController(self.db)
+        user = user_controller.get_entity(user_controller.get_user_id_by_name(work_place_name))
+        print(user_controller.get_entity(user.id))
 
         if user and user.isManager:
             # Assuming the business ID is stored in a field called 'business_id' in the Users table
