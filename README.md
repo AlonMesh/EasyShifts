@@ -8,6 +8,9 @@
 
 EasyShifts is a comprehensive web application designed to streamline the scheduling and shift management process for workplaces operating on a shift-based system. This platform empowers managers to effortlessly handle schedules, assign shifts, and manage employee requests, all within a centralized and user-friendly interface. Employees, on the other hand, can conveniently view their upcoming shifts, submit shift requests, and stay informed about their schedules.
 
+Here's a link to our project introduction video - 
+https://youtu.be/4vgTDveiXa8
+
 ## Features
 
 - **User Authentication**: Secure registration and login system for managers and employees.
