@@ -1,7 +1,3 @@
-<div style="text-align: center;">
-  <img alt="easyshifts-logo.png" height="200" src="app/public/easyshifts-logo.png"/>
-</div>
-
 # EasyShifts
 
 ## Introduction
@@ -9,9 +5,6 @@
 EasyShifts is a comprehensive web application designed to streamline the scheduling and shift management process for workplaces operating on a shift-based system. This platform empowers managers to effortlessly handle schedules, assign shifts, and manage employee requests, all within a centralized and user-friendly interface. Employees, on the other hand, can conveniently view their upcoming shifts, submit shift requests, and stay informed about their schedules.
 
 https://github.com/AlonMesh/EasyShifts/assets/97172662/a2ec1f9e-c905-48a0-8183-463563874dac
-
-Here's a link to our project introduction video - 
-https://youtu.be/4vgTDveiXa8
 
 ## Features
 
@@ -88,11 +81,3 @@ pip install -r Backend/requirements.txt
 ## Usage
 
 Once the application is running, you can access the EasyShifts platform through your web browser. Managers can log in and start managing workplaces, schedules, and employee requests. Employees can register, view their shifts, and submit shift requests.
-
-
-## Authors
-* [Alon Meshulam](https://github.com/AlonMesh)
-* [Halel Itzhaki](https://github.com/halelitzhaki)
-* [Neta Cohen](https://github.com/NetaCohen4)
-* [Ori Ekshtein](https://github.com/ori-eksh)
-* [Shoval Nahmias](https://github.com/Shovshi)
